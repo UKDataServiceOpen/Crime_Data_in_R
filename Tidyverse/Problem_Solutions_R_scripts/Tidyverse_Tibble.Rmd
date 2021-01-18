@@ -1,0 +1,80 @@
+---
+title: "Tidyverse_Tibbles"
+output: html_document
+runtime: shiny
+---
+# Setup: tidyr #
+
+This .Rmd uses the 'readxl' and 'tidyverse' packages, which I have already loaded for you invisibly in the background. If you are working directly in R (rather than a virtual environment like this) you may need to install and/or load those packages, as well as set your working directory or other start up stuff. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries and packages, , include=FALSE}
+require(readxl)
+require(tidyverse)
+```
+
+# Loading in the data #
+
+The first step in most R processes is to load in some data. I have provided 4 different data sets in 3 different formats so you can see how to load in different data types.
+
+```{r read in basic style}
+drugs_siezures <- read.csv("drugs_siezures.csv",  header = TRUE, check.names=FALSE)
+drugs_volume <- read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE)
+crime_survey <- read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE)
+sexual_offences <- read_excel("SexualOffences1918_70_Data.xlsx")
+```
+
+## Print one of them ##
+```{r checking}
+print(drugs_siezures)
+typeof(drugs_siezures)
+```
+
+## Convert all three to tibbles ##
+```{r convert to tibbles}
+drugs_siezures <- as_tibble(drugs_siezures)
+drugs_volume <- as_tibble(drugs_volume)
+crime_survey <- as_tibble(crime_survey)
+sexual_offences <- as_tibble(sexual_offences)
+```
+
+## Print one of them ##
+```{r checking again post-tibblization}
+print(drugs_siezures)
+typeof(drugs_siezures)
+```
+
+### Hint = you can do both of these in one step by using this format###
+```{r read in advance}
+drugs_siezures <- as_tibble(read.csv("drugs_siezures.csv", header = TRUE, check.names=FALSE))
+drugs_volume <- as_tibble(read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE))
+
+crime_survey <- as_tibble(read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE))
+sexual_offences <- as_tibble(read_excel("SexualOffences1918_70_Data.xlsx"))
+```
+
+# Looking at the data#
+## Extract columns of data as values in (at least) 2 different ways ##
+```{r examine column data as values}
+siezures_drug_type <- drugs_siezures$`Drug type`
+typeof(siezures_drug_type)
+
+siezures_drug_class <- drugs_siezures[['Drug class']]
+siezures_force <- drugs_siezures[[1]]
+typeof(siezures_drug_type)
+```
+
+# Looking at the data#
+## Extract a column of data as a list in (at least) 2 different ways ##
+```{r examine column data as lists}
+siezures_2007 <- drugs_siezures[,4]
+typeof(siezures_2007)
+siezures_2008 <- drugs_siezures[5]
+```
+
+## Extract a colum as a variable, extract a row as a variable ##
+```{r examine data by row}
+Cocaine_siezures <- drugs_siezures[1,]
+```

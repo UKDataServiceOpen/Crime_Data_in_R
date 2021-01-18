@@ -3,22 +3,31 @@ require(readxl)
 require(tidyverse)
 
 #### Load the three different data sets into R using appropriate read in functions ####
-Mammals <- read.csv("Mammals.csv")
-population_data <- read.table("Population_data.txt", header=TRUE)
-Suicides <- read_excel("Suicides.xlsx")
+
+drugs_siezures <- read.csv("drugs_siezures.csv")
+drugs_volume <- read.csv("drugs_volume.csv")
+
+crime_survey <- read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE)
+sexual_offences <- read_excel("SexualOffences1918_70_Data.xlsx")
 
 #### Print one of them ####
-print(Mammals)
-typeof(Mammals)
+print(drugs_siezures)
+typeof(drugs_siezures)
 
 #### Convert all three to tibbles ####
-Mammals <- as_tibble(Mammals)
-population_data <- as_tibble(population_data)
-Suicides <- as_tibble(Suicides)
+drugs_siezures <- as_tibble(drugs_siezures)
+drugs_volume <- as_tibble(drugs_volume)
 
+crime_survey <- as_tibble(crime_survey)
+sexual_offences <- as_tibble(sexual_offences)
 
 ## Hint = you can do both of these in one step by using this format
-Mammals <- as_tibble(read.csv("Mammals.csv"))
+
+drugs_siezures <- as_tibble(read.csv("drugs_siezures.csv"))
+drugs_volume <- as_tibble(read.csv("drugs_volume.csv"))
+
+crime_survey <- as_tibble(read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE))
+sexual_offences <- as_tibble(read_excel("SexualOffences1918_70_Data.xlsx"))
 
 #### Extract a column as a value in 2 different ways ####
 Mammal_name <-Mammals$name

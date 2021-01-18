@@ -2,10 +2,12 @@
 require(readxl)
 require(tidyverse)
 
-#### Ensure you have the 3 data sets loaded into R as tibbles ####
-Mammals <- as_tibble(read.csv("Mammals.csv"))
-population_data <- as_tibble(read.table("Population_data.txt", header=TRUE))
-Suicides <- as_tibble(read_excel("Suicides.xlsx"))
+#### Ensure you have the 4 data sets loaded into R as tibbles ####
+drugs_siezures <- as_tibble(read.csv("drugs_siezures.csv"))
+drugs_volume <- as_tibble(read.csv("drugs_volume.csv"))
+
+crime_survey <- as_tibble(read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE))
+sexual_offences <- as_tibble(read_excel("SexualOffences1918_70_Data.xlsx"))
 
 #### Make each tibble tidy as needed ####
 

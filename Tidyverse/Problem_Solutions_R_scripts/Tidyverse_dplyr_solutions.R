@@ -3,8 +3,11 @@ require(readxl)
 require(tidyverse)
 
 #### Ensure you have the data sets loaded into R as tidy tibbles ####
-Suicides <- as_tibble(read_excel("Suicides.xlsx"))
-Suicides_tidy <- Suicides %>% gather(GenderAge, Count, 4:ncol(Suicides)) %>% spread(Type, Count) %>% separate(GenderAge, c("Gender", "Age"), ":")
+
+#MyData <- read.table(file.choose(), sep="\t", header=TRUE)
+
+Offences <- as_tibble(read_excel("SexualOffences1918_70_Data.xlsx"))
+#Suicides_tidy <- Suicides %>% gather(GenderAge, Count, 4:ncol(Suicides)) %>% spread(Type, Count) %>% separate(GenderAge, c("Gender", "Age"), ":")
 
 #### Exercises: dplyr ####
 # using the tidy suicides data

@@ -1,0 +1,17 @@
+University of Manchester, Cathie Marsh Centre for Census and Survey Research, ESDS Government. (2011). 
+British Crime Survey 2007-2008: Unrestricted Access Teaching Dataset. 
+[data collection]. BMRB, Social Research, Home Office, Research, Development and Statistics Directorate, 
+[original data producer(s)]. BMRB, Social Research. SN: 6891, http://doi.org/10.5255/UKDA-SN-6891-1. 
+Contains public sector information licensed under the Open Government Licence v2.0
+
+
+Jackson, L. (2015). Criminal justice statistics and sexual offences (England and Wales) 1918-1970. 
+[data collection]. UK Data Service. SN: 852096, http://doi.org/10.5255/UKDA-SN-852096
+
+https://data.police.uk/data/fetch/d974cf22-fdaa-45d3-8ce4-ce9b69043e7c/
+These CSV files provide street-level crime, outcome, and stop and search information, broken down by police force and 2011 lower layer super output area (LSOA).
+Date range: January 2020 to November 2020
+Forces: Greater Manchester Police
+ Include crime data
+ Include outcomes data, The crime CSV files contain the latest outcome category, but this option will generate a separate set of files with the outcome history for all crimes. Outcomes data is not available for BTP or PSNI.
+ Include stop and search data
