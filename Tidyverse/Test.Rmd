@@ -1,0 +1,31 @@
+---
+title: "Example R Markdown Notebook"
+output:
+  html_document:
+    df_print: paged
+jupyter:
+  kernelspec:
+    display_name: R
+    language: R
+    name: ir
+  language_info:
+    codemirror_mode: r
+    file_extension: .r
+    mimetype: text/x-r-source
+    name: R
+    pygments_lexer: r
+    version: 3.4.3
+---
+
+This is a [R Markdown](http://rmarkdown.rstudio.com) document (written in 100% valid R Markdown). You can render this in RStudio with "Knit" ([the API to `rmarkdown::render`](https://rmarkdown.rstudio.com/authoring_quick_tour.html#rendering_output)). However, if you are viewing this on Binder you are viewing it as a Jupyter Notebook(!). That means that you also are able to interact with it as you normally would in Jupyter. When you execute code within the notebook, the results appear beneath the code.
+
+As an example, run the cell below, which is taken from [the R Markdown website](https://rmarkdown.rstudio.com/authoring_quick_tour.html#r_code_chunks)
+
+```{r qplot, fig.width=4, fig.height=3, message=FALSE}
+# quick summary and plot
+library(ggplot2)
+summary(cars)
+qplot(speed, dist, data=cars) + geom_smooth()
+```
+
+Enjoy the ability to work in both R Markdown and in the Jupyter ecosystem!
