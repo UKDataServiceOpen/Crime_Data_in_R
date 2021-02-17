@@ -1,0 +1,55 @@
+---
+title: "Tidyverse_3_Dplyr"
+author: "J"
+date: "25/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(readxl)
+require(tidyverse)
+options(scipen = 999) 
+```
+#### Exercises: tidyr ####
+
+#### Ensure you have the sexual offences with population as a tidy tibble ####
+
+```{r check sexual offences tidy tibble has added population column}
+sexual_offences <- as_tibble(read_excel("sexual_offences_1946_1970.xlsx"))
+population <- as_tibble(read_excel("population.xlsx"))
+population_data <- population[,2]
+sexual_offences_with_population <- sexual_offences  %>%
+  add_column(population_data)
+
+sexual_offences_with_pop_tidy <- sexual_offences_with_population %>% 
+  gather(offence_name, reports_taken, `abduction-females`:`sex-males`) %>% 
+  separate(offence_name, c("offence","against"), sep='-')
+
+
+```
+
+#### Exercises: dplyr ####
+
+```{r summaries offences by year and victim gender}
+offences_against <- sexual_offences_with_pop_tidy %>%
+  group_by(year,against)  %>%
+  summarise(reports=sum(reports_taken))
+
+```
+
+If you get an output in red warning you about how `summarise` groups objects, you can ignore it for now. Unless it actually says "error" - then you probably need to try something else. 
+
+```{r summarise offences by year and add a column for offences per population}
+offences_by_year <- sexual_offences_with_pop_tidy %>%
+  group_by(year,population)  %>% 
+  summarise(reports=sum(reports_taken)) %>%
+  mutate(reports/population)
+
+```
+You can, of course, look at the new tibbles that you have created by viewing or printing them... The grammar for both is demonstrated below. 
+```{r have a look at your summaries}
+view(offences_against)
+print(offences_by_year)
+
+```

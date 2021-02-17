@@ -1,0 +1,82 @@
+---
+title: "Tidyverse_Tibbles"
+output: html_document
+runtime: shiny
+---
+# Setup: tidyr #
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(readxl)
+require(tidyverse)
+options(scipen = 999) 
+
+```
+
+
+# Loading in the data #
+```{r read in basic style}
+drugs_seizures <- read.csv("drugs_seizures.csv",  header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM")
+drugs_volume <- read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM")
+crime_survey <- read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE)
+sexual_offences <- read_excel("sexual_offences_1946_1970.xlsx")
+population <- read_excel("population.xlsx")
+```
+
+## Take a closer look at one or more of them ##
+```{r checking}
+print(drugs_seizures)
+typeof(drugs_seizures)
+```
+
+## Convert all your data frames to tibbles ##
+```{r convert to tibbles}
+drugs_seizures <- as_tibble(drugs_seizures)
+drugs_volume <- as_tibble(drugs_volume)
+crime_survey <- as_tibble(crime_survey)
+sexual_offences <- as_tibble(sexual_offences)
+population <- as_tibble(population)
+
+```
+
+## Have another close up look ##
+```{r checking again post-tibblization}
+print(drugs_seizures)
+typeof(drugs_seizures)
+```
+
+### Hint = you can do both of these in one step by using this format###
+```{r read in advanced}
+drugs_seizures <- as_tibble(read.csv("drugs_seizures.csv",  header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+drugs_volume <- as_tibble(read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+
+crime_survey <- as_tibble(read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE))
+sexual_offences <- as_tibble(read_excel("sexual_offences_1946_1970.xlsx"))
+population <- as_tibble(read_excel("population.xlsx"))
+
+```
+
+## Manipulating the data with tidyverse functions ##
+```{r examine column data as values}
+drugs_seizure_2008 <- drugs_seizures$`2008`
+drugs_seizure_2009 <- drugs_seizures[['2009']]
+forces_who_siezed <- drugs_seizures[[1]]
+
+drugs_have_been_siezed <- drugs_seizures %>% .$drug
+drug_volumes_siezed_2007 <- drugs_volume %>% .[['2007']] 
+drug_volumes_siezed_2016 <- drugs_volume  %>% .[[13]]
+
+
+population_year_span <- population[,1]
+population_data <- population[2]
+police_cocaine_seizures <- drugs_seizures[1,]
+
+```
+
+## Add the population column to the sexual offences tibble
+
+```{r extract the population column from the population tibble and add it to the sexual offences tibble}
+sexual_offences_with_population <- sexual_offences  %>%
+  add_column(population_data)
+
+```
