@@ -1,0 +1,75 @@
+---
+title: "Tidyverse_2_Tidyr"
+author: "J"
+date: "25/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(readxl)
+require(tidyverse)
+options(scipen = 999) 
+
+```
+
+#### Exercises: tidyr ####
+First, make sure you have your datasets loaded up as tibbles. 
+
+```{r check loaded as tibbles}
+drugs_seizures <- 
+  as_tibble(read.csv("drugs_seizures.csv",  header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+drugs_volume <- 
+  as_tibble(read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+
+crime_survey <- 
+  as_tibble(read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE))
+sexual_offences <- 
+  as_tibble(read_excel("sexual_offences_1946_1970.xlsx"))
+population <- 
+  as_tibble(read_excel("population.xlsx"))
+
+```
+
+### Make each tibble tidy as needed ###
+
+```{r gather, separate and relocate drugs}
+drugs_seizures_tidy <- drugs_seizures %>% gather(year,seizures,'2007':'2020')
+drugs_volume_tidy <- drugs_volume %>% gather(year,volume_seized,'2007':'2020')
+
+drugs_seizures_tidy <- drugs_seizures_tidy %>% separate(drug, c("class","type"), sep='-')
+drugs_volume_tidy <- drugs_volume_tidy %>% separate(drug, c("class","type"), sep='-')
+
+drugs_volume_tidy <- drugs_volume_tidy %>% relocate('unit', .after = 'volume_seized')
+
+```
+
+Or do the above in a more streamlined way by piping the results of each step to the next. 
+
+```{r efficiently gather, separate and relocate drugs}
+drugs_seizures_tidy <- drugs_seizures %>% gather(year,seizures,'2007':'2020') %>%
+  separate(drug, c("class","type"), sep='-')
+
+drugs_volume_tidy <- drugs_volume %>% gather(year,volume_seized,'2007':'2020') %>%
+  separate(drug, c("class","type"), sep='-')  %>%
+  relocate('unit', .after = 'volume_seized')
+
+```
+
+```{r efficiently gather and separate sexual offences}
+sexual_offences_tidy <- sexual_offences %>% 
+  gather(offence_name, reports_taken, `abduction-females`:`sex-males`) %>% 
+  separate(offence_name, c("offence","against"), sep='-')
+
+```
+
+# The crime_survey data - is it tidy? 
+Note: There is no functional code here... You have to look at the crime survey data and decide for yourself whether it needs any gathering, separating or spreading!
+```{r gather crime survey}
+crime_survey_tidy <- crime_survey %>%
+  gather() %>%
+  separate()  %>%
+  spread()
+
+```
+

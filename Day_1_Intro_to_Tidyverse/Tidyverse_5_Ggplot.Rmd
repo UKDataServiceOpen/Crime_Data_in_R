@@ -1,0 +1,107 @@
+---
+title: "Tidyverse_5_Ggplot"
+author: "J"
+date: "25/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(readxl)
+require(tidyverse)
+```
+
+#### Ensure you have the up to date tidy tibbles ####
+```{r check that you have all needed tidy tibbles}
+drugs_siezures <- 
+  as_tibble(read.csv("drugs_seizures.csv",  header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+drugs_volume <- 
+  as_tibble(read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+
+drugs_siezures_tidy <- drugs_siezures %>% gather(year,siezures,'2007':'2020') %>%
+  separate(drug, c("class","type"), sep='-')
+drugs_volume_tidy <- drugs_volume %>% gather(year,volume_siezed,'2007':'2020') %>%
+  separate(drug, c("class","type"), sep='-')  %>%
+  relocate('unit', .after = 'volume_siezed')
+
+crime_survey <- 
+  as_tibble(read.table("bcs_2007_8_teaching_data.tab", sep="\t", header=TRUE))
+
+sexual_offences <- 
+  as_tibble(read_excel("sexual_offences_1946_1970.xlsx"))
+population <- 
+  as_tibble(read_excel("population.xlsx"))
+population_data <- population[,2]
+
+sex_offences_with_pop_tidy <- sexual_offences  %>%
+  add_column(population_data) %>%
+  gather(offence_name, reports_taken, `abduction-females`:`sex-males`) %>% 
+  separate(offence_name, c("offence","against"), sep='-')
+
+offences_against <- sex_offences_with_pop_tidy %>%
+  group_by(year,against)  %>%
+  summarise(reports=sum(reports_taken))
+
+```
+#### Exercises: ggplot2 ####
+
+```{r histogram}
+
+histogram_plot <- crime_survey %>%
+  ggplot( aes(x=age)) +
+    geom_histogram( binwidth=9)
+# comment for clarity 
+histogram_plot <- crime_survey %>%
+  ggplot( aes(x=age)) +
+    geom_histogram( binwidth=9, colour = "tomato")
+
+histogram_plot
+
+```
+
+```{r histogram but better}
+
+histogram_plot <- crime_survey %>%
+  ggplot( aes(x=age)) +
+  geom_histogram( binwidth=1, fill="tomato", color="white", alpha=0.9) +
+  ggtitle("Histogram of respondent age")
+
+histogram_plot
+
+```
+
+
+```{r scatterplot}
+crime_survey_plot <- crime_survey %>%
+  ggplot(aes(age,tcneigh)) +
+  geom_point()
+
+crime_survey_plot
+
+```
+
+
+##   add fitted regression lines for each gender to this plot
+```{r scatterplot with colour}
+
+crime_survey_plot <- crime_survey %>%
+  ggplot(aes(age,tcneigh,colour = as_factor(sex))) +
+  geom_point()
+
+crime_survey_plot
+
+```
+
+```{r make it easier to read}
+
+crime_survey_plot + scale_x_continuous(name="Age of respondent", limits=c(20, 100), breaks=seq(20,100,10)) +
+  scale_y_continuous(name="Opinion about problem represented by noisy or nuisance neighbours", limits=c(-2, 4.5))
+
+```
+
+```{r add a linear regression model}
+
+crime_survey_plot +
+  geom_smooth(aes(group = sex, x=age, y=tcneigh), method = "lm", se = FALSE)
+
+```
