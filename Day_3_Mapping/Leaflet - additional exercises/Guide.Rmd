@@ -1,0 +1,420 @@
+---
+title: "Introduction to Mapping in R"
+author: "Simon Parker"
+date: "1 August 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+require(dplyr)
+require(leaflet)
+require(leaflet.extras)
+require(rgdal)
+require(sp)
+require(spdplyr)
+
+```
+
+##Marker maps
+
+First, we will need to load the Dplyr and Leaflet packages.
+
+```{r packages, echo=TRUE, results='hide', eval=FALSE}
+
+library(dplyr)
+library(leaflet)
+
+```
+
+With that done we can import the data will be using for the first exercise. This data shows cities or towns in the UK that has a population greater than 15,000 people. It also includes the latitude and longitude of the locations as we can see.
+
+```{r loaddata, echo=TRUE}
+
+UK <- read.csv("UK.csv")
+
+head(UK)
+
+```
+
+We will now use the Leaflet package to map this data. We will create a new object called *UKmap* that will display the locations. Leaflet relies on the pipe operator (**%>%**) from the Dplyr package to join up commands.
+
+```{r UKmap, echo=TRUE}
+
+UKmap <- leaflet(UK) %>% 
+         addTiles() %>%
+         addMarkers(~long, ~lat)
+
+```
+
+The command above takes three parts. Firstly we are instructing R to use the Leaflet package on the data we are working with. This is convenient because it means R knows where to look when we call specific variables later on. 
+
+**addTiles()** is the argument to draw the background map. Without this, the points would be plotted but the background would be blank. 
+
+The final section, **addMarkers()** adds the markers to the map. For this argument you will need call the longitude variable before the latitude (unless you specify using the options long =, and lat =). We can now call our map to see if it has worked.
+
+```{r viewmap1, echo=TRUE, results='hide'}
+
+UKmap
+
+```
+
+The obvious problem with this is that there are far too many markers for us to be able to see the map properly, and it is quite slow to use. It makes sense then to group the markers into clusters so that the map is easier to see. Fortunately, this is easy to do with Leaflet.
+
+```{r UKmap2, echo=TRUE}
+
+UKmap2 <- leaflet(UK) %>% 
+          addTiles() %>% 
+          addMarkers(~long, ~lat, 
+                     clusterOptions=markerClusterOptions())
+
+```
+
+As we can see the code has slightly changed for producing the second map. We have added the **clusterOptions()** option to the **addMarkers()** function. As the code is written above the markers will cluster. See *help markerClusterOptions* for more that can be done using this feature.
+
+Let's look at the new map.
+
+```{r viewmap2, echo=TRUE, results='hide'}
+
+UKmap2
+
+```
+
+The new map looks a lot better. However it isn't all that useful, as whilst we can see where the locations are, we can't easily find out the names of the locations (unless your geography is better than mine!). Our data does include the variable *name* so we could utilise that information. We can do so in two different ways depending on our preference. Labels (*UKmap3*) are displayed whenever we hover our mouse over one of the markers, popups(*UKmap4*) are shown only when we click on a marker.
+
+```{r UKmap3, echo=TRUE}
+
+UKmap3 <- leaflet(UK) %>% 
+          addTiles() %>% 
+          addMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), 
+                     label = ~name)
+
+```
+
+```{r viewmap3, echo=TRUE, results='hide'}
+
+UKmap3
+
+```
+
+```{r UKmap4, echo=TRUE}
+
+UKmap4 <- leaflet(UK) %>% 
+          addTiles() %>% 
+          addMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), 
+                     popup = ~name)
+```
+
+```{r viewmap4, echo=TRUE, results='hide'}
+
+UKmap4
+
+```
+
+We can also play around with the way that Leaflet displays popups and labels using html code. Our UK data also contains the population of the locations which would be useful to display alongside the name of the location in the popups. To do this we will create a new set of values named *content* which constructs the content of the popups for us.
+
+```{r content, echo=TRUE}
+
+content <- paste("<b>Location:</b>", UK$name, "<br/>",
+                 "<b>Population:</b>", UK$pop)
+```
+
+Now we can use the *content* values as our popups.
+
+```{r UKmap5, echo=TRUE}
+
+UKmap5 <- leaflet(UK) %>% 
+          addTiles() %>% 
+          addMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), 
+                     popup = ~content)
+
+```
+
+```{r viewmap5, echo=TRUE, results='hide'}
+
+UKmap5
+
+```
+
+Finally, Leaflet gives us the option to change the background map to somethng else using the **addProviderTiles()** argument in place of **addTiles()**. We would then need to specify which basemap we would like to use. Examples of those we can choose can be found here: http://leaflet-extras.github.io/leaflet-providers/preview/index.html. 
+
+Helpfully R Studio has an autofill feature, as such when you type **providers$** as part of the **addProviderTiles()** command you will get a dropdown menu appear with all of the possible basemap options to choose from.
+
+```{r UKmap6, echo=TRUE}
+
+UKmap6 <- leaflet(UK) %>% 
+          addProviderTiles(providers$Esri.WorldImagery) %>% 
+          addMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), popup = ~content)
+
+```
+
+```{r viewmap6, echo=TRUE, results='hide'}
+
+UKmap6
+
+```
+
+###Other types of marker maps
+
+We could display this map as a circle marker map instead of a point marker map if we wish. Doing so does open up a couple of new options such as adding colour for us to play around with. To do so we replace the **addMarkers()** command with **addcircleMarkers()**. As we can see in *UKmap7*, instead of point markers we now have small blue circles.
+
+```{r UKmap7, echo=TRUE}
+UKmap7 <- leaflet(UK) %>% 
+          addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+          addCircleMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), popup = ~content)
+```
+
+```{r viewmap7, echo=TRUE, results='hide'}
+UKmap7
+```
+
+One of the options we now have available is to colour code our map markers. To do so we need to create a function to generate the colours we need. 
+
+```{r palette, echo=TRUE}
+pal <- colorBin("YlOrRd", bins=c(15000,50000,100000,250000,500000,1000000,8000000), domain = UK$pop)
+
+```
+
+In the example above, I am using the **colorBin** command. This command is good for skewed continous variables as you can group the values in a way that makes sense for the data you have. In this example I am using the default Yellow, Orange, Red (**"YlOrRd"**) specturm of colours, I am grouping the populations sizes as between 15k and 50k people, 50k to 100k, 100k to 250k, 250k to 500k, 500k to 1m, and 1m to 8m. This was done because London has a far larger population than any other location in the UK.  I am then applying these bins to the population variable in our data (**domain = UK$pop**).
+
+I can then add this colour function to the **addCircleMarkers()** command.
+
+```{r UKmap8, echo=TRUE}
+UKmap8 <- leaflet(UK) %>% 
+          addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+          addCircleMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), popup = ~content, 
+                           color = ~pal(pop), opacity = 1, fillColor = ~pal(pop), fillOpacity = 1)
+```
+
+Here I have added four new options. **color** sets the colour of the outer ring of our circle markers. Instead of simply assigning a single colour, we can use the *pal* function we created and apply it to population variable (**~pal(pop)**). We do the same for the **fillColor** option which controls the fill of the circle markers. The two opacity commands set the opacity of the circle markers, by default this is set to 0.5 and 0.2 but I wanted to make them easier to see in this example.
+
+```{r viewmap8, echo=TRUE, results='hide'}
+
+UKmap8
+
+```
+
+We should probably add a legend to the map now, so that viewers can interpret the colours we have used. Again this can be done relatively easily in Leaflet using the **addLegend()** option.
+
+```{r UKmap9, echo=TRUE}
+UKmap9 <- leaflet(UK) %>% 
+          addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+          addCircleMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), popup = ~content, 
+                           color = ~pal(pop), opacity = 1, fillColor = ~pal(pop), fillOpacity = 1) %>%
+          addLegend("topright", pal = pal, values = UK$pop, title = "Population", opacity = 1)
+```
+
+For the **addLegend()** command we can choose where the legend will appear. We then use **pal** to set the colour palette we wish to use, in this case it is the *pal* colour palette we created previously. We then choose the **values** we wish to display and the **title** of the legend.
+
+```{r viewmap9, results='hide'}
+
+UKmap9
+
+```
+
+One final issue you may have found is that when you move around the maps we have created you may accidently zoom to the wrong part of the map, and may not be able to easily return to the correct view. We can add a button to help with this from the leaflet.extras package.
+
+```{r packages2, echo=TRUE, results='hide', eval=FALSE}
+
+library(leaflet.extras)
+
+```
+
+The leaflet.extras packages adds a great deal of extra functionality to Leaflet, some of which are worth experimenting with. For now, we will simply add a view reset button to our map using the command **addResetMapButton()**.
+
+```{r UKmap10, echo=TRUE}
+
+UKmap10 <- leaflet(UK) %>% 
+          addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+          addCircleMarkers(~long, ~lat, clusterOptions=markerClusterOptions(), popup = ~content, 
+                           color = ~pal(pop), opacity = 1, fillColor = ~pal(pop), fillOpacity = 1) %>%
+          addLegend("topright", pal = pal, values = UK$pop, title = "Population", opacity = 1) %>%
+          addResetMapButton()
+
+```
+
+```{r viewmap10, results='hide'}
+
+UKmap10
+
+```
+
+##Chloropleths
+
+Now we will move on to chloropleths (sometimes called heatmaps). These are slightly more complicated as rather than display data at a particular point, we are now showing data for a particular region. To make these work we will usually have to use a shapefile. A shapefile is actually a collection of files used in combination to map geographic areas. For example, a shapefile for CCGs would display all of the boundaries for CCGs which could then be combined with data, or layered onto a map using GIS software.
+
+The first step for this work is to load some new packages to help us handle shapefiles.
+
+```{r packages3, echo=TRUE, results='hide', eval=FALSE}
+
+library(rgdal)
+library(sp)
+library(spdplyr)
+
+```
+
+Then we will read in the shapefile we will be working with. This particular shapefile was downloaded from the ONS Open Geography portal (http://geoportal.statistics.gov.uk/). The shapefile shows local authority districts from 2011.
+
+We are using the **readOGR** function from the rgdal package. As shapefiles are made up of several separate files we cannot just have a simple import of the data. **dsn** refers to the data source name, and in our case, the data source is the *maps* folder included in the materials for this exercise. **layer** refers to the layer name. If you navigate to the *maps* folder you will see 6 files with names beginning *Local_Authority_Districts_December_2011_GB_BGC*; the layer command will bring over all of the files that make up this shapefile as all of the files with this name are needed. Using **str** we can see the structure of the imported object. 
+
+```{r shapfile, echo=TRUE}
+
+LAD <- readOGR(dsn = "./Maps", layer = "Local_Authority_Districts_December_2011_GB_BGC", verbose = FALSE)
+
+str(LAD, max.level = 3, list.len = 8)
+
+```
+
+Having imported the shapefile we must also make sure that the projections are consistent. As you will have seen, maps look very different depending on the projection that has been used to produce them. Not having a consistent projection between the shapefile you are using and the way that Leaflet projects the map will cause your chloropleth to be incorrectly located. I always use this code to correct for this.
+
+```{r projection, echo=TRUE}
+
+PRO <- CRS('+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0')
+LAD <- spTransform(LAD, PRO)
+
+```
+
+Now we can import the data we will be using.The data is taken from the 2011 census, and reports the number of people who listed their religion as either Heavy Metal or Jedi, aggregated to local authority district level. It was obtained from the UK Data Service Census Support website.
+
+```{r}
+
+Religions <- read.csv("Religions.csv")
+
+head(Religions)
+
+```
+
+As we have a shapefile, and a dataset, we can merge them together. Looking at the **str** output created when importing the shapefile, we can see that in the @data section there are the variables that are included with this shapefile (these correspond to the attribute table for the shapefile if using GIS software). The variables are *objectid, ladllcd, ladllcdo, ladllnm, ladllnmw, st_areasha, st_lengths*. Coincidently, our *Religions* data also contains a variable *ladllcd*! We can therefore use that variable to merge our religions data with the shapefile.
+ 
+```{r merging, echo=TRUE}
+
+LAD.map <- merge(LAD, Religions, by = "lad11cd")
+
+```
+
+We can now try plotting the data. We are going to use the **addPolygons()** function from Leaflet to do this. 
+
+```{r UKmap11, echo=TRUE}
+
+UKmap11 <- leaflet(LAD.map) %>% 
+           addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+           addResetMapButton() %>%
+           addPolygons()
+
+```
+
+```{r viewmap11, results='hide'}
+
+UKmap11
+
+```
+
+Not the prettiest or most useful map ever! Fortunately we can change it. Firstly let's change the thickness of the lines along the boundaries. We use the **weight** option to do this. Then we can change the colour of the shapes and boundaries using the **color** option. Adding **smoothFactor** will slightly improve the look of the map, and make edges less jarring. We also make use of the highlight function, so that as we hover over an area it is highlighted for us. In this example, the region the mouse is over will be highlighted with a white boundary, and that boudary will be twice as broad as normal.
+
+```{r UKmap12, echo=TRUE}
+
+UKmap12 <- leaflet(LAD.map) %>% 
+           addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+           addResetMapButton() %>%
+           addPolygons(weight=0.5, color = "#d3d3d3", smoothFactor = 0.5, 
+                       highlightOptions = highlightOptions(color = "white", weight = 2, bringToFront = TRUE))
+
+```
+
+```{r viewmap12, results='hide'}
+
+UKmap12
+
+```
+
+It's less garish, but not really anymore useful. We can now start displaying the religions data on the map.
+
+Much like before, we want to create a palette to display the information that we are interested in. We can do this to colour our map by the number of people who listed their religion as Jedi in 2011. We will use the same **colorBIn** command to do this. Notice that this time, rather than using one of the inbuilt R palettes, I have instead listed three hex codes for colours I wish to use. R will assume these are the lowest, middle, and uppermost colours of the spectrum I want, and will generate any inbetween colours that are needed.
+
+```{r}
+
+pal2 <- colorBin(c("#00b6ed", "#ffffff", "#ec008c"), bins=c(0,500,1000,1500,2000,2500,3000), domain = LAD.map$Jedi)
+
+```
+
+Now we can try adding these colours to our chloropleth.
+
+```{r UKmap13, echo=TRUE}
+
+UKmap13 <- leaflet(LAD.map) %>% 
+           addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+           addResetMapButton() %>%
+           addPolygons(weight=0.5, color = "#d3d3d3", smoothFactor = 0.5,
+                       highlightOptions = highlightOptions(color = "white", weight = 2, bringToFront = TRUE),
+                       fillColor= ~pal2(Jedi), fillOpacity = 0.8)
+
+```
+
+Here I have added the new argument **fillColor**. This is set to use the *pal2* palette we've just created upon the Jedi variable in the *LAD.map* data.I have also included **fillOpacity = 0.8** because I would like the fill colours to stand out. 
+
+```{r viewmap13, results='hide'}
+
+UKmap13
+
+```
+
+As we did before, we should probably add a legend so that people can understand what is being shown.
+
+```{r UKmap14, echo=TRUE}
+
+UKmap14 <- leaflet(LAD.map) %>% 
+           addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+           addResetMapButton() %>%
+           addPolygons(weight=0.5, color = "#d3d3d3", 
+                       highlightOptions = highlightOptions(color = "white", weight = 2, bringToFront = TRUE),
+                       fillColor= ~pal2(Jedi), fillOpacity = 0.8, smoothFactor = 0.5) %>%
+           addLegend("topright", pal = pal2, values = ~Jedi, title = "Number of Jedis", opacity = 1)
+
+```
+
+```{r viewmap14, results='hide'}
+
+UKmap14
+
+```
+
+Whilst there is certainly a visual improvement to the map, as we don't have any data for Scotland, it is probably for the best that we delete the boundaries for Scotland. This will hopefully remove the large grey patch from the map, and the NAs from our legend. Boundaries codes for Scotland all begin *S1* so I will use **grep** to remove any objects whose codes contain *S1*.
+
+```{r scotland, echo=TRUE}
+
+LAD.map <- LAD.map[ grep("S1", LAD.map$lad11cd, invert = TRUE) , ]
+
+```
+
+It would also be useful to display popups when we click on a region as we did previously. We can use the same commands to generate new *content* values for the new maps.
+
+```{r}
+content2 <- paste("<b>Location:</b>", LAD.map$lad11nm, "<br/>",
+                  "<b>Jedis:</b>", LAD.map$Jedi)
+```
+
+So let's create our final map.
+
+```{r UKmap15, echo=TRUE}
+
+UKmap15 <- leaflet(LAD.map) %>% 
+           addProviderTiles(providers$Esri.WorldGrayCanvas) %>% 
+           addResetMapButton() %>%
+           addLegend("topright", pal = pal2, values = ~Jedi, title = "Number of Jedis", opacity = 1) %>%
+           addPolygons(weight=0.5, color = "#d3d3d3", smoothFactor = 0.5,
+                       highlightOptions = highlightOptions(color = "white", weight = 2, bringToFront = TRUE),
+                       fillColor= ~pal2(Jedi), fillOpacity = 0.8, 
+                       popup = ~content2 )
+         
+```
+
+```{r viewmap15, results='hide'}
+
+UKmap15
+
+```
+
+###Task
+
+Using what we have covered today produce a chloropleth showing the number of people who listed Heavy Metal as their religion in just England. Since my geography is pretty poor could you perhaps **addMiniMap** to help me out please?
