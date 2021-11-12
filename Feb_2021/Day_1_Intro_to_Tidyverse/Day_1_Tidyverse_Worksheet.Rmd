@@ -1,0 +1,325 @@
+---
+title: "Crime Data in R: Day 1 - Tidyverse Worksheet"
+output: html_document
+---
+# Setup: tidyr #
+
+This .Rmd uses the 'readxl' and 'tidyverse' packages, which I have already loaded for you invisibly in the background. If you are working directly in R (rather than a virtual environment) you may need to install and/or load those packages. Do that by hitting the `Run` button, which is the little green right facing arrow at the far right of the code chunk. Alternatively, you can click inside the code chunk, hold down the `Ctrl` and `Shift` keys and clicking the `Enter` key. As a last opiton, there is a little drop down menu next to the right facing arrow Run button at the top of the .Rmd document. 
+
+NOTE!!!
+You want to check that you working directory is set to the source file for this .Rmd. 
+
+Do that by going to the `Session` menu at the very top of the RStudio window and choosing `Set Working Directory` to `To Source File Location`. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(readxl)
+require(tidyverse)
+options(scipen = 999) 
+```
+
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~-
+# Tibble exercises#
+
+## Loading in the data ##
+
+The first step in most R processes is to load in some data. I have provided 5 different data sets in 3 different formats so you can see how to load in different data types:
+* drugs_seizures.csv
+* drugs_volume.csv
+* bcs_2007_8_teaching_data.tab
+* sexual_offences_1946_1970.xlsx
+* population.xlsx
+
+```{r read in basic style}
+
+drugs_seizures <- read.csv ("drugs_seizures.csv", header=TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM")
+
+# name_of_data_frame_1 <- read.cvs ("name_of_file.csv", header=TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM")
+
+# name_of_data_frame_2 <- read.table ("name_of_file.tab", header=TRUE, sep="\t")
+
+# name_of_data_frame_3 <- read_excel ("name_of_file.xlsx")
+```
+
+## Take a closer look at one or more of them ##
+I have provided two ways to take a closer look, but there are more. If you have extra time, can you find some? 
+
+```{r checking}
+print(drugs_seizures)
+typeof(drugs_seizures)
+```
+
+## Convert all your data frames to tibbles ##
+I have provided one easy way to convert data frames to tibbles, but have also provided same code for a way to create a tibble from a set of isolated columns. If you have extra time, can you create or extract columns and then bind them into a tibble?
+```{r convert to tibbles}
+# Convert data frame to tibble
+# name_of_data_frame_x <- as_tibble(name_of_data_frame)
+
+# create new tibble from columns
+# data_name <- tibble(columnA, columnB, columnN)
+```
+
+## Have another close up look ##
+Let's check again to see how they look now as tibbles. have removed the sample code, so you may want to copy/paste it from above when you checked on the original data frames. 
+
+```{r checking again post-tibblization}
+
+```
+
+### Hint = you can do this all in one step! ###
+You can definitely read in data and convert it to tibbles, but you can also fold these two steps together into one and read data AS a tibble. Note that the as_tibble command is the same as above where it was used to convert data frames, but this time it houses the read.format function inside a set of parentheses before saving it under the designated name. You will need to change where it says .FORMAT and .format as needed, plus add in all the header=TRUE stuff. 
+
+```{r read in advanced}
+# name_of_tibble_x <- as_tibble(read.FORMAT ("name_of_file.format"))
+
+```
+
+## Manipulating the data with tidyverse functions ##
+Now that we have some tibbles, let's use some tidyverse functions on them and get used to extracting values and variables. Start by extracting columns and rows of data as values and variables in several ways. I particularly recommend you extract the `population` column from the `population` dataset... 
+Use all the ways if you have the time! 
+It might help you understand the processes better if you take a closer look at  by printing (or printing the `typeof`) or by checking on them in the environment pane on the upper right of the RStudio window. 
+
+```{r examine column data as values}
+### Subset column as value	
+# value_name_1 <- name_of_tibble_x$column_name
+# value_name_2 <- name_of_tibble_x[['column_name']]
+# value_name_3 <- name_of_tibble_x[[1]]
+
+### Subset column as value using the pipe
+# name_of_tibble_x %>% .$column_name
+# name_of_tibble_x %>% .[['column_name']] 
+# name_of_tibble_x %>% .[[1]]
+
+
+### Subset column as variable
+# variable_name_1 <- name_of_tibble_x[1]
+# variable_name_2 <- name_of_tibble_x[,1]
+
+### Subset row as variable
+# variable_name_3 <- name_of_tibble_x[,1]
+
+```
+
+## Adding extracted columns into tibbles
+You are doing so well! One last thing to do for now. I want you to pop the `population` column you extracted into the `sexual_offences` tibble (or however you ended up naming the tibble for that data set). 
+
+```{r add an extracted column into a tibble}
+# new_tibble_name <- original_tibble_name  %>% add_column(column_to_add)
+
+```
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~-
+# Tidy Exercises
+
+### Make each tibble tidy as needed ###
+
+Now that we have tibbles, we need to make sure they are tidy.
+* One observation per row, 
+* One variable per column, and 
+* One value per cell. 
+
+Let's start with the two drugs tibbles, the ones for counts of seizures and the one for volume seized. 
+This one will need gather and separate. If you like to (and have the time) you can use relocate as well to make the drug volumes tibble look nicer. You might also try chaining all the processes together using the pipe. 
+
+```{r gather, separate and relocate drugs}
+# tidy_tibble %>% gather(name_of_column_holding_previous_column_headings, name_of_column_holding_previous_column_contents, Name_of_first_column_to_gather:Name_of_last_column_to_gather)
+
+# tidy_tibble %>% spread(name_of_column_to_split, c('name_of_new_column_1', 'name_of_new_column_1'), 'character_at_which_to_split')
+
+## OR ##
+# # tidy_tibble %>% spread(name_of_column_to_split, c('name_of_new_column_1', 'name_of_new_column_1'), 'numerical_position_after_which_should_split')
+
+# tidy_tibble <- tidy_tibble %>% relocate('name_of_column_to_move', .after = 'name_of_column_to_precede_moved_column')
+
+
+```
+
+The sexual offenses data also has a couple of problems and also needs gather and separate. 
+
+```{r efficiently gather and separate sexual offences}
+# tidy_tibble %>% spread(column, Name)
+
+```
+
+# The crime_survey data - is it tidy? 
+```{r gather crime survey}
+crime_survey_tidy <- crime_survey %>%
+  gather() %>%
+  separate()  %>%
+  spread()
+
+```
+
+If you have enough time, you might play around with gather and spread. They are, in effect, the reverse of each other so you can use them to transform data back and forth between wide and long. Think about why this might be useful. 
+
+```{r practice gather and spread}
+# tidy_tibble %>% spread(column, Name)
+```
+
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~-
+# Dplyr exercises
+
+Using the tidy sexual offenses data, calculate the total number of sexual offense reports taken each year for each gender of victim. This will probably require `group_by` and `summarise` functions. 
+
+```{r summaries offences by year and victim gender}
+# data_grouped <- group_by(ungrouped_data, column_to_be_grouped_by)
+
+# summarise(data_grouped, mean(columns_to_summarise))
+
+```
+
+If you get an output in red warning you about how `summarise` groups objects, you can ignore it for now. Unless it actually says "error" - then you probably need to try something else. 
+
+Now that we know a bit about grouping and summarising, I want you to create a new tibble with the total sexual offenses reports taken each year, add the `population` column that you extracted earlier, and create a new column that shows the ration of reports per year to total population. You will still need `group_by` and `summarise` but now will also need `mutate` but with some other mathematical operator in place of the `+` seen in the next sample code block. 
+
+```{r summarise offences by year and add a column for offences per population}
+
+# tidy_data %>% mutate(new_column = original_column_1 + original_column_2)
+
+```
+
+If you have time, practice your dplyr skills by doing something similar with other data or by using other dplyr functions. 
+```{r summarise data by 2 or more groups}
+
+# select() - create subsets by columns
+# selected_subset_of_data_1 <- select(original_data_set, column_to_select_1, column_to_select_2, column_to_select_3)
+# selected_subset_of_data_2 <- select(original_data_set, first_sequential_column_to_select:final_sequential_column_to_select, another_non_sequential_column_to_select)
+# selected_subset_of_data_3 <- select(original_data_set, -(column_to_exclude_from_selection))
+
+# filter() - create subsets by rows
+# filtered_subset_of_data_1 <- filter(original_data_set, column_heading_used_to_filter == 'observation_to_filter')
+# filtered_subset_of_data_1 <- filter(original_data_set, column_heading_used_to_filter_1 == 'criterion_to_match_1', column_heading_used_to_filter_2 == 'criterion_to_match_1')
+
+# arrange() - only reorders rows 
+# arranged_data_1 <- arrange(original_data_set, column_heading_to_priority_order, column_heading_to_secondary_order)
+
+```
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~-
+# Merge exercises
+
+Let's do some merging! First, try out a full join on the drugs_seizures and drugs_volumes tibbles to see what happens. You can then print the results or otherwise inspect it through the environment pane. 
+
+Note that for a full join you only need the names of the two sources to join - no need for any column names or criteria for joining. 
+# Start with a full_join
+```{r do}
+# full_join_tibble <- full_join(original_tibble_1, original_tibble_2)
+
+```
+What does this show us?
+* Even without specifying which columns are shared by both tibbles, the columns are NOT repeated. This is only true if all the 'same' column headers are the REALLY the same in both tables (e.g. same capitalisation, same spelling, etc.). If there had been a 'year' in one and a 'Year' in the other, you would have gotten both 'year' and 'Year' columns (with the same contents).
+* There are some issues with missing data. For example, police forces made 554 seizures of Class a - other drugs in 2007, but there is no listed volume or unit. A logical problem! At the same time, the missing volume and unit is not so much a problem for class B Mephedrone because there were 0 police seizures in 2007. Still... We might want a zero here instead of a NA and we probably want the unit as (hopefully) it will be listed somewhere. 
+
+
+To do that, let's combine the two tables with an anti_join to see all the rows that appear in one table but not the other. Then we can pipe the results to `group_by` and `summarise` to see a nice table of how many and what kind of rows have missing values?  
+
+Note, I have demonstrated how to anti_join using more than one shared column. How many shared columns do you need to isolate the rows you want? Which columns? And what is the right order to list the tables in? Hmmmm.
+
+#    Explore more with anti-join
+```{r find and then summarise the missing volumes.}
+# anti_join_tibble <- anti_join(original_tibble_1, original_tibble_2, by= c('one_shared_column', 'another_shared_column' ) 
+
+# anti_join_tibble %>% group_by(how_you_want_to_group) %>% summarise((n=n()))
+
+```
+What happens when you reverse the order of tables following `anti_join()`? Does that tell you anything about missing values? 
+
+As a bonus exercise if you have time, try to get the two statements above into one, concise statement in which the output of each step is piped to the next step. 
+
+Moving on, let's ignore the missing values for now then and explore other types of joins. What differences can you find between these? And if you reverse the order of the tables? Look at the number of rows, number of columns, column order, etc.
+# Explore other types of joins
+```{r testing different joins}
+
+inner_join_tibble <- inner_join(original_tibble_1, original_tibble_2, by='column_shared_by_both_tibbles')
+left_join_tibble <- left_join(original_tibble_1, original_tibble_2, by='column_shared_by_both_tibbles')
+right_join_tibble <- right_join(original_tibble_1, original_tibble_2, by='column_shared_by_both_tibbles')
+semi_join_tibble <- semi_join(original_tibble_1, original_tibble_2, by='column_shared_by_both_tibbles')
+
+```
+
+
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~--~-
+# ggplot2 Exercises
+
+Now, let's dig into the crime_survey data. Make sure you have this data set loaded up as a tidy tibble. You may want to open up the user's guide to help you understand the column names and meaning of the values. 
+
+It can be found in Crime_Data_in_R > Day_1_Intro_to_Tidyverse > Original_Data_Files_And_Referrences > British_Crime_Survey > mrdoc folder > 6891_userguide.pdf
+
+Let's start with some nice, straightforward histograms which take a single variable and return a count of how many times all of the different values for that variable occur and puts it in a nice visual. How about we use the `age` variable from the `crime_survey` data set? 
+
+```{r histogram}
+
+histogram_plot <- tibble_name %>%
+  ggplot( aes(x=variable_to_examine)) +
+    geom_histogram( binwidth=5)
+
+histogram_plot
+```
+
+We can see that the age spread is nice enough... more people in the middle ranges responded than people from the youngest and the oldest ends of the range. But how about we make this a bit easier to read and also more precise? 
+* Change the bin width value to 1 (so we get the count of exactly how many respondents match each age.)
+* Set a fill and outline. You can write some words (like "white", "blue", "tomato" or "cornsilk" or you can write hexadecimal values). See this link for more info - http://sape.inf.usi.ch/quick-reference/ggplot2/colour. 
+* Set the alpha to a number between 0 and 1 to change the transparency. I recommend a number just below 1, like 0.85 or 0.9. 
+* Add a logical title. 
+
+If you have lot's of time, try making some other nice histograms for the `crime_survey` data. Which varables make for good histograms? Which are less useful?
+
+```{r histogram but better}
+
+histogram_plot <- tibble_name %>%
+  ggplot( aes(x=variable_to_examine)) +
+  geom_histogram( binwidth= numerical_bin_width_value, fill="colour_1", color="colour_2", alpha=numerical_alpha_value) +
+  ggtitle("Title of Histogram")
+
+histogram_plot
+
+```
+
+Having mastered histograms, let's go on to scatter plots. These are made with `geom_points` and are useful for looking at the relationship between two numerical or scale variables. I suggest you start with `age` and `tcneigh` to see if there is a relationship between the age of the crime survey respondent and their opinion about the level of problems with noisy or nuisance neighbours. What relationship might you expect? 
+
+If you have lots of time, try this again with other variables - which ones work best? Which don't work at all?
+
+```{r scatterplot}
+
+#plot_name <-  tibble_name %>%
+# ggplot(aes(variable_to_plot_along_x,variable_to_plot_along_y) +
+# geom_point)
+
+
+```
+
+This suggests that most people, of all ages, perceive perceive noisy or nuisance neighbours to be a fairly low level problem. This is because the thickest areas of the plot are found within a horizontal line above and below 0 or the y axis. Perhaps not surprisingly, there are fewer points at the higher end of the age scale than at the low end or in the middle, just because fewer people live past 78 or so.
+
+At the same time, there are a non-trivial number of people under the age of 50 or so that find noisy or nuisance neighbours to be a very big problem. Let's add another variable into this plot to see if it clarifies the situation. If we colour each point according to the sex of the respondent, that may show us something interesting. 
+
+Hint - you might notice that the sex should be discrete rather than continuous. To correct that, you can tell ggplot to approach the sex variable as a factor by wrapping the `variable_to_distinguish_by_colour` within  `as_factor()`.
+
+```{r scatterplot with colour}
+
+#plot_name <- ggplot(tibble_name) + 
+#  geom_point(aes(variable_to_plot_along_x,variable_to_plot_along_y, colour = variable_to_distinguish_by_colour))
+
+
+```
+
+Well, that shows two things. First, that more of the points from the upper end of the age range are sex = 2. Second, that more of the people that find noisy or nuisance neighbours to be a problem are also sex = 2. Which sex do you think 2 represents? And why do you think there might be sex differences in this data? How might you explore this further?
+
+If you have lots of time, make another scatterplot or two to explore your ideas. But if you are pushed for time, then you should move right on to making your plot more readable by changing the axis breaks and labels. You may want to explore the data a bit before this, to get exact numbers for the lowest and highest ages (for example). Note, you only have to print the name of the plot followed by a `+` to keep adding brand new details to this plot (like axis labels or break frequencies). 
+
+```{r make it easier to read}
+
+#plot_name + 
+#  scale_x_continuous(name="X_Variable_Label", limits=c(lower_limit_in_numbers, upper_limit_in_numbers), breaks=seq(first_break_in_number,last_break_in_number,break_frequency_in_numbers)) +
+#  scale_y_continuous(name="Y_Variable_Label", limits=c(lower_limit_in_numbers, upper_limit_in_numbers))
+
+
+```
+
+If you have lots of time, consider adding a regression line, or linear model, to the data. You can even make 2, one for each sex. Why not? 
+
+You will need to think carefully about which variable names to substitute for all the variables in this sample formula. Good luck!
+
+```{r add linear model}
+
+# plot_name +
+# geom_smooth(aes(group = variable, x=variable, y=variable), method = "lm", se = FALSE)
+
+```

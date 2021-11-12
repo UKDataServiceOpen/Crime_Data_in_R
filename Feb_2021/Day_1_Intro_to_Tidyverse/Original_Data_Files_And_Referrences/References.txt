@@ -1,0 +1,19 @@
+University of Manchester, Cathie Marsh Centre for Census and Survey Research, ESDS Government. (2011). 
+British Crime Survey 2007-2008: Unrestricted Access Teaching Dataset. 
+[data collection]. BMRB, Social Research, Home Office, Research, Development and Statistics Directorate, 
+[original data producer(s)]. BMRB, Social Research. SN: 6891, http://doi.org/10.5255/UKDA-SN-6891-1. 
+Contains public sector information licensed under the Open Government Licence v2.0
+
+
+Jackson, L. (2015). Criminal justice statistics and sexual offences (England and Wales) 1918-1970. 
+[data collection]. UK Data Service. SN: 852096, http://doi.org/10.5255/UKDA-SN-852096
+https://reshare.ukdataservice.ac.uk/852096/
+
+
+National Statistics. (2021). Seizures of drugs in England and Wales, financial year ending 2020: data tables
+https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/940592/seizures-drugs-mar2020-hosb3920-tables.ods
+
+
+ONS. (2015). UK Population Estimates 1851 to 2014 Release date: Reference number: 004356
+https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/adhocs/004356ukpopulationestimates1851to2014
+

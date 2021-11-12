@@ -1,0 +1,59 @@
+---
+title: "Tidyverse_4_Merge"
+author: "J"
+date: "25/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(readxl)
+require(tidyverse)
+```
+
+#### Ensure you have the drugs data sets loaded into R as tidy tibbles ####
+```{r check that you have all needed tidy tibbles}
+drugs_siezures <- 
+  as_tibble(read.csv("drugs_seizures.csv",  header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+drugs_volume <- 
+  as_tibble(read.csv("drugs_volume.csv", header = TRUE, check.names=FALSE, fileEncoding="UTF-8-BOM"))
+
+drugs_siezures_tidy <- drugs_siezures %>% gather(year,siezures,'2007':'2020') %>%
+  separate(drug, c("class","type"), sep='-')
+
+drugs_volume_tidy <- drugs_volume %>% gather(year,volume_siezed,'2007':'2020') %>%
+  separate(drug, c("class","type"), sep='-')  %>%
+  relocate('unit', .after = 'volume_siezed')
+
+```
+
+#### Exercises: Merging data sets ####
+
+# Start with a full_join
+```{r do}
+full_join_drugs <- full_join(drugs_siezures_tidy,drugs_volume_tidy)
+print(full_join_drugs)
+
+```
+
+#    Explore more with anti-join
+```{r find and then summarise the missing volumes.}
+missing_volumes <- anti_join(drugs_siezures_tidy, drugs_volume_tidy, by = c("force", "type", "class", "year"))
+
+missing_volumes %>% group_by(type) %>% summarise((n=n()))
+
+```
+
+# Explore other types of joins
+Note: you can specify which columns you want to join, as I have done with the inner_join function. But if you do not specify, then R tries to join by everything that can be used to join by, which in this case is `by = c("force", "class", "type", "year")`. It will give you a red message to let you know that it had to do this work for you and that you should know exactly what work it did. 
+
+```{r testing different joins}
+inner_join_drugs <- inner_join(drugs_siezures_tidy,drugs_volume_tidy, by = c("force", "class", "type", "year"))
+
+left_join_drugs <- left_join(drugs_siezures_tidy,drugs_volume_tidy)
+
+right_join_drugs <- right_join(drugs_siezures_tidy,drugs_volume_tidy)
+
+semi_join_drugs <- semi_join(drugs_siezures_tidy,drugs_volume_tidy)
+
+```

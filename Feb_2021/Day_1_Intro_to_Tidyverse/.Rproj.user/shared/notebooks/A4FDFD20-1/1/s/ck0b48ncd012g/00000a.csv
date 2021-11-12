@@ -1,0 +1,4 @@
+"0","drugs_siezures <- read.csv(""./drugs_siezures.csv"",  header = TRUE, check.names=FALSE)"
+"0","drugs_volume <- read.csv(""./drugs_volume.csv"", header = TRUE, check.names=FALSE)"
+"0","crime_survey <- read.table(""./bcs_2007_8_teaching_data.tab"", sep=""\t"", header=TRUE)"
+"0","sexual_offences <- read_excel(""./SexualOffences1918_70_Data.xlsx"")"

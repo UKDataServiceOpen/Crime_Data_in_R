@@ -1,0 +1,767 @@
+name,lat,long,ccode,pop,region
+York,53.95763,-1.08271,GB,153717,Europe/London
+Yeovil,50.94159,-2.63211,GB,45784,Europe/London
+Yeadon,53.86437,-1.68743,GB,37379,Europe/London
+Yate,51.54074,-2.41839,GB,34406,Europe/London
+Yarm,54.50364,-1.35793,GB,19184,Europe/London
+Wrexham,53.04664,-2.99132,GB,65692,Europe/London
+Worthing,50.81795,-0.37538,GB,99110,Europe/London
+Worksop,53.30182,-1.12404,GB,43252,Europe/London
+Workington,54.6425,-3.54413,GB,27120,Europe/London
+Worcester,52.18935,-2.22001,GB,101659,Europe/London
+Woodford Green,51.60938,0.02329,GB,22803,Europe/London
+Wombwell,53.52189,-1.39698,GB,15518,Europe/London
+Wolverhampton,52.58547,-2.12296,GB,252791,Europe/London
+Wokingham,51.4112,-0.83565,GB,41143,Europe/London
+Woking,51.31903,-0.55893,GB,103932,Europe/London
+Witney,51.7836,-1.4854,GB,29103,Europe/London
+Witham,51.80007,0.64038,GB,25353,Europe/London
+Wishaw,55.76667,-3.91667,GB,30510,Europe/London
+Wisbech,52.66622,0.15938,GB,32489,Europe/London
+Winsford,53.19146,-2.52398,GB,30259,Europe/London
+Windsor,51.48333,-0.6,GB,33348,Europe/London
+Winchester,51.06513,-1.3187,GB,46074,Europe/London
+Wilmslow,53.32803,-2.23148,GB,36617,Europe/London
+Willenhall,52.58514,-2.05934,GB,27500,Europe/London
+Wigston Magna,52.58128,-1.09248,GB,33720,Europe/London
+Wigan,53.54296,-2.63706,GB,175405,Europe/London
+Widnes,53.3618,-2.73406,GB,61464,Europe/London
+Wickford,51.61101,0.52331,GB,32975,Europe/London
+Whitstable,51.3607,1.0257,GB,30195,Europe/London
+Whitley Bay,55.03973,-1.44713,GB,38055,Europe/London
+Whitehaven,54.54897,-3.58412,GB,24900,Europe/London
+Whitefield,53.55,-2.3,GB,23545,Europe/London
+Whickham,54.94561,-1.67635,GB,16625,Europe/London
+Weymouth,50.61448,-2.45991,GB,57691,Europe/London
+Weybridge,51.37178,-0.45975,GB,19463,Europe/London
+Weston-super-Mare,51.34603,-2.97665,GB,82903,Europe/London
+West Molesey,51.39985,-0.37997,GB,18565,Europe/London
+City of Westminster,51.4975,-0.1357,GB,247614,Europe/London
+Westhoughton,53.54899,-2.52464,GB,26260,Europe/London
+Westbury,51.26,-2.1875,GB,16989,Europe/London
+West Bromwich,52.51868,-1.9945,GB,135618,Europe/London
+West Bridgford,52.92979,-1.12537,GB,48314,Europe/London
+Wembley,51.55242,-0.29686,GB,90045,Europe/London
+Welwyn Garden City,51.80174,-0.20691,GB,59910,Europe/London
+Wellington,52.7,-2.51667,GB,22816,Europe/London
+Wellingborough,52.30273,-0.69446,GB,50577,Europe/London
+Welling,51.46246,0.10759,GB,42500,Europe/London
+Wednesfield,52.5963,-2.08508,GB,33555,Europe/London
+Wednesbury,52.5514,-2.02355,GB,24337,Europe/London
+Wath upon Dearne,53.50291,-1.3458,GB,17161,Europe/London
+Watford,51.65531,-0.39602,GB,125707,Europe/London
+Waterlooville,50.88067,-1.0304,GB,64350,Europe/London
+Washington,54.9,-1.51667,GB,53526,Europe/London
+Warwick,52.28333,-1.58333,GB,24040,Europe/London
+Warrington,53.39254,-2.58024,GB,165456,Europe/London
+Warminster,51.20434,-2.17873,GB,17490,Europe/London
+Ware,51.81058,-0.02875,GB,17576,Europe/London
+Wantage,51.58846,-1.42565,GB,18505,Europe/London
+Walton-on-Thames,51.38678,-0.41319,GB,22834,Europe/London
+Walton-on-the-Naze,51.84819,1.26738,GB,17458,Europe/London
+Waltham Abbey,51.687,-0.00421,GB,18069,Europe/London
+Walsall,52.58528,-1.98396,GB,172141,Europe/London
+Wallsend,54.99111,-1.53397,GB,42739,Europe/London
+Wallasey,53.42324,-3.06497,GB,58794,Europe/London
+Walkden,53.51667,-2.4,GB,35937,Europe/London
+Wakefield,53.68331,-1.49768,GB,78978,Europe/London
+Urmston,53.44852,-2.35419,GB,41198,Europe/London
+Uckfield,50.96948,0.09589,GB,18452,Europe/London
+Tynemouth,55.01788,-1.42559,GB,17436,Europe/London
+Tyldesley,53.51393,-2.46754,GB,35932,Europe/London
+Truro,50.26526,-5.05436,GB,23041,Europe/London
+Trowbridge,51.31889,-2.20861,GB,40952,Europe/London
+Totton,50.91877,-1.49037,GB,34169,Europe/London
+Torquay,50.46198,-3.52522,GB,65388,Europe/London
+Tonbridge,51.19532,0.27363,GB,38657,Europe/London
+Tiverton,50.90241,-3.49232,GB,19544,Europe/London
+Tipton,52.52956,-2.06773,GB,47000,Europe/London
+Thorne,53.61122,-0.96308,GB,17295,Europe/London
+Thornaby-on-Tees,54.53333,-1.3,GB,22356,Europe/London
+Thetford,52.41667,0.75,GB,24833,Europe/London
+Thatcham,51.40366,-1.26049,GB,24274,Europe/London
+Tewkesbury,51.99244,-2.1601,GB,19778,Europe/London
+Teignmouth,50.54768,-3.49637,GB,17463,Europe/London
+Taunton,51.01494,-3.10293,GB,64621,Europe/London
+Tamworth,52.63399,-1.69587,GB,81964,Europe/London
+Tadley,51.35045,-1.1285,GB,15836,Europe/London
+Swinton,53.5,-2.35,GB,20000,Europe/London
+Swindon,51.55797,-1.78116,GB,185609,Europe/London
+Swansea,51.62079,-3.94323,GB,300352,Europe/London
+Swanscombe,51.44713,0.31028,GB,15732,Europe/London
+Swanley,51.39717,0.17321,GB,21839,Europe/London
+Swadlincote,52.774,-1.55744,GB,40960,Europe/London
+Sutton in Ashfield,53.12542,-1.26135,GB,43912,Europe/London
+Sutton Coldfield,52.56667,-1.81667,GB,107030,Europe/London
+Sutton,51.35,-0.2,GB,187600,Europe/London
+Sunderland,54.90465,-1.38222,GB,335415,Europe/London
+Sunbury-on-Thames,51.40424,-0.41817,GB,27784,Europe/London
+Sudbury,52.0389,0.73117,GB,22213,Europe/London
+Stroud,51.75,-2.2,GB,60155,Europe/London
+Strood,51.39323,0.47713,GB,33381,Europe/London
+Stretford,53.45,-2.31667,GB,41953,Europe/London
+Stratford-upon-Avon,52.19166,-1.70734,GB,27830,Europe/London
+Stowmarket,52.18893,0.99774,GB,21028,Europe/London
+Stourport-on-Severn,52.33976,-2.28034,GB,20586,Europe/London
+Stourbridge,52.45608,-2.14317,GB,56284,Europe/London
+Stoke-on-Trent,53.00415,-2.18538,GB,372775,Europe/London
+Stockton-on-Tees,54.56848,-1.3187,GB,79957,Europe/London
+Stockport,53.40979,-2.15761,GB,139052,Europe/London
+Stirling,56.11903,-3.93682,GB,36440,Europe/London
+Stevenage,51.90224,-0.20256,GB,90232,Europe/London
+Staveley,53.26667,-1.35,GB,25719,Europe/London
+Stanford-le-Hope,51.52274,0.43422,GB,28725,Europe/London
+Stamford,52.65,-0.48333,GB,20592,Europe/London
+Stalybridge,53.48414,-2.05908,GB,22748,Europe/London
+Staines,51.43092,-0.50606,GB,51040,Europe/London
+Stafford,52.80521,-2.11636,GB,69217,Europe/London
+Spennymoor,54.6988,-1.60229,GB,17766,Europe/London
+Spalding,52.78709,-0.15141,GB,31588,Europe/London
+South Shields,54.99859,-1.4323,GB,83655,Europe/London
+Southsea,50.79205,-1.08593,GB,18514,Europe/London
+Southport,53.64581,-3.01008,GB,91703,Europe/London
+South Ockendon,51.50799,0.28333,GB,19460,Europe/London
+South Hayling,50.78773,-0.97697,GB,15485,Europe/London
+Southend-on-Sea,51.53782,0.71433,GB,295310,Europe/London
+South Elmsall,53.59709,-1.28034,GB,18835,Europe/London
+South Benfleet,51.55295,0.55962,GB,48824,Europe/London
+Southampton,50.90395,-1.40428,GB,246201,Europe/London
+Southall,51.50896,-0.3713,GB,70000,Europe/London
+Solihull,52.41426,-1.78094,GB,96267,Europe/London
+Slough,51.50949,-0.59541,GB,163777,Europe/London
+Sleaford,52.99826,-0.40941,GB,17359,Europe/London
+Skelmersdale,53.55024,-2.77348,GB,38944,Europe/London
+Skegness,53.14362,0.3363,GB,24876,Europe/London
+Sittingbourne,51.34128,0.73282,GB,48948,Europe/London
+Shrewsbury,52.71009,-2.75208,GB,71715,Europe/London
+Shoreham-by-Sea,50.83413,-0.27431,GB,19175,Europe/London
+Shipley,53.83333,-1.76667,GB,28544,Europe/London
+Sheffield,53.38297,-1.4659,GB,685368,Europe/London
+Sevenoaks,51.27266,0.18883,GB,29506,Europe/London
+Selby,53.78333,-1.06667,GB,24859,Europe/London
+Seaham,54.83903,-1.34575,GB,22373,Europe/London
+Seaford,50.77141,0.10268,GB,22584,Europe/London
+Scunthorpe,53.57905,-0.65437,GB,79977,Europe/London
+Scarborough,54.27966,-0.40443,GB,61749,Europe/London
+Sandown,50.65158,-1.16103,GB,20155,Europe/London
+Sandbach,53.14515,-2.36251,GB,17976,Europe/London
+Saltash,50.40959,-4.22514,GB,15566,Europe/London
+Salisbury,51.06931,-1.79569,GB,44748,Europe/London
+Salford,53.48771,-2.29042,GB,72750,Europe/London
+Sale,53.42519,-2.32443,GB,55689,Europe/London
+Saint Peters,51.36667,1.41667,GB,125370,Europe/London
+Saint Neots,52.21667,-0.26667,GB,30811,Europe/London
+St Helens,53.45,-2.73333,GB,102555,Europe/London
+St Austell,50.3425,-4.77442,GB,25447,Europe/London
+Saint Andrews,56.33871,-2.79902,GB,16800,Europe/London
+St Albans,51.75,-0.33333,GB,84561,Europe/London
+Saffron Walden,52.02337,0.24234,GB,15210,Europe/London
+Ryton,52.61667,-2.35,GB,16093,Europe/London
+Ryde,50.72999,-1.1621,GB,26082,Europe/London
+Rutherglen,55.82885,-4.21376,GB,31180,Europe/London
+Rushden,52.28927,-0.60184,GB,37584,Europe/London
+Runcorn,53.34174,-2.73124,GB,62872,Europe/London
+Ruislip,51.57344,-0.42341,GB,31000,Europe/London
+Rugeley,52.7593,-1.93694,GB,24033,Europe/London
+Rugby,52.37092,-1.26417,GB,73150,Europe/London
+Royton,53.56507,-2.12267,GB,22848,Europe/London
+Royston,52.04832,-0.02438,GB,15781,Europe/London
+Royal Tunbridge Wells,51.13321,0.26256,GB,68910,Europe/London
+Rottingdean,50.80984,-0.05939,GB,21756,Europe/London
+Rotherham,53.43012,-1.35678,GB,117618,Europe/London
+Romsey,50.98906,-1.49989,GB,17161,Europe/London
+Romford,51.57515,0.18582,GB,95000,Europe/London
+Rochford,51.58198,0.70673,GB,16739,Europe/London
+Rochester,51.38764,0.50546,GB,28671,Europe/London
+Rochdale,53.61766,-2.1552,GB,97550,Europe/London
+Risca,51.60799,-3.10081,GB,20443,Europe/London
+Ripon,54.13579,-1.52826,GB,16363,Europe/London
+Ripley,53.03333,-1.4,GB,21097,Europe/London
+Rhyl,53.31929,-3.49228,GB,25874,Europe/London
+Rhosllanerchrugog,53.00974,-3.05814,GB,25362,Europe/London
+Rhondda,51.65896,-3.44885,GB,59450,Europe/London
+Renfrew,55.87197,-4.39253,GB,22010,Europe/London
+Reigate,51.23736,-0.20582,GB,52123,Europe/London
+Redruth,50.23315,-5.22434,GB,42690,Europe/London
+Redhill,51.24048,-0.17044,GB,51559,Europe/London
+Redditch,52.3065,-1.94569,GB,84300,Europe/London
+Redcar,54.61657,-1.05999,GB,37203,Europe/London
+Reading,51.45625,-0.97113,GB,318014,Europe/London
+Rayleigh,51.58571,0.60459,GB,30196,Europe/London
+Rawtenstall,53.70076,-2.28442,GB,22114,Europe/London
+Rawmarsh,53.46062,-1.34437,GB,18616,Europe/London
+Ramsgate,51.33568,1.41797,GB,38624,Europe/London
+Ramsbottom,53.64789,-2.31683,GB,17738,Europe/London
+Purley,51.33678,-0.11201,GB,72000,Europe/London
+Pudsey,53.79538,-1.66134,GB,33109,Europe/London
+Prestwich,53.53333,-2.28333,GB,32125,Europe/London
+Preston,53.76282,-2.70452,GB,313332,Europe/London
+Prestatyn,53.33748,-3.40776,GB,18701,Europe/London
+Prescot,53.42948,-2.80031,GB,40889,Europe/London
+Poulton-le-Fylde,53.83333,-2.98333,GB,19914,Europe/London
+Potters Bar,51.69353,-0.17835,GB,22639,Europe/London
+Portsmouth,50.79899,-1.09125,GB,194150,Europe/London
+Portslade,50.84286,-0.21608,GB,20000,Europe/London
+Portishead,51.48199,-2.76973,GB,23699,Europe/London
+Porthcawl,51.47903,-3.70362,GB,15672,Europe/London
+Port Glasgow,55.93464,-4.6895,GB,15190,Europe/London
+Portadown,54.42302,-6.44434,GB,22000,Europe/London
+Poole,50.71429,-1.98458,GB,150092,Europe/London
+Pontypridd,51.6021,-3.34211,GB,30420,Europe/London
+Pontypool,51.70111,-3.04444,GB,35686,Europe/London
+Pontefract,53.69107,-1.31269,GB,44710,Europe/London
+Plymstock,50.35999,-4.09049,GB,24103,Europe/London
+Plymouth,50.37153,-4.14305,GB,260203,Europe/London
+Pitsea,51.56387,0.50859,GB,25000,Europe/London
+Pinner,51.59384,-0.38216,GB,19158,Europe/London
+Peterlee,54.76032,-1.33649,GB,37015,Europe/London
+Peterhead,57.50584,-1.79806,GB,18450,Europe/London
+Peterborough,52.57364,-0.24777,GB,163379,Europe/London
+Perth,56.39522,-3.43139,GB,47180,Europe/London
+Penzance,50.11861,-5.53715,GB,19872,Europe/London
+Penrith,54.66579,-2.75757,GB,15181,Europe/London
+Penicuik,55.83116,-3.22608,GB,16110,Europe/London
+Penarth,51.4386,-3.17342,GB,23437,Europe/London
+Paisley,55.83173,-4.43254,GB,76220,Europe/London
+Paignton,50.43565,-3.56789,GB,49886,Europe/London
+Oxford,51.75222,-1.25596,GB,171380,Europe/London
+Oswestry,52.86195,-3.05497,GB,18743,Europe/London
+Ossett,53.67978,-1.58006,GB,21616,Europe/London
+Orpington,51.37457,0.09785,GB,15248,Europe/London
+Ormskirk,53.56685,-2.88178,GB,24073,Europe/London
+Omagh,54.6,-7.3,GB,21056,Europe/London
+Oldham,53.54051,-2.1183,GB,104782,Europe/London
+Oadby,52.60621,-1.08354,GB,23184,Europe/London
+Nuneaton,52.52323,-1.46523,GB,92698,Europe/London
+Nottingham,52.9536,-1.15047,GB,729977,Europe/London
+Norwich,52.62783,1.29834,GB,213166,Europe/London
+Northwich,53.25882,-2.52025,GB,47421,Europe/London
+North Shields,55.01646,-1.44925,GB,39747,Europe/London
+Northolt,51.54855,-0.36778,GB,26000,Europe/London
+Lancing,50.82882,-0.32247,GB,18692,Europe/London
+Northampton,52.25,-0.88333,GB,215963,Europe/London
+Northallerton,54.33901,-1.43243,GB,16832,Europe/London
+Newtownards,54.59236,-5.69092,GB,29363,Europe/London
+Newtownabbey,54.65983,-5.90858,GB,63860,Europe/London
+Newton Mearns,55.77334,-4.33339,GB,24650,Europe/London
+Newton-le-Willows,53.45,-2.6,GB,21782,Europe/London
+Newton Aycliffe,54.61842,-1.5719,GB,25964,Europe/London
+Newton Abbot,50.52858,-3.61186,GB,36474,Europe/London
+Newry,54.17841,-6.33739,GB,27757,Europe/London
+Newquay,50.41557,-5.07319,GB,20189,Europe/London
+Newport Pagnell,52.08731,-0.72218,GB,15067,Europe/London
+Newport,51.58774,-2.99835,GB,306844,Europe/London
+Newport,50.70146,-1.29124,GB,24884,Europe/London
+New Milton,50.75601,-1.6658,GB,23753,Europe/London
+New Mills,53.36592,-1.99986,GB,17968,Europe/London
+Newmarket,52.24467,0.40418,GB,20384,Europe/London
+New Malden,51.40065,-0.2617,GB,23818,Europe/London
+Newcastle upon Tyne,54.97328,-1.61396,GB,192382,Europe/London
+Newcastle under Lyme,53,-2.23333,GB,75794,Europe/London
+Newbury,51.40148,-1.32471,GB,33065,Europe/London
+Newburn,54.9876,-1.74415,GB,41347,Europe/London
+Newark on Trent,53.06667,-0.81667,GB,43363,Europe/London
+Neston,53.28333,-3.05,GB,15064,Europe/London
+Nelson,53.83333,-2.2,GB,29317,Europe/London
+Neath,51.66317,-3.80443,GB,46126,Europe/London
+Nantwich,53.06878,-2.52051,GB,17226,Europe/London
+Nailsea,51.43239,-2.75847,GB,20543,Europe/London
+Musselburgh,55.9417,-3.04991,GB,23620,Europe/London
+Mountsorrel,52.71667,-1.15,GB,17297,Europe/London
+Motherwell,55.78924,-3.99187,GB,32120,Europe/London
+Morley,53.74013,-1.59877,GB,57385,Europe/London
+Moreton,53.4,-3.11667,GB,17670,Europe/London
+Morecambe,54.06835,-2.86108,GB,51644,Europe/London
+Morden,51.39822,-0.19837,GB,48233,Europe/London
+Mitcham,51.40322,-0.16831,GB,48311,Europe/London
+Mirfield,53.67343,-1.69636,GB,18800,Europe/London
+Milton Keynes,52.04172,-0.75583,GB,229941,Europe/London
+Middleton,53.55,-2.2,GB,45589,Europe/London
+Middlesbrough,54.57623,-1.23483,GB,142707,Europe/London
+Mexborough,53.49389,-1.29243,GB,15079,Europe/London
+Merthyr Tydfil,51.74794,-3.37779,GB,43820,Europe/London
+Melton Mowbray,52.76588,-0.88693,GB,27158,Europe/London
+Melksham,51.37281,-2.14002,GB,19357,Europe/London
+Marple,53.39452,-2.06292,GB,18241,Europe/London
+Marlow,51.56933,-0.77415,GB,18261,Europe/London
+Market Harborough,52.4776,-0.92053,GB,22911,Europe/London
+Margate,51.38132,1.38617,GB,60134,Europe/London
+March,52.55131,0.08828,GB,21051,Europe/London
+Mansfield Woodhouse,53.16495,-1.19384,GB,18330,Europe/London
+Mansfield,53.13333,-1.2,GB,171958,Europe/London
+Mangotsfield,51.4878,-2.50403,GB,36427,Europe/London
+Manchester,53.48095,-2.23743,GB,395515,Europe/London
+Maltby,53.41667,-1.2,GB,17513,Europe/London
+Maldon,51.7311,0.67463,GB,21462,Europe/London
+Maidstone,51.26667,0.51667,GB,107627,Europe/London
+Maidenhead,51.52279,-0.71986,GB,64831,Europe/London
+Maghull,53.51619,-2.94117,GB,26997,Europe/London
+Maesteg,51.60926,-3.65823,GB,21001,Europe/London
+Macclesfield,53.26023,-2.12564,GB,63954,Europe/London
+Lymington,50.75767,-1.5443,GB,16446,Europe/London
+Luton,51.87967,-0.41748,GB,258018,Europe/London
+Lowestoft,52.47523,1.75167,GB,70945,Europe/London
+Louth,53.36664,-0.00438,GB,16419,Europe/London
+Loughborough,52.76667,-1.2,GB,59932,Europe/London
+Longfield,51.3969,0.30212,GB,16808,Europe/London
+Long Eaton,52.89855,-1.27136,GB,47898,Europe/London
+Londonderry County Borough,54.99721,-7.30917,GB,87153,Europe/London
+Derry,54.9981,-7.30934,GB,83652,Europe/London
+London,51.50853,-0.12574,GB,7556900,Europe/London
+Lofthouse,53.72947,-1.49697,GB,23458,Europe/London
+Llanelli,51.68195,-4.16191,GB,49591,Europe/London
+Llandudno,53.32498,-3.83148,GB,15371,Europe/London
+Livingston,55.90288,-3.52261,GB,56570,Europe/London
+Liverpool,53.41058,-2.97794,GB,864122,Europe/London
+Littlehampton,50.81137,-0.54078,GB,58714,Europe/London
+Litherland,53.46993,-2.99809,GB,22971,Europe/London
+Lisburn,54.52337,-6.03527,GB,77506,Europe/London
+Lincoln,53.22683,-0.53792,GB,114879,Europe/London
+Lichfield,52.68154,-1.82549,GB,32877,Europe/London
+Leyland,53.69786,-2.68758,GB,37614,Europe/London
+Lewes,50.87398,0.0088,GB,17297,Europe/London
+Letchworth,51.97944,-0.2284,GB,33955,Europe/London
+Leighton Buzzard,51.91722,-0.65802,GB,37469,Europe/London
+Leigh,53.49642,-2.51973,GB,43626,Europe/London
+Leicester,52.6386,-1.13169,GB,508916,Europe/London
+Leek,53.10434,-2.02207,GB,19903,Europe/London
+Leeds,53.79648,-1.54785,GB,455123,Europe/London
+Leatherhead,51.29652,-0.3338,GB,43544,Europe/London
+Royal Leamington Spa,52.2852,-1.52,GB,95172,Europe/London
+Larne,54.85,-5.81667,GB,18421,Europe/London
+Larkhall,55.73333,-3.96667,GB,15020,Europe/London
+Lancaster,54.04649,-2.79988,GB,47162,Europe/London
+Kirkintilloch,55.93933,-4.15262,GB,19630,Europe/London
+Kirkcaldy,56.11683,-3.15999,GB,49460,Europe/London
+Kirkby in Ashfield,53.09982,-1.24379,GB,27539,Europe/London
+Kirkby,53.48138,-2.89215,GB,42744,Europe/London
+Kippax,53.76687,-1.37099,GB,15965,Europe/London
+Kingswood,51.45278,-2.50833,GB,64793,Europe/London
+Kingswinford,52.49755,-2.16889,GB,20000,Europe/London
+Kingston upon Hull,53.7446,-0.33525,GB,314018,Europe/London
+King's Lynn,52.75172,0.39516,GB,46093,Europe/London
+Kilwinning,55.65333,-4.70666,GB,16420,Europe/London
+Kilmarnock,55.61171,-4.49581,GB,46350,Europe/London
+Kidsgrove,53.08691,-2.23777,GB,29480,Europe/London
+Kidlington,51.82166,-1.2886,GB,15829,Europe/London
+Kidderminster,52.38819,-2.25,GB,57059,Europe/London
+Keynsham,51.41387,-2.4978,GB,15641,Europe/London
+Kettering,52.39836,-0.72571,GB,63675,Europe/London
+Kenilworth,52.34958,-1.58276,GB,22413,Europe/London
+Kendal,54.32681,-2.74757,GB,29147,Europe/London
+Kempston,52.11599,-0.50044,GB,19873,Europe/London
+Keighley,53.86791,-1.90664,GB,50171,Europe/London
+Johnstone,55.82906,-4.51605,GB,16390,Europe/London
+Jarrow,54.98036,-1.48423,GB,27264,Europe/London
+Islington,51.53622,-0.10304,GB,319143,Europe/London
+Isleworth,51.47518,-0.34246,GB,20500,Europe/London
+Irvine,55.6194,-4.65508,GB,33740,Europe/London
+Irlam,53.44253,-2.42323,GB,19442,Europe/London
+Ipswich,52.05917,1.15545,GB,178835,Europe/London
+Inverness,57.47908,-4.22398,GB,46870,Europe/London
+Ilkeston,52.97055,-1.30951,GB,38587,Europe/London
+Hythe,50.86004,-1.40162,GB,20201,Europe/London
+Hyde,53.45131,-2.07943,GB,31926,Europe/London
+Huyton,53.4115,-2.83935,GB,54738,Europe/London
+Huntingdon,52.33049,-0.18651,GB,23937,Europe/London
+Huddersfield,53.64904,-1.78416,GB,149017,Europe/London
+Hucknall,53.03333,-1.2,GB,29728,Europe/London
+Hoyland Nether,53.5,-1.45,GB,15842,Europe/London
+Hove,50.83088,-0.1672,GB,75174,Europe/London
+Hounslow,51.46839,-0.36092,GB,66292,Europe/London
+Houghton-Le-Spring,54.84034,-1.46427,GB,37840,Europe/London
+Horwich,53.60126,-2.54975,GB,18696,Europe/London
+Horsham,51.06314,-0.32757,GB,51472,Europe/London
+Horsforth,53.8426,-1.63754,GB,19350,Europe/London
+Horley,51.17423,-0.15919,GB,21232,Europe/London
+Hook,51.36803,-0.3065,GB,18973,Europe/London
+Hoddesdon,51.76148,-0.01144,GB,35174,Europe/London
+Hitchin,51.94924,-0.28496,GB,36099,Europe/London
+Hindley,53.53333,-2.58333,GB,24169,Europe/London
+Hinckley,52.5389,-1.37613,GB,45249,Europe/London
+High Wycombe,51.62907,-0.74934,GB,133204,Europe/London
+High Blantyre,55.78438,-4.10007,GB,16739,Europe/London
+Heysham,54.04367,-2.89322,GB,17016,Europe/London
+Heswall,53.32733,-3.09648,GB,29789,Europe/London
+Hertford,51.79588,-0.07854,GB,25847,Europe/London
+Herne Bay,51.373,1.12857,GB,36642,Europe/London
+Hereford,52.05684,-2.71482,GB,60415,Europe/London
+Hemel Hempstead,51.75368,-0.44975,GB,85629,Europe/London
+Hebburn,54.97302,-1.51546,GB,18808,Europe/London
+Heanor,53.01372,-1.35383,GB,23122,Europe/London
+Hazel Grove,53.38333,-2.11667,GB,15265,Europe/London
+Haywards Heath,50.99769,-0.10313,GB,33845,Europe/London
+Hayes,51.51579,-0.4234,GB,50000,Europe/London
+Haydock,53.46723,-2.68166,GB,17333,Europe/London
+Hawarden,53.18478,-3.02578,GB,25513,Europe/London
+Haverhill,52.08226,0.43891,GB,27041,Europe/London
+Havant,50.8567,-0.98559,GB,45574,Europe/London
+Hatfield,51.76338,-0.22419,GB,41677,Europe/London
+Hastings,50.85519,0.57292,GB,133422,Europe/London
+Haslingden,53.70326,-2.32382,GB,15204,Europe/London
+Harwich,51.94194,1.28437,GB,20723,Europe/London
+Hartley,51.38673,0.30367,GB,16302,Europe/London
+Hartlepool,54.68554,-1.21028,GB,88855,Europe/London
+Harrogate,53.99078,-1.5373,GB,89060,Europe/London
+Harpenden,51.81684,-0.35706,GB,30240,Europe/London
+Harlow,51.77655,0.11158,GB,94365,Europe/London
+Hampton,51.41334,-0.36701,GB,18000,Europe/London
+Hamilton,55.76667,-4.03333,GB,53200,Europe/London
+Halifax,53.71667,-1.85,GB,82624,Europe/London
+Halesowen,52.44859,-2.04938,GB,55265,Europe/London
+Hale,51.22946,-0.78908,GB,15657,Europe/London
+Hailsham,50.8622,0.25775,GB,19977,Europe/London
+Hadleigh,51.55269,0.60983,GB,18300,Europe/London
+Guiseley,53.87561,-1.71232,GB,21000,Europe/London
+Guisborough,54.53478,-1.05606,GB,16979,Europe/London
+Guildford,51.23536,-0.57427,GB,71873,Europe/London
+Grove,51.60954,-1.42187,GB,18312,Europe/London
+Grimsby,53.56539,-0.07553,GB,134160,Europe/London
+Greenock,55.94838,-4.76121,GB,43690,Europe/London
+Greenford,51.52866,-0.35508,GB,38000,Europe/London
+Great Yarmouth,52.60831,1.73052,GB,63434,Europe/London
+Great Wyrley,52.66277,-2.01111,GB,19193,Europe/London
+Great Sankey,53.39234,-2.63994,GB,43793,Europe/London
+Great Malvern,52.11161,-2.32515,GB,36770,Europe/London
+Grays,51.47566,0.32521,GB,89755,Europe/London
+Gravesend,51.44206,0.37106,GB,54263,Europe/London
+Grantham,52.91149,-0.64184,GB,43833,Europe/London
+Grangemouth,56.01141,-3.72183,GB,17280,Europe/London
+Gosport,50.79509,-1.12902,GB,70793,Europe/London
+Gosforth,55,-1.61667,GB,23975,Europe/London
+Gorseinon,51.66931,-4.04163,GB,20581,Europe/London
+Goole,53.70324,-0.87732,GB,20810,Europe/London
+Golborne,53.47693,-2.59651,GB,24021,Europe/London
+Godalming,51.1858,-0.61489,GB,22689,Europe/London
+Gloucester,51.86568,-2.2431,GB,150053,Europe/London
+Glossop,53.44325,-1.949,GB,33243,Europe/London
+Glenrothes,56.19514,-3.17316,GB,39100,Europe/London
+Glasgow,55.86515,-4.25763,GB,591620,Europe/London
+Gillingham,51.38914,0.54863,GB,101187,Europe/London
+Gelligaer,51.66444,-3.25611,GB,17376,Europe/London
+Gateshead,54.96209,-1.60168,GB,77649,Europe/London
+Gainsborough,53.38333,-0.76667,GB,20842,Europe/London
+Fylde,53.83333,-2.91667,GB,76500,Europe/London
+Frome,51.22834,-2.32211,GB,26203,Europe/London
+Frinton-on-Sea,51.83061,1.24424,GB,16941,Europe/London
+Formby,53.55838,-3.06999,GB,23329,Europe/London
+Folkestone,51.08169,1.16734,GB,66429,Europe/London
+Flint,53.24488,-3.13231,GB,26442,Europe/London
+Fleetwood,53.92527,-3.01085,GB,25359,Europe/London
+Fleet,51.28333,-0.83333,GB,38726,Europe/London
+Feltham,51.4462,-0.41388,GB,24325,Europe/London
+Felling,54.95297,-1.57152,GB,34355,Europe/London
+Felixstowe,51.96375,1.3511,GB,29171,Europe/London
+Faversham,51.3148,0.88856,GB,19829,Europe/London
+Farnworth,53.55,-2.4,GB,25680,Europe/London
+Farnham,51.21444,-0.80054,GB,36971,Europe/London
+Farnborough,51.29424,-0.75565,GB,59902,Europe/London
+Fareham,50.85162,-1.17929,GB,57390,Europe/London
+Falmouth,50.15441,-5.07113,GB,31988,Europe/London
+Falkirk,56.0021,-3.78535,GB,35310,Europe/London
+Exmouth,50.61723,-3.40233,GB,34432,Europe/London
+Exeter,50.7236,-3.52751,GB,117763,Europe/London
+Evesham,52.09237,-1.94887,GB,23576,Europe/London
+Esher,51.36969,-0.36693,GB,52392,Europe/London
+Epsom,51.3305,-0.27011,GB,27065,Europe/London
+Enfield Town,51.65147,-0.08497,GB,103970,Europe/London
+Emsworth,50.84779,-0.93697,GB,18777,Europe/London
+Ely,52.39964,0.26196,GB,19090,Europe/London
+Ellesmere Port,53.27875,-2.90134,GB,67768,Europe/London
+Elland,53.6851,-1.83878,GB,15625,Europe/London
+Elgin,57.64947,-3.31843,GB,22980,Europe/London
+Egham,51.43158,-0.55239,GB,29663,Europe/London
+Edinburgh,55.95206,-3.19648,GB,464990,Europe/London
+Eccles,53.48333,-2.33333,GB,37275,Europe/London
+Ebbw Vale,51.77714,-3.20792,GB,33068,Europe/London
+Eastwood,53,-1.3,GB,18612,Europe/London
+Retford,53.32213,-0.94315,GB,22023,Europe/London
+East Molesey,51.39872,-0.34916,GB,18565,Europe/London
+Eastleigh,50.96667,-1.35,GB,54225,Europe/London
+East Kilbride,55.76412,-4.17669,GB,74740,Europe/London
+East Grinstead,51.12382,-0.0061,GB,26523,Europe/London
+East Dereham,52.68333,0.93333,GB,20651,Europe/London
+Eastbourne,50.76871,0.28453,GB,118219,Europe/London
+Durham,54.77676,-1.57566,GB,47785,Europe/London
+Dunstable,51.88571,-0.52288,GB,51973,Europe/London
+Dunfermline,56.07156,-3.45887,GB,50380,Europe/London
+Dundee,56.46913,-2.97489,GB,147710,Europe/London
+Dumfries,55.06959,-3.61139,GB,33280,Europe/London
+Dumbarton,55.94433,-4.57061,GB,19950,Europe/London
+Dukinfield,53.47497,-2.08809,GB,19306,Europe/London
+Dudley,52.5,-2.08333,GB,199059,Europe/London
+Droylsden,53.48005,-2.14543,GB,23689,Europe/London
+Dronfield,53.30221,-1.47507,GB,21124,Europe/London
+Droitwich,52.26667,-2.15,GB,23834,Europe/London
+Dover,51.12598,1.31257,GB,41709,Europe/London
+Dorking,51.23228,-0.3338,GB,17747,Europe/London
+Dorchester,50.71667,-2.43333,GB,16879,Europe/London
+Doncaster,53.52285,-1.13116,GB,158141,Europe/London
+Dinnington,53.36667,-1.2,GB,19860,Europe/London
+Didcot,51.60928,-1.24214,GB,29341,Europe/London
+Dewsbury,53.69076,-1.62907,GB,56640,Europe/London
+Devizes,51.35084,-1.99421,GB,18064,Europe/London
+Derby,52.92277,-1.47663,GB,270468,Europe/London
+Denton,53.45678,-2.11822,GB,27464,Europe/London
+Deal,51.22322,1.40432,GB,30555,Europe/London
+Daventry,52.25688,-1.16066,GB,23879,Europe/London
+Darwen,53.69803,-2.46494,GB,32566,Europe/London
+Darton,53.58705,-1.52676,GB,15259,Europe/London
+Dartford,51.44657,0.21423,GB,56694,Europe/London
+Darlington,54.52429,-1.55039,GB,92363,Europe/London
+Dalserf,55.73333,-3.91667,GB,17985,Europe/London
+Dagenham,51.55,0.16667,GB,108368,Europe/London
+Cwmbran,51.65446,-3.02281,GB,48157,Europe/London
+Cumbernauld,55.94685,-3.99051,GB,51610,Europe/London
+Croydon,51.38333,-0.1,GB,173314,Europe/London
+Crowthorne,51.37027,-0.79219,GB,25522,Europe/London
+Crowborough,51.06098,0.16342,GB,20607,Europe/London
+Crewe,53.09787,-2.44161,GB,75556,Europe/London
+Crawley,51.11303,-0.18312,GB,180508,Europe/London
+Cramlington,55.08652,-1.58598,GB,33180,Europe/London
+Cowley,51.73213,-1.20631,GB,16500,Europe/London
+Cowes,50.76306,-1.29772,GB,21226,Europe/London
+Coventry,52.40656,-1.51217,GB,359262,Europe/London
+Coulsdon,51.32002,-0.14088,GB,25500,Europe/London
+Corby,52.49637,-0.68939,GB,56810,Europe/London
+Consett,54.85404,-1.8316,GB,29137,Europe/London
+Conisbrough,53.48188,-1.23214,GB,15934,Europe/London
+Congleton,53.16314,-2.21253,GB,26178,Europe/London
+Colwyn Bay,53.29483,-3.72674,GB,34284,Europe/London
+Colne,53.85713,-2.16851,GB,20118,Europe/London
+Coleraine,55.13333,-6.66667,GB,25681,Europe/London
+Colchester,51.88921,0.90421,GB,121859,Europe/London
+Coity,51.522,-3.55531,GB,41352,Europe/London
+Cobham,51.32997,-0.4113,GB,16724,Europe/London
+Coatbridge,55.86216,-4.02469,GB,43970,Europe/London
+Coalville,52.72247,-1.3702,GB,38245,Europe/London
+Clydebank,55.90137,-4.4057,GB,26640,Europe/London
+Clydach,51.68333,-3.9,GB,19307,Europe/London
+Clevedon,51.44227,-2.85786,GB,21002,Europe/London
+Cleethorpes,53.56047,-0.03225,GB,32017,Europe/London
+Cleckheaton,53.72405,-1.71294,GB,27393,Europe/London
+Clacton-on-Sea,51.78967,1.15597,GB,50548,Europe/London
+Cirencester,51.71927,-1.97145,GB,17153,Europe/London
+Christchurch,50.73583,-1.78129,GB,42396,Europe/London
+Chorley,53.65,-2.61667,GB,33888,Europe/London
+Chislehurst,51.41709,0.06858,GB,20000,Europe/London
+Chipping Sodbury,51.53813,-2.39379,GB,36108,Europe/London
+Chippenham,51.46,-2.12472,GB,35800,Europe/London
+Chichester,50.83673,-0.78003,GB,31654,Europe/London
+Chester-le-Street,54.85862,-1.57408,GB,36917,Europe/London
+Chesterfield,53.25,-1.41667,GB,113057,Europe/London
+Chester,53.1905,-2.89189,GB,90524,Europe/London
+Chessington,51.3624,-0.30427,GB,19433,Europe/London
+Cheshunt,51.7002,-0.03026,GB,57374,Europe/London
+Chesham,51.7,-0.6,GB,20649,Europe/London
+Chepstow,51.64087,-2.67683,GB,16169,Europe/London
+Cheltenham,51.90006,-2.07972,GB,116447,Europe/London
+Chelsea,51.48755,-0.16936,GB,60000,Europe/London
+Chelmsford,51.73575,0.46958,GB,111511,Europe/London
+Cheadle Hulme,53.3761,-2.1897,GB,28952,Europe/London
+Chatham,51.37891,0.52786,GB,75509,Europe/London
+Chapeltown,53.46506,-1.47217,GB,23056,Europe/London
+Chalfont Saint Peter,51.60885,-0.55618,GB,20059,Europe/London
+Caterham,51.2823,-0.07889,GB,20957,Europe/London
+Castlereagh,54.5735,-5.88472,GB,56679,Europe/London
+Castleford,53.72587,-1.36256,GB,60509,Europe/London
+Carterton,51.75905,-1.59435,GB,16364,Europe/London
+Carshalton,51.36829,-0.16755,GB,45525,Europe/London
+Carrickfergus,54.7158,-5.8058,GB,29208,Europe/London
+Carmarthen,51.85552,-4.30535,GB,15854,Europe/London
+Carlisle,54.8951,-2.9382,GB,78470,Europe/London
+Cardiff,51.48,-3.18,GB,447287,Europe/London
+Canterbury,51.27904,1.07992,GB,55240,Europe/London
+Cannock,52.69045,-2.03085,GB,86121,Europe/London
+Cambuslang,55.80966,-4.16096,GB,27610,Europe/London
+Cambridge,52.2,0.11667,GB,158434,Europe/London
+Camborne,50.21306,-5.29731,GB,22500,Europe/London
+Camberley,51.33705,-0.74261,GB,30155,Europe/London
+Calne,51.43879,-2.00571,GB,17274,Europe/London
+Caerphilly,51.57452,-3.218,GB,31060,Europe/London
+Buxton,53.25741,-1.90982,GB,21300,Europe/London
+Bushey,51.64316,-0.36053,GB,17380,Europe/London
+Bury St Edmunds,52.2463,0.71111,GB,42812,Europe/London
+Bury,53.6,-2.3,GB,61044,Europe/London
+Burton upon Trent,52.80728,-1.64263,GB,122199,Europe/London
+Burntwood,52.68075,-1.92759,GB,29244,Europe/London
+Burnley,53.8,-2.23333,GB,149422,Europe/London
+Burnham-on-Sea,51.23862,-2.9978,GB,23325,Europe/London
+Burgess Hill,50.95843,-0.13287,GB,30635,Europe/London
+Buckley,53.16667,-3.08333,GB,63576,Europe/London
+Brymbo,53.06667,-3.06667,GB,18111,Europe/London
+Broxburn,55.93415,-3.47133,GB,15360,Europe/London
+Brownhills,52.63333,-1.93333,GB,20308,Europe/London
+Brough,53.72861,-0.57215,GB,19904,Europe/London
+Bromsgrove,52.33574,-2.05983,GB,49117,Europe/London
+Broadstairs,51.35908,1.43938,GB,23283,Europe/London
+Brixham,50.39431,-3.51585,GB,16693,Europe/London
+Briton Ferry,51.63106,-3.81898,GB,35179,Europe/London
+Bristol,51.45523,-2.59665,GB,617280,Europe/London
+Brighton,50.82838,-0.13947,GB,139001,Europe/London
+Brighouse,53.70322,-1.78428,GB,32872,Europe/London
+Brierley Hill,52.48173,-2.12139,GB,28000,Europe/London
+Bridlington,54.08306,-0.19192,GB,35154,Europe/London
+Bridgwater,51.12837,-3.00356,GB,41276,Europe/London
+Bridgend,51.50583,-3.57722,GB,58380,Europe/London
+Brentwood,51.62127,0.30556,GB,52586,Europe/London
+Brent,51.55306,-0.3023,GB,329100,Europe/London
+Bredbury,53.41667,-2.11667,GB,15126,Europe/London
+Bramhall,53.35801,-2.16539,GB,25506,Europe/London
+Braintree,51.87819,0.55292,GB,53477,Europe/London
+Bradford,53.79391,-1.75206,GB,299310,Europe/London
+Bracknell,51.41363,-0.75054,GB,76103,Europe/London
+Bournemouth,50.72048,-1.8795,GB,163600,Europe/London
+Boston,52.97633,-0.02664,GB,41340,Europe/London
+Borehamwood,51.65468,-0.27762,GB,32176,Europe/London
+Bootle,53.46667,-3.01667,GB,57791,Europe/London
+Bonnyrigg,55.87329,-3.1051,GB,16360,Europe/London
+Bolton,53.58333,-2.43333,GB,141331,Europe/London
+Bognor Regis,50.78206,-0.67978,GB,63885,Europe/London
+Blyth,55.12708,-1.50856,GB,37339,Europe/London
+Bloxwich,52.61806,-2.00431,GB,40000,Europe/London
+Bletchley,51.99334,-0.73471,GB,50193,Europe/London
+Blackpool,53.81667,-3.05,GB,239409,Europe/London
+Blackburn,53.75,-2.48333,GB,146521,Europe/London
+Bishopstoke,50.96643,-1.32832,GB,17667,Europe/London
+Bishops Stortford,51.87113,0.15868,GB,37838,Europe/London
+Bishopbriggs,55.90669,-4.21869,GB,23430,Europe/London
+Bishop Auckland,54.65554,-1.67706,GB,26050,Europe/London
+Birmingham,52.48142,-1.89983,GB,984333,Europe/London
+Birkenhead,53.39337,-3.01479,GB,325264,Europe/London
+Bingley,53.84861,-1.83857,GB,20327,Europe/London
+Billingham,54.58881,-1.29034,GB,35708,Europe/London
+Billericay,51.62867,0.41963,GB,36338,Europe/London
+Biggleswade,52.08652,-0.26493,GB,16551,Europe/London
+Bideford,51.01678,-4.20832,GB,28672,Europe/London
+Biddulph,53.11724,-2.17584,GB,17669,Europe/London
+Bicester,51.89998,-1.15357,GB,33846,Europe/London
+Bexley,51.44162,0.14866,GB,228000,Europe/London
+Bexhill-on-Sea,50.85023,0.47095,GB,40478,Europe/London
+Beverley,53.84587,-0.42332,GB,30587,Europe/London
+Berkhamsted,51.7604,-0.56528,GB,21997,Europe/London
+Bentley,53.53333,-1.15,GB,34821,Europe/London
+Belper,53.0233,-1.48119,GB,23417,Europe/London
+Bellshill,55.81667,-4.01667,GB,20650,Europe/London
+Belfast,54.59682,-5.92541,GB,274770,Europe/London
+Bedworth,52.4791,-1.46909,GB,29981,Europe/London
+Bedlington,55.13061,-1.59319,GB,16974,Europe/London
+Bedford,52.13459,-0.46632,GB,106940,Europe/London
+Beckenham,51.40878,-0.02526,GB,82000,Europe/London
+Bebington,53.35,-3.01667,GB,15768,Europe/London
+Bearsden,55.91536,-4.33279,GB,27340,Europe/London
+Batley,53.70291,-1.6337,GB,50807,Europe/London
+Bathgate,55.90204,-3.64398,GB,21070,Europe/London
+Bath,51.3751,-2.36172,GB,94782,Europe/London
+Basingstoke,51.26249,-1.08708,GB,107642,Europe/London
+Basildon,51.56844,0.45782,GB,144859,Europe/London
+Basford,52.96667,-1.18333,GB,16000,Europe/London
+Barry,51.39979,-3.2838,GB,54673,Europe/London
+Barrow in Furness,54.11094,-3.22758,GB,45865,Europe/London
+Barrhead,55.79916,-4.39285,GB,17620,Europe/London
+Barnstaple,51.08022,-4.05808,GB,31616,Europe/London
+Barnsley,53.55,-1.48333,GB,71447,Europe/London
+Barnet,51.65,-0.2,GB,30000,Europe/London
+Barking,51.53333,0.08333,GB,61000,Europe/London
+Banstead,51.32233,-0.20685,GB,46280,Europe/London
+Bangor,54.65338,-5.66895,GB,60385,Europe/London
+Bangor,53.22752,-4.12936,GB,17988,Europe/London
+Banbury,52.0632,-1.34222,GB,48651,Europe/London
+Banbridge,54.35,-6.28333,GB,16173,Europe/London
+Ballymena,54.86357,-6.27628,GB,28932,Europe/London
+Baildon,53.84711,-1.78785,GB,15710,Europe/London
+Ayr,55.46273,-4.63393,GB,47190,Europe/London
+Aylesbury,51.81665,-0.81458,GB,74748,Europe/London
+Atherton,53.52371,-2.49354,GB,20149,Europe/London
+Aston,52.5,-1.88333,GB,32286,Europe/London
+Ashton-under-Lyne,53.48876,-2.0989,GB,43675,Europe/London
+Ashton in Makerfield,53.48333,-2.65,GB,29039,Europe/London
+Ashington,55.17719,-1.56412,GB,27670,Europe/London
+Ashford,51.43173,-0.45761,GB,27382,Europe/London
+Ashford,51.14648,0.87376,GB,62787,Europe/London
+Ascot,51.41082,-0.6748,GB,17899,Europe/London
+Arnold,53,-1.13333,GB,37873,Europe/London
+Arbroath,56.56317,-2.58736,GB,23640,Europe/London
+Antrim,54.7,-6.2,GB,19661,Europe/London
+Andover,51.21135,-1.49393,GB,42276,Europe/London
+Ampthill,52.02694,-0.49567,GB,20026,Europe/London
+Ammanford,51.79279,-3.98833,GB,23709,Europe/London
+Amersham,51.66667,-0.61667,GB,21731,Europe/London
+Altrincham,53.38752,-2.34848,GB,41548,Europe/London
+Alton,51.14931,-0.97469,GB,16584,Europe/London
+Alloa,56.11586,-3.78997,GB,20390,Europe/London
+Alfreton,53.09766,-1.38376,GB,22550,Europe/London
+Aldridge,52.60549,-1.91715,GB,16008,Europe/London
+Aldershot,51.24827,-0.76389,GB,61339,Europe/London
+Airdrie,55.86602,-3.98025,GB,37130,Europe/London
+Adwick le Street,53.57077,-1.18454,GB,19481,Europe/London
+Acton,51.50901,-0.2762,GB,53689,Europe/London
+Acocks Green,52.45,-1.81667,GB,26635,Europe/London
+Accrington,53.75379,-2.35863,GB,35318,Europe/London
+Abingdon,51.67109,-1.28278,GB,38676,Europe/London
+Aberystwyth,52.41548,-4.08292,GB,18749,Europe/London
+Abergele,53.28436,-3.5822,GB,17769,Europe/London
+Aberdeen,57.14369,-2.09814,GB,196670,Europe/London
+Aberdare,51.71438,-3.44918,GB,31135,Europe/London
+Crosby,53.47778,-3.03333,GB,52140,Europe/London
+Tonypandy,51.62202,-3.45544,GB,62545,Europe/London
+Blackwood,51.66778,-3.2075,GB,15476,Europe/London
+Neston,51.41222,-2.20056,GB,15352,Europe/London
+Camden Town,51.54057,-0.14334,GB,26122,Europe/London
+Telford,52.67659,-2.44926,GB,147980,Europe/London
+Craigavon,54.44709,-6.387,GB,59236,Europe/London
+Bayswater,51.51116,-0.18426,GB,17500,Europe/London
+Yateley,51.34305,-0.82985,GB,20214,Europe/London
+Bowthorpe,52.63884,1.21885,GB,20000,Europe/London
+Hedge End,50.91234,-1.30076,GB,17978,Europe/London
+Gerrards Cross,51.5861,-0.55543,GB,20633,Europe/London
+Erskine,55.9005,-4.45028,GB,15530,Europe/London
+Hale,53.37831,-2.33271,GB,15315,Europe/London
+Amersham on the Hill,51.67468,-0.60742,GB,17719,Europe/London
+Battersea,51.47475,-0.15547,GB,75651,Europe/London
+South Croydon,51.36217,-0.09421,GB,55198,Europe/London
+Hornchurch,51.55685,0.21664,GB,25470,Europe/London
+Surbiton,51.39148,-0.29825,GB,38158,Europe/London
+Ewell,51.34948,-0.2494,GB,39994,Europe/London
+Becontree,51.5529,0.129,GB,100000,Europe/London
+Brixton,51.46593,-0.10652,GB,66300,Europe/London
+Bethnal Green,51.52718,-0.06109,GB,17590,Europe/London
+Failsworth,53.50484,-2.16568,GB,20555,Europe/London
+Radcliffe,53.56178,-2.32455,GB,34239,Europe/London
+Heywood,53.59245,-2.21941,GB,28024,Europe/London
+Longsight,53.45801,-2.20104,GB,16007,Europe/London
+Heavitree,50.72044,-3.49646,GB,22000,Europe/London
+Ferndown,50.80743,-1.89975,GB,17650,Europe/London
+Canary Wharf,51.50519,-0.02085,GB,73390,Europe/London
+Earl Shilton,52.57682,-1.31536,GB,19578,Europe/London
+Bordon,51.11357,-0.86245,GB,20978,Europe/London
+Lytham St Annes,53.7426,-2.997,GB,41327,Europe/London
+Hadley Wood,51.66669,-0.16981,GB,21639,Europe/London
+Chapel Allerton,53.82901,-1.53834,GB,18206,Europe/London
+Blackheath,51.4647,0.0079,GB,25116,Europe/London
+Kempston Hardwick,52.08956,-0.49908,GB,20000,Europe/London
+Mendip,51.2372,-2.6266,GB,110000,Europe/London
+Lower Earley,51.42708,-0.91979,GB,32000,Europe/London
+Bartley Green,52.43532,-1.99707,GB,25473,Europe/London
+Canvey Island,51.52199,0.5809,GB,38170,Europe/London
+Earlsfield,51.4439,-0.1854,GB,15562,Europe/London
+Peacehaven,50.7927,-0.00652,GB,18579,Europe/London
+Letchworth Garden City,51.97938,-0.22664,GB,43529,Europe/London
+Peckham,51.47403,-0.06969,GB,71552,Europe/London
+Shirley,52.41074,-1.81952,GB,32000,Europe/London
+Stanley,54.86796,-1.69846,GB,21938,Europe/London
+Rossendale,53.68456,-2.2769,GB,67400,Europe/London
+Thornton-Cleveleys,53.87389,-3.02244,GB,31157,Europe/London
+Deeside,53.20053,-3.03841,GB,32000,Europe/London
+High Peak,53.36797,-1.84536,GB,92600,Europe/London
+Hayling Island,50.7838,-0.96869,GB,16887,Europe/London
+Isle of Lewis,58.21901,-6.38803,GB,18500,Europe/London
+Orkney,58.98465,-2.95953,GB,20100,Europe/London
+Holloway,51.55237,-0.12497,GB,41329,Europe/London
+Harringay,51.5824,-0.09956,GB,16500,Europe/London
+Blantyre,55.79634,-4.09485,GB,17090,Europe/London
+Vale of Leven,55.97132,-4.57928,GB,24640,Europe/London
+Viewpark,55.82737,-4.0573,GB,16020,Europe/London
+Burngreave,53.39302,-1.45789,GB,27481,Europe/London
+Archway,51.56733,-0.13415,GB,215667,Europe/London
+Sinfin,52.88157,-1.48681,GB,15128,Europe/London
