@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data visualisation in R   using crime data</title>
+    <meta charset="utf-8" />
+    <meta name="date" content="2021-02-12" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data visualisation in R <br> using crime data
+## Sam Langton
+### 12 February 2021
+
+---
+
+
+
+
+## Welcome
+
+&lt;img src="https://pbs.twimg.com/profile_images/866718054989930496/1JnqmEAe_400x400.jpg" width="150px" /&gt;
+
+@sh_langton
+
+s.langton@leeds.ac.uk
+
+---
+
+## Welcome
+
+&lt;img src="https://pbs.twimg.com/profile_images/866718054989930496/1JnqmEAe_400x400.jpg" width="150px" /&gt;
+
+@sh_langton
+
+s.langton@leeds.ac.uk
+
+&lt;br&gt;
+
+All materials for today are available online.
+
+Web link: https://rpubs.com/langton_
+
+Material: https://github.com/langtonhugh/data_viz_R_workshop
+
+&lt;/br&gt;
+
+
+---
+
+## Contents
+
+**10.00-10.15**
+
+- Intro
+
+**10.15-11.00**
+
+- Presentation: data mapping
+
+**11.00-11.15**
+
+- Short break
+
+**11.15-13.00**
+
+- Practical
+
+**13.00-14.00**
+
+- Long break
+
+**14.00-14.30**
+
+- Presentation: applied research using data mapping
+
+---
+
+## Maps in R
+
+---
+
+## The good news...
+
+- Making a map in R is _very similar_ to what we have covered already.
+- Making use of an additional package (`sf`) we can create beautful maps using `ggplot2`.
+
+&lt;img src="img/sf.gif" width="300px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## The bad news...
+
+- You might be entering uncharted territory!
+- Spatial visualisation (and the prep needed to get to that point) necessitates some additional level of understanding in geography and Geographic Information Systems (GIS), including:
+  - Spatial data
+  - Projection
+  - Visualisation issues
+  
+---
+
+## The bad news: spatial data
+
+- **Vector** data.
+
+&lt;img src="img/vector_data.png" width="420px" style="display: block; margin: auto;" /&gt;
+
+Source: [NEON via Data Carpentry](https://datacarpentry.org/organization-geospatial/02-intro-vector-data/). 
+
+
+---
+
+## The bad news: spatial data
+
+&lt;img src="img/la_stad.png" width="520px" style="display: block; margin: auto;" /&gt;
+
+Source: [Google Maps](https://www.google.com/maps/place/Dodger+Stadium/@34.0739291,-118.240295,2149m/data=!3m1!1e3!4m5!3m4!1s0x80c2c6f954005675:0x9e94554f839c09df!8m2!3d34.073851!4d-118.2399583).
+---
+
+## The bad news: spatial data
+
+&lt;img src="img/la_dodge_ggplot.png" width="480px" style="display: block; margin: auto;" /&gt;
+
+Source: [Langton &amp; Solymosi](https://github.com/langtonhugh/crowds_crime).
+
+---
+
+## The bad news: spatial data
+
+- Today, we will use shapefiles (`.shp`).
+- Shapefiles are a popular format to store geospatial vector data.
+- Unlike standard 2D data frames, such as .csv files, shapefiles contains multiple components.
+  - `.shp`
+  - `.shx`
+  - `.dbf`
+  - `.prj`
+- But there are other formats, such as _.geojson_ or _kml_, which you might come across.
+- There is some [debate](https://gis.stackexchange.com/questions/64909/which-data-formats-are-best-for-open-data-distribution) over the most appropriate, with each having their own advantages and disadvantages.
+
+
+---
+
+## The bad news: projections
+
+- Maps tend to represent the (~spherical) earth on flat surfaces (e.g. paper, screens).
+- This transformation is known as a [projection](https://docs.qgis.org/testing/en/docs/gentle_gis_introduction/coordinate_reference_systems.html).
+- Be aware of the Coordinate Reference System (CRS).
+- Geographic CRS (e.g. [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System)).
+- Projected CRS (e.g. [British National Grid](https://www.ordnancesurvey.co.uk/documents/resources/guide-to-nationalgrid.pdf)).
+
+&lt;br&gt;
+
+&lt;img src="img/qgisproj.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+Source: [QGIS documentation](https://docs.qgis.org/testing/en/docs/gentle_gis_introduction/coordinate_reference_systems.html).
+
+---
+
+## The bad news: visualisation issues
+
+&lt;img src="img/jr1.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+Source: [Jerry Ratcliffe](http://www.lifestudy.ac.uk/jdi/events/mapping-conf/conf-2004/conf2004-downloads/jerry-ten-mapping-tips.pdf)
+
+---
+
+## The bad news: visualisation issues
+
+&lt;img src="img/brexit_maps.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+Source: [Langton &amp; Solymosi (2020)](https://journals.sagepub.com/doi/full/10.1177/2399808319873923?casa_token=fpYtCeRyyAsAAAAA%3ApqxSWjH7dMwZmDokf93BMCYIVLqU5QIGv4_61LrEcc1l2UGr2s0qJsRqAoOnHRd-xe4lGoKFLuCAVw)
+
+---
+
+## Crime demo
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": false,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

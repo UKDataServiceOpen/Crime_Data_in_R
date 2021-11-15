@@ -1,0 +1,5 @@
+<style type="text/css">
+slides > slide:not(.nobackground):after {
+  content: '';
+}
+</style>

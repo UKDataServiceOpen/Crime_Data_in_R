@@ -1,0 +1,194 @@
+---
+title: "Data visualisation in R <br> using crime data"
+subtitle: "Sam Langton"
+date: "12 February 2021"
+# output: beamer_presentation
+output:
+  xaringan::moon_reader:
+    incremental: true
+    css: ["default", "my_theme.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: false
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Welcome
+
+```{r, echo=FALSE, out.width="150px"}
+knitr::include_graphics("https://pbs.twimg.com/profile_images/866718054989930496/1JnqmEAe_400x400.jpg")
+```
+
+@sh_langton
+
+s.langton@leeds.ac.uk
+
+---
+
+## Welcome
+
+```{r, echo=FALSE, out.width="150px"}
+knitr::include_graphics("https://pbs.twimg.com/profile_images/866718054989930496/1JnqmEAe_400x400.jpg")
+```
+
+@sh_langton
+
+s.langton@leeds.ac.uk
+
+<br>
+
+All materials for today are available online.
+
+Web link: https://rpubs.com/langton_
+
+Material: https://github.com/langtonhugh/data_viz_R_workshop
+
+</br>
+
+
+---
+
+## Contents
+
+**10.00-10.15**
+
+- Intro
+
+**10.15-11.00**
+
+- Presentation: data mapping
+
+**11.00-11.15**
+
+- Short break
+
+**11.15-13.00**
+
+- Practical
+
+**13.00-14.00**
+
+- Long break
+
+**14.00-14.30**
+
+- Presentation: applied research using data mapping
+
+---
+
+## Maps in R
+
+---
+
+## The good news...
+
+- Making a map in R is _very similar_ to what we have covered already.
+- Making use of an additional package (`sf`) we can create beautful maps using `ggplot2`.
+
+```{r, out.width = "300px", echo=FALSE, fig.align= "center"}
+knitr::include_graphics("img/sf.gif")
+```
+
+---
+
+## The bad news...
+
+- You might be entering uncharted territory!
+- Spatial visualisation (and the prep needed to get to that point) necessitates some additional level of understanding in geography and Geographic Information Systems (GIS), including:
+  - Spatial data
+  - Projection
+  - Visualisation issues
+  
+---
+
+## The bad news: spatial data
+
+- **Vector** data.
+
+```{r, out.width = "420px", echo=FALSE, fig.align= "center"}
+knitr::include_graphics("img/vector_data.png")
+```
+
+Source: [NEON via Data Carpentry](https://datacarpentry.org/organization-geospatial/02-intro-vector-data/). 
+
+
+---
+
+## The bad news: spatial data
+
+```{r, out.width = "520px", echo=FALSE, fig.align= "center"}
+knitr::include_graphics("img/la_stad.png")
+```
+
+Source: [Google Maps](https://www.google.com/maps/place/Dodger+Stadium/@34.0739291,-118.240295,2149m/data=!3m1!1e3!4m5!3m4!1s0x80c2c6f954005675:0x9e94554f839c09df!8m2!3d34.073851!4d-118.2399583).
+---
+
+## The bad news: spatial data
+
+```{r, out.width = "480px", echo=FALSE, fig.align= "center"}
+knitr::include_graphics("img/la_dodge_ggplot.png")
+```
+
+Source: [Langton & Solymosi](https://github.com/langtonhugh/crowds_crime).
+
+---
+
+## The bad news: spatial data
+
+- Today, we will use shapefiles (`.shp`).
+- Shapefiles are a popular format to store geospatial vector data.
+- Unlike standard 2D data frames, such as .csv files, shapefiles contains multiple components.
+  - `.shp`
+  - `.shx`
+  - `.dbf`
+  - `.prj`
+- But there are other formats, such as _.geojson_ or _kml_, which you might come across.
+- There is some [debate](https://gis.stackexchange.com/questions/64909/which-data-formats-are-best-for-open-data-distribution) over the most appropriate, with each having their own advantages and disadvantages.
+
+
+---
+
+## The bad news: projections
+
+- Maps tend to represent the (~spherical) earth on flat surfaces (e.g. paper, screens).
+- This transformation is known as a [projection](https://docs.qgis.org/testing/en/docs/gentle_gis_introduction/coordinate_reference_systems.html).
+- Be aware of the Coordinate Reference System (CRS).
+- Geographic CRS (e.g. [WGS 84](https://en.wikipedia.org/wiki/World_Geodetic_System)).
+- Projected CRS (e.g. [British National Grid](https://www.ordnancesurvey.co.uk/documents/resources/guide-to-nationalgrid.pdf)).
+
+<br>
+
+```{r, echo=FALSE, out.width="600px", fig.align="center"}
+knitr::include_graphics("img/qgisproj.png")
+```
+
+Source: [QGIS documentation](https://docs.qgis.org/testing/en/docs/gentle_gis_introduction/coordinate_reference_systems.html).
+
+---
+
+## The bad news: visualisation issues
+
+```{r, out.width = "600px", echo=FALSE, fig.align= "center"}
+knitr::include_graphics("img/jr1.png")
+```
+
+Source: [Jerry Ratcliffe](http://www.lifestudy.ac.uk/jdi/events/mapping-conf/conf-2004/conf2004-downloads/jerry-ten-mapping-tips.pdf)
+
+---
+
+## The bad news: visualisation issues
+
+```{r, out.width = "700px", echo=FALSE, fig.align= "center"}
+knitr::include_graphics("img/brexit_maps.png")
+```
+
+Source: [Langton & Solymosi (2020)](https://journals.sagepub.com/doi/full/10.1177/2399808319873923?casa_token=fpYtCeRyyAsAAAAA%3ApqxSWjH7dMwZmDokf93BMCYIVLqU5QIGv4_61LrEcc1l2UGr2s0qJsRqAoOnHRd-xe4lGoKFLuCAVw)
+
+---
+
+## Crime demo

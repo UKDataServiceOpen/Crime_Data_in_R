@@ -1,0 +1,12 @@
+Notes from John Burn-Murdoch presentation rstudio::global 2021.
+
+- Data visualisation fundamentally is an act of communication.
+- To CREATE effective, powerful charts, you have to understand how people CONSUME charts.
+- How can we design the chart so that people understand, enjoy and remember the visual?
+- Not everyone is a chart person!
+- In many ways, a chart is an advert. 
+- If you've conducted lots of data handling and analysis to answer a research question, surely
+  you want to convey this information and tell the story in a way that people will understanding,
+  enjoy and remember!
+- Of course, the chart should be accurate, but you are COMMUNICATING! It's not JUST about
+  objectivity and precision.

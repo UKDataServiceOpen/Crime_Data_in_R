@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data visualisation in R   using crime data</title>
+    <meta charset="utf-8" />
+    <meta name="date" content="2021-02-11" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data visualisation in R <br> using crime data
+## Sam Langton
+### 11 February 2021
+
+---
+
+
+
+
+## Welcome
+
+&lt;img src="https://pbs.twimg.com/profile_images/866718054989930496/1JnqmEAe_400x400.jpg" width="150px" /&gt;
+
+@sh_langton
+
+s.langton@leeds.ac.uk
+
+www.samlangton.info
+
+---
+
+## Welcome
+
+&lt;img src="https://pbs.twimg.com/profile_images/866718054989930496/1JnqmEAe_400x400.jpg" width="150px" /&gt;
+
+@sh_langton
+
+s.langton@leeds.ac.uk
+
+www.samlangton.info
+
+&lt;br&gt;
+
+All materials for today are available online.
+
+Web link: https://rpubs.com/langton_
+
+Material: https://github.com/langtonhugh/data_viz_R_workshop
+
+&lt;/br&gt;
+
+
+---
+
+## Contents
+
+**10.00-10.15**
+
+- Intro
+
+**10.15-11.00**
+
+- Presentation: data visualisation
+
+**11.00-11.15**
+
+- Short break
+
+**11.15-13.00**
+
+Practical
+
+**13.00-14.00**
+
+- Long break
+
+**14.00-14.30**
+
+- Presentation: applied research using data visualisation
+
+---
+
+## Data viz
+
+&lt;center&gt;
+
+"The visual representation and presentation of data to facilitate understanding" (Kirk, 2019)
+
+&lt;/center&gt;
+
+---
+
+## Data viz in R
+
+&lt;center&gt;
+
+"The visual representation and presentation of data to facilitate understanding" (Kirk, 2019)
+
+&lt;/center&gt;
+
+&lt;img src="img/bbc1.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+Source: [Medium](https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535)
+
+---
+
+## Data viz in R
+
+&lt;img src="img/ft_covid_tracker.png" width="650px" style="display: block; margin: auto;" /&gt;
+
+Source: [John Burn-Murdoch](https://twitter.com/jburnmurdoch)
+
+---
+
+
+## Data viz in R
+
+&lt;img src="img/colin_angus1.png" width="700px" style="display: block; margin: auto;" /&gt;
+
+Source: [Colin Angus](https://twitter.com/VictimOfMaths/status/1254812636744687619/photo/3)
+
+---
+
+
+## Data viz in R
+
+&lt;img src="img/colin_angus2.png" width="1000px" style="display: block; margin: auto;" /&gt;
+
+Source: [Colin Angus](https://twitter.com/VictimOfMaths/status/1254812636744687619/photo/1)
+
+
+---
+
+## Data viz in R
+
+&lt;img src="img/trafford1.png" width="1679" /&gt;
+
+Source: [Trafford Data Lab](https://trafforddatalab.shinyapps.io/imd19/)
+
+---
+
+## Data viz in R
+
+&lt;img src="img/triplets_cb.png" width="250px" style="display: block; margin: auto;" /&gt;
+
+Source: [Sam Langton](https://github.com/langtonhugh/spatial_viz)
+
+---
+
+## Data viz in R
+
+&lt;img src="img/nadpi2.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+Source: [Nadleh Bremer](https://www.visualcinnamon.com/2015/01/exploring-art-hidden-in-pi.html)
+
+---
+
+## Data viz in R using crime data
+
+&lt;img src="img/crime_odds.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+Source: [Matt Ashby](http://lesscrime.info/slides/esc-2019.html#/section-2)
+
+---
+
+## Data viz in R using crime data
+
+&lt;img src="img/crime_bubble.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+Source: [Reka Solymosi](https://twitter.com/r_solymosi/status/1169565465355726848)
+
+---
+
+## Data viz in R using crime data
+
+&lt;img src="img/crime_density.png" width="450px" style="display: block; margin: auto;" /&gt;
+
+Source: [Sharp Insight](https://www.sharpsightlabs.com/blog/how-to-create-a-crime-heatmap-in-r/)
+
+
+---
+
+## Data viz in R using crime data
+
+&lt;img src="img/iain_work.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+Source: [Iain Agar](https://twitter.com/routineactivity)
+
+---
+
+## Data viz in R using crime data
+
+&lt;img src="img/covid_crime.png" width="4704" style="display: block; margin: auto;" /&gt;
+
+Source: [Langton, Dixon and Farrell (2020)](https://osf.io/preprints/socarxiv/t7ne8/)
+
+---
+
+## Common thread?
+
+---
+
+## Common thread?
+
+&lt;img src="img/ggplot2_logo.png" width="380px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## ggplot2
+
+- ggplot2 is a package for creating graphics in R based on the [grammar of graphics](https://vita.had.co.nz/papers/layered-grammar.html).
+- A fundamental component of this is that graphics are made up **layers**.
+- This way of thinking is reflected in how we write ggplot2 code.
+
+&lt;br&gt;
+
+&lt;br&gt;
+
+&lt;img src="img/gg.png" width="380px" style="display: block; margin: auto;" /&gt;
+
+Image source: [Skill Gaze](https://skillgaze.com/2017/10/31/understanding-different-visualization-layers-of-ggplot/)
+
+---
+
+## ggplot2
+
+
+
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## ggplot2
+
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+
+&lt;center&gt;
+
+What is the relationship between var1 and var2?
+
+&lt;/center&gt;
+
+---
+
+## ggplot2: data
+
+
+&lt;br&gt;
+
+&lt;br&gt;
+
+
+&lt;img src="img/gg.png" width="380px" style="display: block; margin: auto;" /&gt;
+
+Image source: [Skill Gaze](https://skillgaze.com/2017/10/31/understanding-different-visualization-layers-of-ggplot/)
+
+---
+
+## ggplot2: data
+
+
+```r
+ggplot(data = df1)
+```
+
+.pull-left[
+&lt;img src="slides-graphics_files/figure-html/unnamed-chunk-22-1.png" width="320px" /&gt;
+]
+
+&lt;br&gt; 
+
+.pull-right[
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+## ggplot2: aesthetics
+
+&lt;br&gt;
+
+&lt;br&gt;
+
+&lt;img src="img/gg.png" width="380px" style="display: block; margin: auto;" /&gt;
+
+Image source: [Skill Gaze](https://skillgaze.com/2017/10/31/understanding-different-visualization-layers-of-ggplot/)
+
+
+---
+
+## ggplot2: aesthetics
+
+
+```r
+ggplot(data = df1, mapping = aes(x = var1, y = var2))
+```
+
+.pull-left[
+&lt;img src="slides-graphics_files/figure-html/unnamed-chunk-26-1.png" width="400px" /&gt;
+]
+
+&lt;br&gt; 
+
+.pull-right[
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+## ggplot2: geometries
+
+&lt;br&gt;
+
+&lt;br&gt;
+
+
+&lt;img src="img/gg.png" width="380px" style="display: block; margin: auto;" /&gt;
+
+Image source: [Skill Gaze](https://skillgaze.com/2017/10/31/understanding-different-visualization-layers-of-ggplot/)
+
+
+---
+
+## ggplot2: geometries
+
+
+```r
+ggplot(data = df1, mapping = aes(x = var1, y = var2)) +
+  geom_point()
+```
+
+.pull-left[
+&lt;img src="slides-graphics_files/figure-html/unnamed-chunk-30-1.png" width="400px" /&gt;
+]
+
+&lt;br&gt; 
+
+.pull-right[
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+## ggplot2: different aesthetics
+
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+
+&lt;center&gt;
+
+How does var3 factor into this relationship?
+
+&lt;/center&gt;
+
+
+---
+
+## ggplot2: different aesthetics
+
+- x
+- y
+- colour
+- fill
+- shape
+- size
+- alpha
+- linetype
+- ...
+
+---
+
+
+## ggplot2: different aesthetics
+
+
+```r
+ggplot(data = df1, mapping = aes(x = var1, y = var2, colour = var3)) +
+  geom_point()
+```
+
+.pull-left[
+&lt;img src="slides-graphics_files/figure-html/unnamed-chunk-34-1.png" width="400px" /&gt;
+]
+
+&lt;br&gt; 
+
+.pull-right[
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+## ggplot2: different aesthetics
+
+
+```r
+ggplot(data = df1, mapping = aes(x = var1, y = var2, shape = var3)) +
+  geom_point()
+```
+
+.pull-left[
+&lt;img src="slides-graphics_files/figure-html/unnamed-chunk-37-1.png" width="400px" /&gt;
+]
+
+&lt;br&gt; 
+
+.pull-right[
+&lt;table&gt;
+&lt;caption&gt;df1&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; var1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var2 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; var3 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; BB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+## ggplot2: different geometries
+
+- geom_point()
+- geom_bar()
+- geom_density()
+- geom_smooth()
+- ...
+
+&lt;img src="img/gg_examples.png" width="959" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Crime demo
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": false,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
