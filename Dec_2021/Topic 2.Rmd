@@ -1,0 +1,227 @@
+---
+title: "Topic 2: Shapefiles"
+author: "Nadia Kennar"
+date: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+## Read in the Shapefile for 'Surrey Heath' 
+
+```{r read and plot the boundary for surrey heath}
+ 
+shp_file <- st_read("Data/Shapefile/england_lsoa_2011.shp")
+
+
+## Plot the Shapefile 
+ggplot() + 
+  geom_sf(data = shp_file)
+
+```
+
+
+
+## Group the crimes
+
+
+```{r crimes per lsoa}
+crimes_grouped_by_lsoa <- crime01_19 %>%
+  group_by(lsoa_code) %>%
+  summarise(count=n())
+```
+
+
+
+
+## Merge the shapefile to the crime dataset
+
+
+```{r merge the data}
+
+surrey_lsoa <- left_join(shp_file, crimes_grouped_by_lsoa, by = c("code" = "lsoa_code"))
+
+st_geometry_type(surrey_lsoa)    #view the geometery type 
+st_bbox(surrey_lsoa)             #obtains the objects value as specific units 
+
+
+#map the data
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = count), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Number of crimes")
+
+```
+
+
+
+
+## Plotting via the 'tmap' package
+
+
+```{r}
+library(tmap)
+tm_shape(surrey_lsoa) + 
+  tm_fill("count") + 
+  tm_borders(alpha = 0.5)
+```
+
+
+
+
+### Classification methods
+
+
+```{r}
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "kmeans") + 
+  tm_borders(alpha = 0.3)
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "jenks") + 
+  tm_borders(alpha = 0.3)
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "sd") + 
+  tm_borders(alpha = 0.3)
+
+
+
+```
+
+
+
+
+
+
+## Map Layouts - additional features of tmap
+
+
+```{r}
+
+## map style 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "sd") + 
+  tm_borders(alpha = 0.3) + 
+  tmap_style("col_blind")
+
+
+## map legends
+
+tm_shape(surrey_lsoa)+
+  tm_fill("count", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5)
+
+
+## compass, scale bar and grid
+
+tm_shape(surrey_lsoa)+
+  tm_fill("count", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) +   #compass 
+  tm_scale_bar(width = 0.15) +           #scale bar 
+  tm_grid()                              #grid
+
+```
+
+
+
+
+
+
+## using categorical variables (tm_facets)
+
+
+```{r}
+tm_shape(surrey_lsoa) +
+  tm_fill("count",
+          style = "quantile",
+          palette = "Blues",
+          thres.poly = 0) + 
+  tm_facets(by="name", 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
+```
+
+
+
+
+
+
+## Activity 2 and break 
+
+1. Explore some of the different classification methods such as "bclust"
+   To get help on the different methods available use *??tmap-package* or search in the help tab 
+
+   
+```{r type your answer here}
+
+```
+ 
+
+2. Head to Mentimeter to answer some recap questions!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

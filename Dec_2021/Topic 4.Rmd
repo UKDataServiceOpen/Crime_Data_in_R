@@ -1,0 +1,95 @@
+---
+title: "Additional Topics and Next Steps"
+author: "Nadia Kennar"
+date: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+
+
+### Binning data
+
+Binning, can be thought of as a two-dimensional histogram (shading of the bins take the heights of the bars). 
+
+Need to convert the sf data.frame geometry column into a data.frame with separate x, y columns 
+
+How do you separate the coordinates? 
+
+https://github.com/r-spatial/sf/issues/231 
+
+```{r}
+sfc_as_cols <- function(x, names = c("x","y")) {
+  stopifnot(inherits(x,"sf") && inherits(sf::st_geometry(x),"sfc_POINT"))
+  ret <- sf::st_coordinates(x)
+  ret <- tibble::as_tibble(ret)
+  stopifnot(length(names) == raster::ncol(ret))
+  x <- x[ , !names(x) %in% names]
+  ret <- setNames(ret,names)
+  dplyr::bind_cols(x,ret)
+}
+
+sf_seperate <- sfc_as_cols(sf, c("lng", "lat")) 
+
+
+ggplot(sf_seperate, aes(lng, lat)) +   
+  annotation_map_tile() +
+  stat_binhex(bins = 30) +                                           
+  scale_fill_gradientn(colours = c("white","red"), name = "Frequency")   
+
+
+#hexagonal = stat_binhex() 
+#rectangle = stat_bin2d()
+#heat = stat_density2d()  
+
+```
+
+
+
+
+
+### Interactive Maps; Leaflet
+
+```{r}
+
+## Subsetting for just ASB 
+asb <- subset(crime01_19, crime_type == "Anti-social behaviour")
+
+m <- leaflet(data = asb) %>%
+  addProviderTiles("Stamen.Toner") %>% 
+  addMarkers(lng=~longitude, lat=~latitude, popup=~as.character(location), label = ~as.character(location))
+m
+
+```
+
+
+
+
+
+
+

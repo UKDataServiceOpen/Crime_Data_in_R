@@ -1,0 +1,156 @@
+---
+title: "Topic 3: Crime Rate vs Crime Count"
+author: "Nadia Kennar"
+dat: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+
+```{r}
+pop <- read_csv("Data/Census Population/Data_UNIT_URESPOP.csv") %>% slice(3:57) %>% 
+  select(2,3,6,7, 8) %>%
+  janitor::clean_names() %>%
+  rename(pop_density = f2383, 
+         pop_count_wrk = f2384, 
+         pop_count_res = f323339) %>% 
+  mutate_at(c('pop_density', 'pop_count_wrk',
+              'pop_count_res'), as.numeric)
+```
+
+
+
+
+```{r}
+surrey_lsoa <- left_join(surrey_lsoa, pop, by = c("code"="geo_code"))
+
+```
+
+
+
+```{r}
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate = (count/pop_count_wrk)*1000)
+
+```
+
+
+
+##ggplot
+
+```{r}
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = crime_rate), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+```
+
+
+
+##tmaps 
+
+```{r}
+tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile") + 
+  tm_borders(alpha = 0.3)
+```
+
+
+
+
+## Cartograms and ggplot
+
+
+```{r}
+library(cartogram)
+
+#In our data set we have a variable “pop_count” which refers to the total number of people in our LSOA 
+cart <- cartogram_cont(surrey_lsoa, weight = "pop_count_wrk")   
+
+## simple plot 
+ggplot(cart) + 
+  geom_sf()
+
+
+## fill with our count variable 
+ggplot(cart) + 
+  geom_sf(aes(fill = pop_count_wrk))
+
+
+## add in some aesthetics 
+ggplot(cart) + 
+  geom_sf(aes(fill = pop_count_wrk), 
+          color = "gray50", 
+          linetype = 1, 
+          lwd = 0.35) + 
+  scale_fill_gradientn(colours = heat.colors(n =10, 
+                                            alpha = 0.5, 
+                                            rev = TRUE)) + 
+  theme_gray() + 
+  labs(title = "Surrey Heath: Population by LSOA", 
+       subtitle = "August 2020")
+```
+
+
+
+
+
+
+
+## Activity 3
+
+We have mapped the variable pop_count_wrk, now lets do the same with the variable 'pop_count_res' which represents the residential population. 
+
+
+Steps: 
+
+1  First calculate the crime rate 
+2. Plot using ggplot 
+3. Plot using tmap 
+4. Plot both maps (residential and workday) together using tmap_arrange 
+5. Plot a cartogram of residential population
+
+Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends
+
+
+```{r type your answer here}
+
+```
+ 
+
+
+
+
+
+
+
+
+
+
+
+
