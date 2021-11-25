@@ -6,6 +6,7 @@ output: html_notebook
 toc: true
 ---
 
+## Load packages
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -31,6 +32,20 @@ library(tmap)
 
 
 
+What are Shapefiles? 
+
+They represent a geospatial vector that is used for GIS software. Shapefiles store both geogrpahic location and its associated attribute information 
+
+The Shapefile format stores the data as primitive geometric shapes like points, lines, and polygons. These shapes, together with data attributes that are linked to each shape, create the representation of the geographic data.
+
+They contain four mandatory file extensions (.shx, .shp, .dbf and the .prj). 
+- The .shp contains the geometry data (a 2D axis ordering of coordinate data)
+- The .shx contains the positional index of the feature geometry 
+- The .dbf contins the attributes for each shape
+- The .prj contains the cs and projection information
+
+In criminological research, the LSOA is quite frequently used as the main census geography 
+
 ## Read in the Shapefile for 'Surrey Heath' 
 
 ```{r read and plot the boundary for surrey heath}
@@ -45,16 +60,25 @@ ggplot() +
 ```
 
 
+The original crime data set contains the individual count of reported crime types across LSOAS, therefore the LSOAs are repeated multiple times. This is because you would expect to see multiple crime counts in one LSOA
+
+In order to highlight how many crimes have occurred in each LSOA, we can count the crimes per LSOA and obtained grouped statistics
+
 
 ## Group the crimes
 
 
 ```{r crimes per lsoa}
-crimes_grouped_by_lsoa <- crime01_19 %>%
+crimes_grouped_by_lsoa <- crime %>%
   group_by(lsoa_code) %>%
   summarise(count=n())
 ```
 
+In our new object you will see two variables, the LSOA and the count of crime in each one.  
+
+We can now join the Shapefile (the geospatial vector) and the crimes_grouped_by_losa (the aggregated data)
+
+To join the crimes per lsoa to the shapefile we can use the left_join function that returns all the rows of the table on the left side of the join and matching rows for the table on the right side of join.
 
 
 
@@ -67,6 +91,9 @@ surrey_lsoa <- left_join(shp_file, crimes_grouped_by_lsoa, by = c("code" = "lsoa
 
 st_geometry_type(surrey_lsoa)    #view the geometery type 
 st_bbox(surrey_lsoa)             #obtains the objects value as specific units 
+
+
+#The spatial extent of a shapefile or R spatial object represents the geographic “edge” or location that is the #furthest north, south east and west. Thus is represents the overall geographic coverage of the spatial object. #Image Source: National Ecological Observatory Network (NEON).
 
 
 #map the data
@@ -83,6 +110,7 @@ ggplot() +
 ## Plotting via the 'tmap' package
 
 
+
 ```{r}
 library(tmap)
 tm_shape(surrey_lsoa) + 
@@ -93,7 +121,15 @@ tm_shape(surrey_lsoa) +
 
 
 
+
 ### Classification methods
+
+How can we better visualise counts? Count data does not equally represent the population distribution at hand, tmaps allows you to add different 'styles' 
+
+The different styles result in different clustering mechanism, tmaps have available on 'jenks'or 'Standard Deviation' 
+
+
+In this example I've used 'kmeans'. k-means clustering is a method of vector quantisation, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster.
 
 
 ```{r}
@@ -110,6 +146,8 @@ tm_shape(surrey_lsoa) +
   tm_borders(alpha = 0.3)
 
 
+## tmap_arrange
+
 
 ```
 
@@ -118,7 +156,7 @@ tm_shape(surrey_lsoa) +
 
 
 
-## Map Layouts - additional features of tmap
+## Map Layouts - additional features of tmap (optional task)
 
 
 ```{r}
@@ -197,18 +235,21 @@ tm_shape(surrey_lsoa) +
 
 
 
-## Activity 2 and break 
+## Activity 2
 
-1. Explore some of the different classification methods such as "bclust"
-   To get help on the different methods available use *??tmap-package* or search in the help tab 
+1. Explore some of the different classification methods such as "bclust". To get help on the different methods available use *??tmap-package* or search in the help tab 
 
    
 ```{r type your answer here}
 
+tm_shape(.....) + 
+  tm_fill(....., style = .....) + 
+  tm_borders(alpha = 0.3)
+
+
 ```
  
 
-2. Head to Mentimeter to answer some recap questions!
 
 
 

@@ -45,51 +45,32 @@ Using open source police recorded crime statistics this workshop will demonstrat
 The datasets needed in this workshop include crime data, population statistics and shapefiles. Information on how to download these will be available in R file names 'downloading the data' but feel free to obtain these via git *add link*. Ensure these are loaded into your environment before starting the workshop
 
 
-
-
-# Topic 1: - Intro to spatial data 
+# Topic 1: - Introduction to the crime data
 
 ## Downloading the crime data 
 
  *https://data.police.uk/*. 
 
-Select January 2019 to December 2019, from the Surrey and click 'Include Crime Data'. Download and unzip the data into your working directory
-
-Read in just the January 2019 month of data
-
 
 ```{r crime data}
 #unzip(file.choose())
-crime01_19 <- read_csv("Data/2020-08/2020-08-surrey-street.csv") %>% 
+crime <- read_csv("Data/2020-08/2020-08-surrey-street.csv") %>% 
   janitor::clean_names() 
 
 #explore variables
-glimpse(crime01_19)
+glimpse(crime)
 
 ```
-
-Points, lines and polygon 
-
-- Our coordinate variables (the latitude and longitude) are known as point data 
-- The 'location' variable represents the line. This is normally define by a street or junction 
-- The 'lsoa name' represent our polygon (borough, wards, districts etc). LSOA refers to the Lower Layer Super Output Areas which are a unit measure in census geography 
-
 
 
 
 ## Briefly explore using ggmap and ggplot (areal plot)
 
-The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using
-ggplot2, and then plot additional content layers of data, statistics, or models on top of the map.
-
-In ggmap, downloading a map as an image and formatting the image for plotting is done with the
-get_map function. More specifically, get_map is a wrapper function
-
 
 ```{r using ggmap}
 
 ## Ariel Map of Surrey
-qmplot(longitude, latitude, data = crime01_19, colour = crime_type, size = I(3), darken = .3)
+qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), darken = .3)
 
 
 
@@ -102,55 +83,26 @@ map <- get_map(Crawley, zoom = 13, scale = 1)
 ggmap(map)
 
 ggmap(map) +
-  geom_point(aes(longitude, latitude), data = crime01_19) 
+  geom_point(aes(longitude, latitude), data = crime) 
 
 
 ## Colour the Crime Type
 
 ggmap(map) +
-  geom_point(aes(longitude, latitude, colour = crime_type), data = crime01_19) 
+  geom_point(aes(longitude, latitude, colour = crime_type), data = crime) 
 
 ggmap(map) +
-  geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime01_19) 
-
-
+  geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime) 
 
 ```
 
 
-
-
-
 ## Simple Features and Projection methods
 
-Simple Features is a common R language, also known as sf, that allow you to handle and manipulate the UoA (points, lines and polyons). Simple Features allows you store spatial objects
-
-Features refers to the property that linestring and polygons are built from points by straight line segments. 
-
-One of the fastest growing packages in this area is [sf](https://github.com/r-spatial/sf), which gives you access to a whole host of features and functions for use with spatial data, including visualisation. html) to spatial data out there. For this exercise, we'll keep things simple, and focus on how to use sf to make spatial data visualisations in combination with ggplot. Should you want to know more, or would like additional resources on using spatial data in R, please do not hesitate to ask!
-
-
-CRS and Projection: 
-
-CRS are  is a coordinate-based local, regional or global system used to locate geographical entities. A spatial reference system defines a specific map projection, as well as transformations between different spatial reference systems. […] spatial reference systems can be referred to using a SRID integer, including EPSG codes
-
-In short "Projection methods allow us to move move from the 3D to the 2D, CRS allow us to identify specific locations within these 
-
-There are thousands of CRS, the most common being BNG and the WGS 84 
-
-Each crs has an ESPG identifier
-i.e. the BNG = 27700 (British National Grid)
-i.e. the WGS 84 is 4326 (World Geodetic System)
-i.e. the ETRS 1980 = 3035 (European Terrestial Reference System)
-
-
-First step is to transform you ordinary data into an sf object using 'st_as_sf' - which consumes are latitude and longitutde in a geometry attribute
-
-
 ```{r simple features }
-st_crs(crime01_19)   # to check the crs
+st_crs(crime)   # to check the crs
 
-sf <- st_as_sf(crime01_19,                                
+sf <- st_as_sf(crime,                                
                       coords = c("longitude", "latitude"),
                       crs = 4326, 
                       na.fail = FALSE)
@@ -159,21 +111,8 @@ st_crs(sf)
 ```
 
 
-Other functions 
-
-- agr (atribute-geometry-relationship) = character vector. 
-- Specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, NA_agr_, implies we don't know.
-
-
-
-
-
 
 ## Mapping point data 
-
-
-Now we have an sf object which contains point-level, spatially sensitive data about Crime in Surrey 2019, We can now create a basic point map of these
-
 
 ```{r}
 
@@ -215,16 +154,20 @@ ggplot() +
 
 ### Activity 1
 
-```{r}
-#### Activity 1 - How does this compare to 'drugs'?
-#Subset the data for the those crime types recorded as 'drugs', create this into a new object like we did for ASB and name it 'drugs' 
-#Using ggplot plot the point data over a base map (reference map)
+How does this compare to the crime_type 'drugs'?
 
+Steps; 
+1. Subset the data for the those crime types recorded as 'drugs', 
+2. create this into a new object like we did for ASB and name it 'drugs' 
+3. Using ggplot plot the point data over a base map (reference map)
+
+
+```{r fill in the code here}
 
 ## Solution 
 
 drugs <- subset(sf, crime_type == "Drugs") %>%  
-  select(-c(1, 9, 10))
+  select(-c(1, 9, 10))      #this line is not necessary but helps to neaten your data as we are removing the columns that are not of interest
 
 ggplot() +
   annotation_map_tile() +
@@ -248,25 +191,9 @@ ggplot() +
 
 # Topic 2: - Shapefiles 
 
-What are Shapefiles? 
-
-They represent a geospatial vector that is used for GIS software. Shapefiles store both geogrpahic location and its associated attribute information 
-
-The Shapefile format stores the data as primitive geometric shapes like points, lines, and polygons. These shapes, together with data attributes that are linked to each shape, create the representation of the geographic data.
-
-They contain four mandatory file extensions (.shx, .shp, .dbf and the .prj). 
-- The .shp contains the geometry data (a 2D axis ordering of coordinate data)
-- The .shx contains the positional index of the feature geometry 
-- The .dbf contins the attributes for each shape
-- The .prj contains the cs and projection information
 
 
-- Mention crime data and how research in criminology tend to use the LSOA as the main census geography 
-
-
-
-
-Read in the Shapefile for 'Surrey Heath' 
+## Read in the Shapefile for 'Surrey Heath' 
 
 ```{r read and plot the boundary for surrey heath}
  
@@ -280,26 +207,19 @@ ggplot() +
 ```
 
 
-
-The original crime01_19 data set contains the individual count of reported crime types across LSOAS, therefore the LSOAs are repeated multiple times. This is because you would expect to see multiple crime counts in one LSOA
-
-In order to highlight how many crimes have occurred in each LSOA, we can count the crimes per LSOA and obtained grouped statistics
+## Group the crimes
 
 
 ```{r crimes per lsoa}
-crimes_grouped_by_lsoa <- crime01_19 %>%
+crimes_grouped_by_lsoa <- crime %>%
   group_by(lsoa_code) %>%
   summarise(count=n())
 ```
 
 
-In our new object you will see two variables, the LSOA and the count of crime in each one.  
-
-We can now join the Shapefile (the geospatial vector) and the crimes_grouped_by_losa (the aggregated data)
-
-To join the crimes per lsoa to the shapefile we can use the left_join function that returns all the rows of the table on the left side of the join and matching rows for the table on the right side of join.
 
 
+## Merge the shapefile to the crime dataset
 
 ```{r merge the data}
 
@@ -333,6 +253,8 @@ tm_shape(surrey_lsoa) +
 
 
 
+## Clasification methods
+
 How can we better visualise counts? Count data does not equally represent the population distribution at hand, tmaps allows you to add different 'styles' 
 
 The different styles result in different clustering mechanism, tmaps have available on 'jenks'or 'Standard Deviation' 
@@ -340,7 +262,7 @@ The different styles result in different clustering mechanism, tmaps have availa
 
 In this example I've used 'kmeans'. k-means clustering is a method of vector quantisation, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster.
 
-///
+
 
 ```{r}
 tm_shape(surrey_lsoa) + 
@@ -362,7 +284,7 @@ tm_shape(surrey_lsoa) +
 
 
 
-## Map Layouts - additional features of tmap
+## Map Layouts - additional features of tmap (optional task)
 
 
 ```{r}
@@ -435,15 +357,22 @@ tm_shape(surrey_lsoa) +
 
 
 
-## Activity 2 and break 
+## Activity 2 
+
+1. Explore some of the different classification methods such as "bclust"
+   To get help on the different methods available use *??tmap-package* or search in the help tab 
 
 
-```{r Activity 2}
+```{r type your answer here}
 
-#1) Explore some of the different classification methods such as "bclust"
-#   To get help on the different methods available use *??tmap-package* or search in the help tab 
+##solution
 
-#2) Head to mentimeter meter to answer some recap questions!
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "bclust") + 
+  tm_borders(alpha = 0.3) + 
+  tmap_style("col_blind")
+
+
 
 
 ```
@@ -454,11 +383,6 @@ tm_shape(surrey_lsoa) +
 
 
 # Topic 3: - Crime Rate vs Crime Count 
-
-Count data is not entirely accurate of population density. Whilst the above might help us identify interesting patterns, point-level open crime data is rarely used in isolation for detailed analysis. 
-
-For one thing, the data is points are geomasked. Th means that points are highly likely to be overlapping, giving a skewed picture of the distribution. There are ways round this, such as through jittering or applying census based data.
-
 
 
 ```{r}
@@ -472,25 +396,14 @@ pop <- read_csv("Data/Census Population/Data_UNIT_URESPOP.csv") %>% slice(3:57) 
               'pop_count_res'), as.numeric)
 ```
 
-
-
-Again we join this to our surrey_lsoa file, by matching the LSOAs
-
+## Join the data to our new shapefile
 
 ```{r}
 surrey_lsoa <- left_join(surrey_lsoa, pop, by = c("code"="geo_code"))
 
 ```
 
-
-
-Now you will see the census data has merged into the shapefile, 
-
-A crime rate is calculated by dividing the number of reported by the total population, and then multiplied by 100,000. 
-
-In this case that would be the count variable, divided by the 'pop' variable, and then times by 1000 (we use 1000 as this is the average population of an LSOA, if you were using larger UoA you can choose to multiply by 100,000. Just remember what affect this will have on your rate and how this then interpreted across your results)
-
-In order to work out the crime rate, we need to create a new variable that takes the count/pop*10000
+## How to calculate the crime rate?
 
 ```{r}
 surrey_lsoa <- surrey_lsoa %>% 
@@ -499,9 +412,6 @@ surrey_lsoa <- surrey_lsoa %>%
 ```
 
 
-
-
-Now lets explore these trends using ggplot and tmap 
 
 ##ggplot
 
@@ -523,12 +433,7 @@ tm_shape(surrey_lsoa) +
 
 
 
-
 ## Cartograms and ggplot
-
-A cartogram is a type of map where different geographic areas are modified based on a variable associated to those areas. 
-
-Two types: contiguous vs non-contiguous (sharing a common border) 
 
 
 ```{r}
@@ -571,15 +476,13 @@ ggplot(cart) +
 We have mapped the variable pop_count_wrk, now lets do the same with the variable pop_count_res
 
 Steps: 
-- 1) First calculate the crime rate 
-- 2) Plot using ggplot 
-- 3) Plot using tmap 
-- 4) Plot both maps together using tmap_arrange 
-- 5) Plot a cartogram of residential population
+1. First calculate the crime rate 
+2. Plot using ggplot 
+3. Plot using tmap 
+4. Plot both maps together using tmap_arrange 
+5. Plot a cartogram of residential population
 
 Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends
-
-
 
 
 ```{r}
@@ -691,7 +594,7 @@ ggplot(sf_seperate, aes(lng, lat)) +
 ```{r}
 
 ## Subsetting for just ASB 
-asb <- subset(crime01_19, crime_type == "Anti-social behaviour")
+asb <- subset(crime, crime_type == "Anti-social behaviour")
 
 m <- leaflet(data = asb) %>%
   addProviderTiles("Stamen.Toner") %>% 

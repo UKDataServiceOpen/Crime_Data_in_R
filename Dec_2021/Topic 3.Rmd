@@ -6,6 +6,7 @@ output: html_notebook
 toc: true
 ---
 
+## Load Packages
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -31,6 +32,12 @@ library(tmap)
 
 
 
+## Read in the population statistics
+
+Count data is not entirely accurate of population density. Whilst the above might help us identify interesting patterns, point-level open crime data is rarely used in isolation for detailed analysis. 
+
+For one thing, the data is points are geomasked. Th means that points are highly likely to be overlapping, giving a skewed picture of the distribution. There are ways round this, such as through jittering or applying census based data.
+
 
 ```{r}
 pop <- read_csv("Data/Census Population/Data_UNIT_URESPOP.csv") %>% slice(3:57) %>% 
@@ -44,13 +51,25 @@ pop <- read_csv("Data/Census Population/Data_UNIT_URESPOP.csv") %>% slice(3:57) 
 ```
 
 
+## Join the data to our new shapefile
 
+Again we join this to our surrey_lsoa file, by matching the LSOAs
 
 ```{r}
 surrey_lsoa <- left_join(surrey_lsoa, pop, by = c("code"="geo_code"))
 
 ```
 
+Now you will see the census data has merged into the shapefile/ 
+
+
+## How to calculate the crime rate?
+
+A crime rate is calculated by dividing the number of reported by the total population, and then multiplied by 100,000. 
+
+In this case that would be the count variable, divided by the 'pop' variable, and then times by 1000 (we use 1000 as this is the average population of an LSOA, if you were using larger UoA you can choose to multiply by 100,000. Just remember what affect this will have on your rate and how this then interpreted across your results)
+
+In order to work out the crime rate, we need to create a new variable that takes the count/pop*1000
 
 
 ```{r}
@@ -60,6 +79,7 @@ surrey_lsoa <- surrey_lsoa %>%
 ```
 
 
+Now lets explore these trends using ggplot and tmaps;
 
 ##ggplot
 
@@ -84,6 +104,10 @@ tm_shape(surrey_lsoa) +
 
 
 ## Cartograms and ggplot
+
+A cartogram is a type of map where different geographic areas are modified based on a variable associated to those areas. 
+
+Two types: contiguous vs non-contiguous (sharing a common border) 
 
 
 ```{r}
@@ -138,7 +162,57 @@ Steps:
 Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends
 
 
-```{r type your answer here}
+```{r fill in the code here}
+
+# 1) First calculate the crime rate 
+
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate2 = (count/......)*...)
+
+
+#2) Plot using ggplot 
+
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = ....., aes(fill = ......), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+
+
+#3) Plot using tmap 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill(....., style = "quantile") + 
+  tm_borders(alpha = 0.3)
+
+
+#4) Compare the workday vs residential population 
+
+e <- tm_shape(surrey_lsoa) + 
+  tm_fill(....., style = "quantile", title = "Workday Pop") + 
+  tm_borders(alpha = 0.3)
+
+f <- tm_shape(surrey_lsoa) + 
+  tm_fill(....., style = "quantile", title = "Residential pop") + 
+  tm_borders(alpha = 0.3)
+
+
+tmap_arrange(...., .....)
+
+
+
+#5) Cartogram
+
+ggplot(.....) + 
+  geom_sf(aes(fill = ......), 
+          color = "gray50", 
+          linetype = 1, 
+          lwd = 0.35) + 
+  scale_fill_gradientn(colours = heat.colors(n =10, 
+                                            alpha = 0.5, 
+                                            rev = TRUE)) + 
+  theme_gray() + 
+  labs(title = "Surrey Heath: Population by LSOA", 
+       subtitle = "August 2020")
 
 ```
  
