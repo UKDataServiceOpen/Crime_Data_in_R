@@ -1,12 +1,12 @@
 ---
-title: "Additional Topics and Next Steps"
+title: "Additional Topics"
 author: "Nadia Kennar"
 date: "1st December 2021"
 output: html_notebook
 toc: true
 ---
 
-## Load packages
+## Load packages 
 
 
 ```{r setup, include=FALSE}

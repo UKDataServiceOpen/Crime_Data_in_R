@@ -6,6 +6,7 @@ output: html_notebook
 toc: true
 ---
 
+## Load Packages
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
