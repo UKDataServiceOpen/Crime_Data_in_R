@@ -1,0 +1,216 @@
+---
+title: "Topic 1: Exploring Crime Data"
+author: "Nadia Kennar"
+date: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+## Load the pacakges
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#install.packages(")
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+  
+## Downloading the crime data 
+
+ *https://data.police.uk/*. 
+
+Select August 2020 to August 2021, from Surrey and click 'Include Crime Data'. Download and unzip the data into your working directory.
+
+Read in just the month of August 2020. 
+
+
+```{r crime data}
+#unzip(file.choose())
+crime <- read_csv("Data/2020-08/2020-08-surrey-street.csv") %>% 
+  janitor::clean_names() 
+
+#explore variables
+glimpse(crime)
+
+```
+
+
+Points, lines and polygon 
+
+- Our coordinate variables (the latitude and longitude) are known as point data 
+- The 'location' variable represents the line. This is normally define by a street or junction 
+- The 'lsoa name' represent our polygon (borough, wards, districts etc). LSOA refers to the Lower Layer Super Output Areas which are a unit measure in census geography 
+
+
+
+## Briefly explore the data using ggmap and ggplot (Ariel Map)
+
+The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map.
+
+In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function
+
+
+```{r using ggmap}
+## Ariel Map of Surrey
+qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), darken = .3)
+
+## Lets just say you were interested in a specific area (in this example we will use Crawley 002B)
+
+## Ariel Map of Crawley 002B
+geocode("Crawley 002B")
+Crawley <- c(long = -0.152210, lat = 51.15813)
+map <- get_map(Crawley, zoom = 13, scale = 1)
+ggmap(map)
+
+ggmap(map) +
+  geom_point(aes(longitude, latitude), data = crime) 
+
+
+## Colour the Crime Type
+
+ggmap(map) +
+  geom_point(aes(longitude, latitude, colour = crime_type), data = crime) 
+
+ggmap(map) +
+  geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime) 
+```
+
+
+
+
+## Simple Features and Projection methods
+
+Simple Features is a common R language, also known as sf, that allow you to handle and manipulate the UoA (points, lines and polyons). Simple Features allows you store spatial objects
+
+Features refers to the property that linestring and polygons are built from points by straight line segments. 
+
+One of the fastest growing packages in this area is [sf](https://github.com/r-spatial/sf), which gives you access to a whole host of features and functions for use with spatial data, including visualisation. html) to spatial data out there. For this exercise, we'll keep things simple, and focus on how to use sf to make spatial data visualisations in combination with ggplot. Should you want to know more, or would like additional resources on using spatial data in R, please do not hesitate to ask!
+
+
+CRS and Projection: 
+
+CRS are  is a coordinate-based local, regional or global system used to locate geographical entities. A spatial reference system defines a specific map projection, as well as transformations between different spatial reference systems. […] spatial reference systems can be referred to using a SRID integer, including EPSG codes
+
+In short "Projection methods allow us to move move from the 3D to the 2D, CRS allow us to identify specific locations within these 
+
+There are thousands of CRS, the most common being BNG and the WGS 84 
+
+Each crs has an ESPG identifier
+i.e. the BNG = 27700 (British National Grid)
+i.e. the WGS 84 is 4326 (World Geodetic System)
+i.e. the ETRS 1980 = 3035 (European Terrestial Reference System)
+
+First step is to transform you ordinary data into an sf object using 'st_as_sf' - which consumes are latitude and longitutde in a geometry attribute
+
+
+```{r simple features }
+st_crs(crime)   # to check the crs
+
+sf <- st_as_sf(crime,                                
+                      coords = c("longitude", "latitude"),
+                      crs = 4326, 
+                      na.fail = FALSE)
+st_crs(sf)
+
+
+```
+
+
+Other functions 
+
+- agr (atribute-geometry-relationship) = character vector. 
+- Specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, NA_agr_, implies we don't know.
+
+
+
+## Mapping point data 
+
+Now we have an sf object which contains point-level, spatially sensitive data about Crime in Surrey 2019, We can now create a basic point map of these
+
+
+```{r}
+#### Plot the point data
+ggplot() + 
+  geom_sf(data = sf)
+
+#### Colour the different crime type
+ggplot() + 
+  geom_sf(data = sf, aes(fill = crime_type, col = crime_type))
+
+#### Reference map / base map  
+ggplot() + 
+  annotation_map_tile() +
+  geom_sf(data = sf)
+
+#### Sub-setting for just ASB 
+asb <- subset(sf, crime_type == "Anti-social behaviour") %>% 
+  select(-c(1, 9, 10))
+
+ggplot() +
+  annotation_map_tile() +
+  geom_sf(data = asb)
+
+
+
+```
+
+
+
+## Activity 1
+
+How does this compare to the crime_type 'drugs'?
+
+Steps; 
+1. Subset the data for the those crime types recorded as 'drugs', 
+2. create this into a new object like we did for ASB and name it 'drugs' 
+3. Using ggplot plot the point data over a base map (reference map)
+
+
+
+```{r Fill in the code here}
+
+#1)
+subset(sf, ..... ==  .....  )
+
+
+#2) 
+drugs <- subset(sf, ..... == ..... ) 
+
+
+#3)
+ggplot() +
+  ..............() +
+  geom_sf(data = .....) 
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
