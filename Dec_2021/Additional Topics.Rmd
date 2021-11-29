@@ -78,7 +78,7 @@ ggplot(sf_seperate, aes(lng, lat)) +
 ```{r}
 
 ## Subsetting for just ASB 
-asb <- subset(crime01_19, crime_type == "Anti-social behaviour")
+asb <- subset(crime, crime_type == "Anti-social behaviour")
 
 m <- leaflet(data = asb) %>%
   addProviderTiles("Stamen.Toner") %>% 
