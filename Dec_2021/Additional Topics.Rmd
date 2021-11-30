@@ -8,7 +8,6 @@ toc: true
 
 ## Load packages 
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -35,13 +34,12 @@ library(tmap)
 
 ### Binning data
 
-Binning, can be thought of as a two-dimensional histogram (shading of the bins take the heights of the bars). 
-
-Need to convert the sf data.frame geometry column into a data.frame with separate x, y columns 
+Binning, can be thought of as a two-dimensional histogram (shading of the bins take the heights of the bars). You first need to convert the sf data.frame geometry column into a data.frame with separate x, y columns. 
 
 How do you separate the coordinates? 
 
-https://github.com/r-spatial/sf/issues/231 
+Luckily a function to do this already exists [https://github.com/r-spatial/sf/issues/231]. The below code is converting a sfc_point to seperate x, y columns 
+
 
 ```{r}
 sfc_as_cols <- function(x, names = c("x","y")) {
@@ -72,8 +70,9 @@ ggplot(sf_seperate, aes(lng, lat)) +
 
 
 
-
 ### Interactive Maps; Leaflet
+
+Leaflet is one of the most popular open-source JavaScript libraries for interactive maps. For more information you can view this link here [https://rstudio.github.io/leaflet/]
 
 ```{r}
 
@@ -89,6 +88,20 @@ m
 
 
 
+
+
+
+### Other imporant functions 
+
+- Jittering: 
+
+Jittering indeed means just adding random noise to a vector of numeric values, by default this is done in jitter-function by drawing samples from the uniform distribution. The range of values in the jittering is chosen according to the data, if amount-parameter is not provided. It helps to grasp where the density of observations is high. 
+
+There are a few packages that offer this method including the 'geom_jitter' function found in the ggplot2 package [https://ggplot2.tidyverse.org/reference/geom_jitter.htm]. Additionally, the 'rjitter' function under the spatsat package. The function rjitter is generic, with methods for point patterns (described here) and for some other types of geometrical objects. Each of the points in the point pattern X is subjected to an independent random displacement. More information can be found here; [https://rdrr.io/cran/spatstat.geom/man/rjitter.html]
+
+-  st_intersect():
+
+This function is also under the sf package and is used to intersect two objects between two sets of objects. More information can be found here [https://r-spatial.github.io/sf/reference/geos_binary_ops.htm]
 
 
 
