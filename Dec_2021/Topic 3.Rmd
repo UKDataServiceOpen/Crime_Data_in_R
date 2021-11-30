@@ -36,7 +36,9 @@ library(tmap)
 
 Count data is not entirely accurate of population density. Whilst the above might help us identify interesting patterns, point-level open crime data is rarely used in isolation for detailed analysis. 
 
-For one thing, the data is points are geomasked. Th means that points are highly likely to be overlapping, giving a skewed picture of the distribution. There are ways round this, such as through jittering or applying census based data.
+For one thing, the data is points are geomasked. This means that points are highly likely to be overlapped, giving a skewed picture of the distribution. There are ways round this, such as through jittering or applying census based data. To view more information about jittering please view the 'Additional Topic.rmd' file 
+
+The follow population statistics can be obtained from [http://infuse2011gf.ukdataservice.ac.uk/] 
 
 
 ```{r}
@@ -48,26 +50,33 @@ pop <- read_csv("Data/Census Population/Data_UNIT_URESPOP.csv") %>% slice(3:57) 
          pop_count_res = f323339) %>% 
   mutate_at(c('pop_density', 'pop_count_wrk',
               'pop_count_res'), as.numeric)
+
+head(pop)
 ```
+
+
 
 
 ## Join the data to our new shapefile
 
-Again we join this to our surrey_lsoa file, by matching the LSOAs
+Again we join this to our surrey_lsoa file, by matching the LSOAs using the left_join function
 
 ```{r}
 surrey_lsoa <- left_join(surrey_lsoa, pop, by = c("code"="geo_code"))
 
+head(surrey_lsoa)
+
 ```
 
-Now you will see the census data has merged into the shapefile/ 
+Now you will see the census data has merged into the shapefile
+
 
 
 ## How to calculate the crime rate?
 
-A crime rate is calculated by dividing the number of reported by the total population, and then multiplied by 100,000. 
+A crime rate is calculated by dividing the number of reported crimes by the total population, and then multiplying by 100,000. 
 
-In this case that would be the count variable, divided by the 'pop' variable, and then times by 1000 (we use 1000 as this is the average population of an LSOA, if you were using larger UoA you can choose to multiply by 100,000. Just remember what affect this will have on your rate and how this then interpreted across your results)
+So for our dataset, we take the count variable, divide by the 'pop' variable (workday or residential), and then times by 1000 (in this instance we use 1000 as this is the average population of an LSOA, if you were using larger UoA you can choose to multiply by 100,000. Just remember what affect this will have on your rate and how this then interprets across your results)
 
 In order to work out the crime rate, we need to create a new variable that takes the count/pop*1000
 
@@ -76,10 +85,14 @@ In order to work out the crime rate, we need to create a new variable that takes
 surrey_lsoa <- surrey_lsoa %>% 
   mutate(crime_rate = (count/pop_count_wrk)*1000)
 
+head(surrey_lsoa)
+
 ```
 
 
 Now lets explore these trends using ggplot and tmaps;
+
+
 
 ##ggplot
 
@@ -103,18 +116,21 @@ tm_shape(surrey_lsoa) +
 
 
 
+
+
+
+
 ## Cartograms and ggplot
 
-A cartogram is a type of map where different geographic areas are modified based on a variable associated to those areas. 
-
-Two types: contiguous vs non-contiguous (sharing a common border) 
+A cartogram is a type of map where different geographic areas are modified based on a variable associated to those areas. There are two two types of cartograms: contiguous vs non-contiguous (sharing a common border) 
 
 
 ```{r}
 library(cartogram)
 
-#In our data set we have a variable “pop_count” which refers to the total number of people in our LSOA 
-cart <- cartogram_cont(surrey_lsoa, weight = "pop_count_wrk")   
+#In our data set we have a variable “pop_count_wrk” which refers to the total number of people in our LSOA 
+cart <- cartogram_cont(surrey_lsoa, weight = "pop_count_wrk") 
+
 
 ## simple plot 
 ggplot(cart) + 
@@ -159,7 +175,7 @@ Steps:
 4. Plot both maps (residential and workday) together using tmap_arrange 
 5. Plot a cartogram of residential population
 
-Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends
+Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends?
 
 
 ```{r fill in the code here}
