@@ -6,6 +6,8 @@ output: html_notebook
 toc: true
 ---
 
+rm(list = ls())
+
 ## Load the pacakges
 
 
@@ -66,7 +68,7 @@ Points, lines and polygon
 
 The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map.
 
-In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function
+In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function.
 
 
 ```{r using ggmap}
@@ -119,7 +121,10 @@ i.e. the BNG = 27700 (British National Grid)
 i.e. the WGS 84 is 4326 (World Geodetic System)
 i.e. the ETRS 1980 = 3035 (European Terrestial Reference System)
 
-First step is to transform you ordinary data into an sf object using 'st_as_sf' - which consumes are latitude and longitutde in a geometry attribute
+
+First step is to transform you ordinary data into an sf object using 'st_as_sf' - which converts our latitude and longitutde to a geometry attribute
+
+To recap, sf objects are just data-frames that are collections of spatial objects. Each row is a spatial object (e.g. a polgyon), that may have data associated with it (e.g. its area) and a special geo variable that contains the coordinates
 
 
 ```{r simple features }
@@ -127,11 +132,12 @@ st_crs(crime)   # to check the crs
 
 sf <- st_as_sf(crime,                                
                       coords = c("longitude", "latitude"),
-                      crs = 4326, 
+                      crs = 4326,     
                       na.fail = FALSE)
 st_crs(sf)
 
-
+glimpse(sf)
+head(sf)
 ```
 
 
@@ -159,7 +165,8 @@ ggplot() +
 #### Reference map / base map  
 ggplot() + 
   annotation_map_tile() +
-  geom_sf(data = sf)
+  geom_sf(data = sf, aes(fill = crime_type, col = crime_type))
+
 
 #### Sub-setting for just ASB 
 asb <- subset(sf, crime_type == "Anti-social behaviour") %>% 
@@ -172,6 +179,11 @@ ggplot() +
 
 
 ```
+
+
+
+
+
 
 
 

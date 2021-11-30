@@ -284,9 +284,14 @@ tm_shape(surrey_lsoa)+
 
 2. Assign your new bclust and hclust classification maps into separate objects (call them "h" and "b" and plot them together using tmap_arrange()
 
+
+3. Plot an interactive map using the "bclust" classification method by changing the command in the tmap_mode() function 
+
    
 ```{r type your answer here}
 
+#1)
+
 tm_shape(.....) + 
   tm_fill(....., style = .....) + 
   tm_borders(alpha = 0.3)
@@ -295,6 +300,25 @@ tm_shape(.....) +
 tm_shape(.....) + 
   tm_fill(....., style = .....) + 
   tm_borders(alpha = 0.3)
+
+
+#2) 
+
+
+
+
+
+
+#3) 
+
+tmap_mode("....")
+
+
+tm_shape(.....) + 
+  tm_fill(....., style = .....) + 
+  tm_borders(alpha = 0.3)
+
+
 ```
  
 
