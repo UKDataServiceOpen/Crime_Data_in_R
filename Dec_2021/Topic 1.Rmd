@@ -51,8 +51,8 @@ crime <- read_csv("Data/2020-08/2020-08-surrey-street.csv") %>%
   janitor::clean_names() 
 
 #explore variables
+head(crime)
 glimpse(crime)
-
 ```
 
 
@@ -79,6 +79,7 @@ qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), dark
 
 ## Ariel Map of Crawley 002B
 geocode("Crawley 002B")
+
 Crawley <- c(long = -0.152210, lat = 51.15813)
 map <- get_map(Crawley, zoom = 13, scale = 1)
 ggmap(map)
@@ -134,7 +135,7 @@ sf <- st_as_sf(crime,
                       coords = c("longitude", "latitude"),
                       crs = 4326,     
                       na.fail = FALSE)
-st_crs(sf)
+st_crs(sf2)
 
 glimpse(sf)
 head(sf)
@@ -156,25 +157,28 @@ Now we have an sf object which contains point-level, spatially sensitive data ab
 ```{r}
 #### Plot the point data
 ggplot() + 
-  geom_sf(data = sf)
+  geom_sf(data = sf2)
 
 #### Colour the different crime type
 ggplot() + 
-  geom_sf(data = sf, aes(fill = crime_type, col = crime_type))
+  geom_sf(data = sf, aes(col = crime_type))
 
 #### Reference map / base map  
 ggplot() + 
   annotation_map_tile() +
-  geom_sf(data = sf, aes(fill = crime_type, col = crime_type))
+  geom_sf(data = sf, aes(col = crime_type))
 
 
 #### Sub-setting for just ASB 
 asb <- subset(sf, crime_type == "Anti-social behaviour") %>% 
   select(-c(1, 9, 10))
+head(asb)
 
-ggplot() +
+
+asb_map <- ggplot() +
   annotation_map_tile() +
   geom_sf(data = asb)
+
 
 
 
@@ -201,17 +205,23 @@ Steps;
 ```{r Fill in the code here}
 
 #1)
-subset(sf, ..... ==  .....  )
+subset(sf, crime_type ==  "Drugs" )
 
 
 #2) 
-drugs <- subset(sf, ..... == ..... ) 
+drugs <- subset(sf, crime_type == "Drugs" ) 
 
 
 #3)
-ggplot() +
-  ..............() +
-  geom_sf(data = .....) 
+drug_map <- ggplot() +
+  annotation_map_tile() +
+  geom_sf(data = drugs) 
+
+
+install.packages("cowplot")
+library(cowplot)
+
+plot_grid(asb_map, drug_map, labels = c("asb", "drugs"))
 
 
 ```
