@@ -64,11 +64,11 @@ Points, lines and polygon
 
 
 
-## Briefly explore the data using ggmap and ggplot (Ariel Map)
+## Briefly explore the data using ggmap and ggplot
 
-The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map.
+The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map. In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function
 
-In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function.
+It is important to note that when using ggmap, users have to first setup an account with Google, enable the relevant API, and then tell R about the user's setup. Do not worry about doing this for this workshop as we will demonstrate the code below, however, if you would like to follow along then please refer to these steps in 'Google_API.rmd. 
 
 
 ```{r using ggmap}
@@ -201,28 +201,20 @@ Steps;
 3. Using ggplot plot the point data over a base map (reference map)
 
 
-
 ```{r Fill in the code here}
 
 #1)
-subset(sf, crime_type ==  "Drugs" )
+subset(sf, ..... ==  .....  )
 
 
 #2) 
-drugs <- subset(sf, crime_type == "Drugs" ) 
+drugs <- subset(sf, ..... == ..... ) 
 
 
 #3)
-drug_map <- ggplot() +
-  annotation_map_tile() +
-  geom_sf(data = drugs) 
-
-
-install.packages("cowplot")
-library(cowplot)
-
-plot_grid(asb_map, drug_map, labels = c("asb", "drugs"))
-
+ggplot() +
+  ..............() +
+  geom_sf(data = .....) 
 
 ```
 
