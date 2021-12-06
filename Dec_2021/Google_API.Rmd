@@ -1,9 +1,9 @@
 ---
 title: "Google_API"
+author: "Nadia Kennar"
 date: "1st December 2021"
 output: html_notebook
 toc: true
-output: html_notebook
 ---
 
 Setting up a connetion to Google's API;
@@ -27,11 +27,11 @@ Setting up a connetion to Google's API;
 - Google Maps Places API
 
 If you do not authorise the above API you will recieve and error message as such "Geocoding Service: This API project is not authorised to use the API". To authorise said APIs go to 
-1. https://console.cloud.google.com/apis/dashboard?project=missing-314119
-2. Click '+ Enable APIS and SERVICES' at the top of the screen
-3. Search for each API listed above and click the 'Enable button' 
+a. https://console.cloud.google.com/apis/dashboard?project=missing-314119
+b. Click '+ Enable APIS and SERVICES' at the top of the screen
+c. Search for each API listed above and click the 'Enable button' 
 
-One all are enabled, wait 5 minutes for changes to take place, and then move on to the next step to register your API to google. 
+Once all APIs are enabled, wait 5 minutes for changes to take place, and then move on to the next step to register your Google API to ggmaps. 
 
 
 4. Third; you need to tell ggmap about your API by using the 'register_google()' function. It would look something like *register_google(key = "hahfuibfiu324898249dbhsgag")* (this is a fake key). This will then set your API key for the current session, Every time you restart R you will have to request a new API key or you can set it permanently by adding 'write = TRUE', the full code being....
