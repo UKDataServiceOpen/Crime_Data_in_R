@@ -1,0 +1,52 @@
+CDU_FIELD_NAME,CENSUS_CELLNAME,TOPIC,CATEGORY,TOPIC_DESCRIPTION,
+F2383,QS102EW0003,Unit,Persons,The unit is for a particular count (e.g. people or households),
+F2383,QS102EW0003,Population (usual residents),Density (number of persons per Hectare),"The main population base for statistics from the 2011 Census is the usual resident population as at census day, 27 March 2011. Although the population base for enumeration included non-UK born short-term residents, this population is analysed separately and is not included in the main outputs from the 2011 Census.
+<br/> All statistics, unless specified, are produced using only usual residents of the UK.
+For 2011 Census purposes, a usual resident of the UK is anyone who, on census day, was in the UK and had stayed or intended to stay in the UK for a period of 12 months or more, or had a permanent UK address and was outside the UK and intended to be outside the UK for less than 12 months.
+For information about the main population base for statistics, how other population sub-groups are counted, and all variable definitions, see information about  <a href="http://web.ons.gov.uk/ons/guide-method/census/2011/census-data/2011-census-user-guide/information-by-variable/index.html" target="_blank">variables and classifications</a>.",
+F2384,QS102EW0001,Unit,Persons,The unit is for a particular count (e.g. people or households),
+F2384,QS102EW0001,Population (usual residents),All usual residents,"The main population base for statistics from the 2011 Census is the usual resident population as at census day, 27 March 2011. Although the population base for enumeration included non-UK born short-term residents, this population is analysed separately and is not included in the main outputs from the 2011 Census.
+<br/> All statistics, unless specified, are produced using only usual residents of the UK.
+For 2011 Census purposes, a usual resident of the UK is anyone who, on census day, was in the UK and had stayed or intended to stay in the UK for a period of 12 months or more, or had a permanent UK address and was outside the UK and intended to be outside the UK for less than 12 months.
+For information about the main population base for statistics, how other population sub-groups are counted, and all variable definitions, see information about  <a href="http://web.ons.gov.uk/ons/guide-method/census/2011/census-data/2011-census-user-guide/information-by-variable/index.html" target="_blank">variables and classifications</a>.",
+F323339,WD1101EW0001,Age,Total\ Age,"Age is derived from the date of birth question and is a person's age at their last birthday, at 27 March 2011. Dates of birth that imply an age over 115 are treated as invalid and the person's age is imputed. Infants less than one year old are classified as 0 years of age.",
+F323339,WD1101EW0001,Population (daytime/workday) [E][N][W],Workday population,"<b>England and Wales (Workday Population)</b>
+<br/>
+Workday population is where the usually resident population is re-distributed to their places of work, while those not in work are recorded at their usual residence.
+<br/>
+The workday population of an area is defined as all usual residents aged 16 and above who are in employment and whose workplace is in the area, and all other usual residents of any age who are not in employment but are resident in the area.  People who work mainly at or from home or do not have a fixed place of work are included in their area of their usual residence.  The following population groups are excluded from the workday population of an area:
+<ul>
+<li>Those living in England and Wales but working in Scotland, Northern Ireland, outside the UK or on offshore installations,</li>
+<li>Those with a place of work in England and Wales but who are not usually resident in England and Wales, and</li>
+<li>Short-term residents</li>
+</ul>
+<b>England and Wales (Workplace Population)</b>
+<br/>
+Workplace population is where the usually resident population is re-distributed to their main place of work, but those not working are excluded.
+<br/>
+<br/>
+<br/>
+<b>Northern Ireland (Daytime Population)</b>
+<br/>
+The daytime population of an area is defined as 'All usual residents who are either in employment or full-time students in the area, or not in employment or full-time students but are usually resident in the area'. People who work or study mainly at or from home, or do not have a fixed place of work or study, are included in the area of their usual residence.
+<br/>
+The following population groups are excluded from the daytime population of an area:
+<ul>
+<li>Those living in Northern Ireland but working or studying in England, Wales, Scotland, outside the UK or on offshore installations</li>
+<li>Those with a place of work or study in Northern Ireland but who are not usually resident in Northern Ireland</li>
+<li>Short-term residents</li>
+</ul>
+<b>Northern Ireland (Workplace Population)</b>
+<br/>
+The workplace population of an area is defined as 'All usual residents aged 16 to 74 who are in employment and whose workplace is in the area'. People who work mainly at or from home or do not have a fixed place of work are included in the area of their usual residence.
+<br/>
+The following population groups are excluded from the workplace population of an area:
+<ul>
+<li>Those not working the week before 27 March 2011</li>
+<li>Those living in Northern Ireland but working in England, Wales, Scotland, outside the UK or on offshore installations</li>
+<li>Those with a place of work in Northern Ireland but who are not usually resident in Northern Ireland</li>
+<li>Short-term residents</li>
+</ul>
+",
+F323339,WD1101EW0001,Sex,Total\ Sex,The classification of a person as either male or female.,
+F323339,WD1101EW0001,Unit,Persons,The unit is for a particular count (e.g. people or households),

@@ -1,0 +1,348 @@
+---
+title: "Topic 2: Shapefiles"
+author: "Nadia Kennar"
+date: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+## Load packages
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+What is a Shapefile? 
+
+They represent a geospatial vector that is used for GIS software. Shapefiles store both geogrpahic location and its associated attribute information 
+
+The Shapefile format stores the data as primitive geometric shapes like points, lines, and polygons. These shapes, together with data attributes that are linked to each shape, create the representation of the geographic data.
+
+They contain four mandatory file extensions (.shx, .shp, .dbf and the .prj). 
+- The .shp contains the geometry data (a 2D axis ordering of coordinate data)
+- The .shx contains the positional index of the feature geometry 
+- The .dbf contins the attributes for each shape
+- The .prj contains the cs and projection information
+
+In criminological research, the LSOA is quite frequently used as the main census geography 
+
+## Read in the Shapefile for 'Surrey Heath' 
+
+```{r read and plot the boundary for surrey heath}
+shp_file <- sf::st_read("Data/Shapefile/england_lsoa_2011.shp")
+
+## Plot the Shapefile 
+ggplot() + 
+  geom_sf(data = shp_file)
+
+head(shp_file)
+```
+
+
+
+*Further Information - To clarify, this is an 'empty shapefile', it simply contains the boundary profile of Surrey Heath and does not contain any further attribute information. However, if it did contain further attribute information such as the crime counts, population statistics, IMD counts, then you would not need to join the data as we do in this workshop, but instead you could layer the shapefile over our simple feature object created in Topic 1. More information on this method is available from the workshop that was held in February - all resources are available via the 'Feb_2021' folder from the github link [https://github.com/UKDataServiceOpen/Crime_Data_in_R.git] *
+
+
+This workshop instead joins the 'crime' datatset (in tibble format) to the above shapefile. Our newly created object 'shp_file' is in fact a simple feature object. You can check this by typing *class(shp_file)*. 
+
+The geometry column can be split into two key sections; the feature and the geomatry 
+  - The feature in this case is our polygon level (referenced by the multipolygon) which is in fact a  *simple feature geometery list- column (sfc)* 
+  - The geometery are the numbers that follow, and more technically known as a *'simple feature geometry (sfg)*
+
+The column in the sf data.frame that contains the geometries is a list, of class sfc. We can retrieve the geometry list-column in this case by using st_geometry. 
+
+```{r to view the sfc and sfg}
+st_geometry(shp_file)
+```
+
+
+
+
+## Group the crimes per lsoa 
+
+The original crime data set contains the individual count of reported crime types across LSOAS, therefore the LSOAs are repeated multiple times. This is because you would expect to see multiple crime counts in one LSOA
+
+In order to highlight how many crimes have occurred in each LSOA, we can count the crimes per LSOA and obtained grouped statistics
+
+
+```{r crimes per lsoa}
+crimes_grouped_by_lsoa <- crime %>%
+  group_by(lsoa_code) %>%
+  summarise(count=n())
+
+head(crimes_grouped_by_lsoa)
+
+```
+
+
+
+
+
+## Merge the shapefile to the crime dataset
+
+In our new object you will see two variables, the LSOA and the count of crime in each one.  
+
+We can now join the Shapefile (the geospatial vector) and the crimes_grouped_by_losa (the aggregated data)
+
+To join the crimes per lsoa to the shapefile we can use the left_join function that returns all the rows of the table on the left side of the join and matching rows for the table on the right side of join.
+
+
+```{r merge the data}
+
+surrey_lsoa <- left_join(shp_file, crimes_grouped_by_lsoa, by = c("code" = "lsoa_code"))
+
+head(surrey_lsoa)
+
+st_geometry_type(surrey_lsoa)    #view the geometery type 
+st_bbox(surrey_lsoa)             #obtains the objects value as specific units 
+
+
+#The spatial extent of a shapefile or R spatial object represents the geographic “edge” or location that is the #furthest north, south east and west. Thus is represents the overall geographic coverage of the spatial object.
+
+
+#map the data
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = count), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Number of crimes")
+
+```
+
+
+
+
+## Plotting via the 'tmap' package
+
+The tmap package allows you tp create thematic maps, the syntax is very similar to the ggplot2. Each map can be plot as an image or as an interactive map via the *tmap_mode("view" / "plot" )* function. 
+
+
+```{r}
+tmap_mode("view")
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count") + 
+  tm_borders("green", lwd = 0.7, alpha = 0.5)
+  #tm_text("name", size = "AREA", col = "black")
+  #tmap_style("col_blind")
+```
+
+
+
+
+
+### Classification methods
+
+How can we better visualise counts? Count data does not equally represent the population distribution at hand, tmaps allows you to alter the characteristics of theamatic maps via the 'styles' function. The different styles result in different binning techniques.  Now, when mapping quantitiatve data such as crime counts, typicaly the variables needed to be put into to 'bins'. As seen in the previous example, the default binning applied to highlight the LSOAs grouped started from 1-10, 11-20, 21-20, 31-40, 41-50 and 51-60 crimes 
+
+These bins were decided on automatically, however we can define more accurate classes that best refelct the distributional character of the data set
+
+
+In this example I've used the "kmeans", "jenks" and "sd".
+
+- k-means is a method of vector quantisation, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster.
+- Jenks (also known as natural breaks, or goodness of fit variance) classifcaiton aims to arrange a set of values into natural classes, that is the most optimal class range found naturally. This method minimizes the variation within each range, so the areas within each range are as close as possible in value to each other. 
+- sd classification is a standarised measure of observations deviated from the mean. By showing which values are above or below the mean, this method helps to show which locations are above or below an average mean
+
+
+
+```{r}
+
+a <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "kmeans") + 
+  tm_borders(alpha = 0.3)
+
+b <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "jenks") + 
+  tm_borders(alpha = 0.3)
+
+c <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "sd") + 
+  tm_borders(alpha = 0.3)
+
+
+## tmap_arrange
+
+tmap_mode("plot")
+tmap_arrange(a, b, c)
+
+
+```
+
+
+
+
+
+## Using categorical variables (tm_facets)
+
+Just like the tmap_arrange function, tmap_facets are way to produce side-by-side maps (known as *small multiples*). It is similar to the 'facet_grid' function in ggplot2
+
+Following the rdocumentation [https://www.rdocumentation.org/packages/tmap/versions/3.3-2/topics/tm_facets] "Small multiples can be created in two ways: 1) by specifying the by argument with one or two variable names, by which the data is grouped, 2) by specifying multiple variable names in any of the aesthetic argument of the layer functions (for instance, the argument col in tm_fill)." 
+
+Typically tm_facets are defined by a categorical variables. For example in this example, I am using tm_facets() to seperate the map into multiple components by lsoa (This isnt't the best example of a categorical variable, but something like the urban or rural landscape, or deprivation decile, would be more of interest in criminology). You could for example download the 2011 rural/urban classification from open geography portal and join this to our 'surrey_lsoa' sf object (using left_join). 
+
+If you are interested in doing so the dataset can be found here;
+[https://www.ons.gov.uk/methodology/geography/geographicalproducts/ruralurbanclassifications/2011ruralurbanclassification]
+
+
+
+```{r}
+tm_shape(surrey_lsoa) +
+  tm_fill("count",
+          style = "quantile",
+          palette = "Blues",
+          thres.poly = 0) + 
+  tm_facets(by="name", 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
+```
+
+
+
+
+
+
+
+
+
+## Map Layouts - additional features of tmap (optional task)
+
+
+```{r}
+
+## map style 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "sd") + 
+  tm_borders(alpha = 0.3) + 
+  tmap_style("col_blind")
+
+
+## map legends
+
+tm_shape(surrey_lsoa)+
+  tm_fill("count", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5)
+
+
+## compass, scale bar and grid
+
+tm_shape(surrey_lsoa)+
+  tm_fill("count", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) +   #compass 
+  tm_scale_bar(width = 0.15) +           #scale bar 
+  tm_grid()                              #grid
+
+```
+
+
+
+
+
+
+
+
+
+## Activity 2
+
+1. Explore some of the different classification methods such as "bclust" and "hclust"  - what are the main differences? To get help on the different methods available use *??tmap-package* or search in the help tab 
+
+2. Assign your new bclust and hclust classification maps into separate objects (call them "h" and "b" and plot them together using tmap_arrange()
+
+
+3. Plot an interactive map using the "bclust" classification method by changing the command in the tmap_mode() function 
+
+   
+```{r type your answer here}
+
+#1)
+
+h <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "bclust") + 
+  tm_borders(alpha = 0.3)
+
+
+b <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "hclust") + 
+  tm_borders(alpha = 0.3)
+
+
+#2) 
+
+
+tmap_arrange(h, b)
+
+
+
+#3) 
+
+tmap_mode("view")
+
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "hclust") + 
+  tm_borders(alpha = 0.3)
+
+
+```
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

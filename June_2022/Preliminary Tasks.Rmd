@@ -1,0 +1,89 @@
+---
+title: "Preliminary Tasks"
+author: "Nadia Kennar"
+date: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+
+
+# Prerequisite 
+
+This workshop is suitable for those beginner to intermediate in R. It requires you know how to set your working directory, how to read data into R.
+
+Using open source police recorded crime statistics this workshop will demonstrate how to map crime data in R using sf and ggplot. More specifically looking at the area of Surrey we will 
+
+  1) briefly explore the crime data and introduce key topics in spatial data
+  2) demonstrate how to join crime data to shapefiles and how to map data 
+  3) identify how to map and calculate crime rate 
+
+
+The datasets needed in this workshop include crime data, population statistics and shapefiles. Information on how to download these will be available in R file names 'downloading the data' but feel free to obtain these via git *add link*. Ensure these are loaded into your environment before starting the workshop
+
+
+
+## Set your working directory 
+
+The working directory is just a file path on your computer that sets the default location of any files you read into R, or save out of R. You need to set your current working directory in order to follow along with this workshop, You can read more about working directories here  *https://bookdown.org/ndphillips/YaRrr/the-working-directory.html* 
+
+You can use the *setwd()* function to set your current working directory, and the *getwd()* function to print your current working directory. 
+
+I would suggest however, creating an R project with a version control repository. This will allow you to work with the complete set of code provided. To do so follow these steps from the task menu found at the top left of your RStudio;
+
+File -> new project -> version control -> click git -> paste the github link in the ''repository url' box  *(https://github.com/UKDataServiceOpen/Crime_Data_in_R.git)* -> give your project directory a name -> tick open in new session -> click create new project
+
+
+
+## Install and load the packages required for this workshop
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## Install packages 
+
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("readr")
+install.packages("tibble")
+install.packages("janitor")
+install.packages("sf")
+install.packages("ggmap")
+install.packages("ggplot2")
+install.packages("ggspatial")
+install.packages("spdep")
+install.packages("leaflet")
+install.packages("RColorBrewer")
+install.packages("tmap")
+
+
+## Load packages
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+
+
+
+
+
+
+

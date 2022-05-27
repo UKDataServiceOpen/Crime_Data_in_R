@@ -1,0 +1,619 @@
+---
+title: "Crime mapping in R (Topics 1-4)"
+author: "Nadia Kennar"
+date: "25/10/2021"
+output: html_notebook
+toc: true
+---
+
+## Load Packages
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+# Prerequisite 
+
+This workshop is suitable for those beginner to intermediate in R. It requires you know how to set your working directory, how to read data into R.
+
+Using open source police recorded crime statistics this workshop will demonstrate how to map crime data in R using sf and ggplot. More specifically looking at the area of Surrey we will 
+
+  1) briefly explore the crime data and introduce key topics in spatial data
+  2) demonstrate how to join crime data to shapefiles and how to map data 
+  3) identify how to map and calculate crime rate 
+
+
+The datasets needed in this workshop include crime data, population statistics and shapefiles. Information on how to download these will be available in R file names 'downloading the data' but feel free to obtain these via git *add link*. Ensure these are loaded into your environment before starting the workshop
+
+
+# Topic 1: - Introduction to the crime data
+
+## Downloading the crime data 
+
+ *https://data.police.uk/*. 
+
+
+```{r crime data}
+#unzip(file.choose())
+crime <- read_csv("Data/2020-08/2020-08-surrey-street.csv") %>% 
+  janitor::clean_names() 
+
+#explore variables
+glimpse(crime)
+
+```
+
+
+
+## Briefly explore using ggmap and ggplot (areal plot)
+
+
+```{r using ggmap}
+
+## Ariel Map of Surrey
+qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), darken = .3)
+
+
+
+## Lets just say you were interested in a specific area (in this example we will use Crawley 002B)
+
+## Ariel Map of Crawley 002B
+geocode("Crawley 002B")
+Crawley <- c(long = -0.152210, lat = 51.15813)
+map <- get_map(Crawley, zoom = 13, scale = 1)
+ggmap(map)
+
+ggmap(map) +
+  geom_point(aes(longitude, latitude), data = crime) 
+
+
+## Colour the Crime Type
+
+ggmap(map) +
+  geom_point(aes(longitude, latitude, colour = crime_type), data = crime) 
+
+ggmap(map) +
+  geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime) 
+
+```
+
+
+## Simple Features and Projection methods
+
+```{r simple features }
+st_crs(crime)   # to check the crs
+
+sf <- st_as_sf(crime,                                
+                      coords = c("longitude", "latitude"),
+                      crs = 4326, 
+                      na.fail = FALSE)
+st_crs(sf)
+
+```
+
+
+
+## Mapping point data 
+
+```{r}
+
+#### Plot the point data
+ggplot() + 
+  geom_sf(data = sf)
+
+
+#### Colour the different crime type
+ggplot() + 
+  geom_sf(data = sf, aes(fill = crime_type, col = crime_type)) + 
+  labs(title = "Crime Count in Surrey", 
+       subtitle = "January 2019", 
+       caption = "Police Recorded Crime Statistics")
+
+
+#### Reference map 
+ggplot() + 
+  annotation_map_tile() +
+  geom_sf(data = sf)
+
+
+#### Sub-setting for just ASB 
+asb <- subset(sf, crime_type == "Anti-social behaviour") %>% 
+  select(-c(1, 9, 10))
+
+ggplot() +
+  annotation_map_tile() +
+  geom_sf(data = asb)
+
+
+
+```
+
+
+
+
+
+
+### Activity 1
+
+How does this compare to the crime_type 'drugs'?
+
+Steps; 
+1. Subset the data for the those crime types recorded as 'drugs', 
+2. create this into a new object like we did for ASB and name it 'drugs' 
+3. Using ggplot plot the point data over a base map (reference map)
+
+
+```{r fill in the code here}
+
+## Solution 
+
+drugs <- subset(sf, crime_type == "Drugs") %>%  
+  select(-c(1, 9, 10))      #this line is not necessary but helps to neaten your data as we are removing the columns that are not of interest
+
+ggplot() +
+  annotation_map_tile() +
+  geom_sf(data = drugs) 
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage 
+
+
+# Topic 2: - Shapefiles 
+
+
+
+## Read in the Shapefile for 'Surrey Heath' 
+
+```{r read and plot the boundary for surrey heath}
+ 
+shp_file <- st_read("Data/Shapefile/england_lsoa_2011.shp")
+
+
+## Plot the Shapefile 
+ggplot() + 
+  geom_sf(data = shp_file)
+
+```
+
+
+## Group the crimes
+
+
+```{r crimes per lsoa}
+crimes_grouped_by_lsoa <- crime %>%
+  group_by(lsoa_code) %>%
+  summarise(count=n())
+```
+
+
+
+
+## Merge the shapefile to the crime dataset
+
+```{r merge the data}
+
+surrey_lsoa <- left_join(shp_file, crimes_grouped_by_lsoa, by = c("code" = "lsoa_code"))
+
+st_geometry_type(surrey_lsoa)    #view the geometery type 
+st_bbox(surrey_lsoa)             #obtains the objects value as specific units 
+
+#The spatial extent of a shapefile or R spatial object represents the geographic “edge” or location that is the #furthest north, south east and west. Thus is represents the overall geographic coverage of the spatial object. #Image Source: National Ecological Observatory Network (NEON).
+
+
+#map the data
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = count), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Number of crimes")
+
+```
+
+
+
+## Plotting via the 'tmap' package
+
+
+```{r}
+library(tmap)
+tm_shape(surrey_lsoa) + 
+  tm_fill("count") + 
+  tm_borders(alpha = 0.5)
+```
+
+
+
+## Clasification methods
+
+How can we better visualise counts? Count data does not equally represent the population distribution at hand, tmaps allows you to add different 'styles' 
+
+The different styles result in different clustering mechanism, tmaps have available on 'jenks'or 'Standard Deviation' 
+
+
+In this example I've used 'kmeans'. k-means clustering is a method of vector quantisation, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean, serving as a prototype of the cluster.
+
+
+
+```{r}
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "kmeans") + 
+  tm_borders(alpha = 0.3)
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "jenks") + 
+  tm_borders(alpha = 0.3)
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "sd") + 
+  tm_borders(alpha = 0.3)
+
+
+
+```
+
+
+
+
+## Map Layouts - additional features of tmap (optional task)
+
+
+```{r}
+
+## map style 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "sd") + 
+  tm_borders(alpha = 0.3) + 
+  tmap_style("col_blind")
+
+
+## map legends
+
+tm_shape(surrey_lsoa)+
+  tm_fill("count", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5)
+
+
+## compass, scale bar and grid
+
+tm_shape(surrey_lsoa)+
+  tm_fill("count", 
+          style = "quantile", 
+          palette = "Blues", 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c("right", "bottom"),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type="8star", size = 2) +   #compass 
+  tm_scale_bar(width = 0.15) +           #scale bar 
+  tm_grid()                              #grid
+
+```
+
+
+
+## using categorical variables (tm_facets)
+
+
+```{r}
+tm_shape(surrey_lsoa) +
+  tm_fill("count",
+          style = "quantile",
+          palette = "Blues",
+          thres.poly = 0) + 
+  tm_facets(by="name", 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
+```
+
+
+
+## Activity 2 
+
+1. Explore some of the different classification methods such as "bclust"
+   To get help on the different methods available use *??tmap-package* or search in the help tab 
+
+
+```{r type your answer here}
+
+##solution
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "bclust") + 
+  tm_borders(alpha = 0.3) + 
+  tmap_style("col_blind")
+
+
+
+
+```
+
+
+
+
+
+
+# Topic 3: - Crime Rate vs Crime Count 
+
+
+```{r}
+pop <- read_csv("Data/Census Population/Data_UNIT_URESPOP.csv") %>% slice(3:57) %>% 
+  select(2,3,6,7, 8) %>%
+  janitor::clean_names() %>%
+  rename(pop_density = f2383, 
+         pop_count_wrk = f2384, 
+         pop_count_res = f323339) %>% 
+  mutate_at(c('pop_density', 'pop_count_wrk',
+              'pop_count_res'), as.numeric)
+```
+
+## Join the data to our new shapefile
+
+```{r}
+surrey_lsoa <- left_join(surrey_lsoa, pop, by = c("code"="geo_code"))
+
+```
+
+## How to calculate the crime rate?
+
+```{r}
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate = (count/pop_count_wrk)*1000)
+
+```
+
+
+
+##ggplot
+
+```{r}
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = crime_rate), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+```
+
+
+##tmaps 
+
+```{r}
+tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile") + 
+  tm_borders(alpha = 0.3)
+```
+
+
+
+## Cartograms and ggplot
+
+
+```{r}
+library(cartogram)
+
+#In our data set we have a variable “pop_count” which refers to the total number of people in our LSOA 
+
+cart <- cartogram_cont(surrey_lsoa, weight = "pop_count_wrk")   
+
+## simple plot 
+ggplot(cart) + 
+  geom_sf()
+
+## fill with our count variable 
+ggplot(cart) + 
+  geom_sf(aes(fill = pop_count_wrk))
+
+## add in some aesthetics 
+ggplot(cart) + 
+  geom_sf(aes(fill = pop_count_wrk), 
+          color = "gray50", 
+          linetype = 1, 
+          lwd = 0.35) + 
+  scale_fill_gradientn(colours = heat.colors(n =10, 
+                                            alpha = 0.5, 
+                                            rev = TRUE)) + 
+  theme_gray() + 
+  labs(title = "Surrey Heath: Population by LSOA", 
+       subtitle = "August 2020")
+```
+
+
+
+
+
+
+
+## Activity 3
+
+We have mapped the variable pop_count_wrk, now lets do the same with the variable pop_count_res
+
+Steps: 
+1. First calculate the crime rate 
+2. Plot using ggplot 
+3. Plot using tmap 
+4. Plot both maps together using tmap_arrange 
+5. Plot a cartogram of residential population
+
+Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends
+
+
+```{r}
+# 1) First calculate the crime rate 
+
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate2 = (count/pop_count_res)*1000)
+
+
+#2) Plot using ggplot 
+
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = crime_rate2), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+
+
+#3) Plot using tmap 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile") + 
+  tm_borders(alpha = 0.3)
+
+
+#4) Compare the workday vs residential population 
+
+e <- tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile", title = "Workday Pop") + 
+  tm_borders(alpha = 0.3)
+
+f <- tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate2", style = "quantile", title = "Residential pop") + 
+  tm_borders(alpha = 0.3)
+
+
+tmap_arrange(e, f)
+
+
+#5) Cartogram
+
+ggplot(cart) + 
+  geom_sf(aes(fill = pop_count_res), 
+          color = "gray50", 
+          linetype = 1, 
+          lwd = 0.35) + 
+  scale_fill_gradientn(colours = heat.colors(n =10, 
+                                            alpha = 0.5, 
+                                            rev = TRUE)) + 
+  theme_gray() + 
+  labs(title = "Surrey Heath: Population by LSOA", 
+       subtitle = "August 2020")
+
+
+```
+ 
+
+
+
+
+
+
+
+# Topic 4 - Additional Material
+
+
+
+### Binning data
+
+Binning, can be thought of as a two-dimensional histogram (shading of the bins take the heights of the bars). 
+
+Need to convert the sf data.frame geometry column into a data.frame with separate x, y columns 
+
+How do you separate the coordinates? 
+
+https://github.com/r-spatial/sf/issues/231 
+
+```{r}
+sfc_as_cols <- function(x, names = c("x","y")) {
+  stopifnot(inherits(x,"sf") && inherits(sf::st_geometry(x),"sfc_POINT"))
+  ret <- sf::st_coordinates(x)
+  ret <- tibble::as_tibble(ret)
+  stopifnot(length(names) == raster::ncol(ret))
+  x <- x[ , !names(x) %in% names]
+  ret <- setNames(ret,names)
+  dplyr::bind_cols(x,ret)
+}
+
+sf_seperate <- sfc_as_cols(sf, c("lng", "lat")) 
+
+
+ggplot(sf_seperate, aes(lng, lat)) +   
+  annotation_map_tile() +
+  stat_binhex(bins = 30) +                                           
+  scale_fill_gradientn(colours = c("white","red"), name = "Frequency")   
+
+
+#hexagonal = stat_binhex() 
+#rectangle = stat_bin2d()
+#heat = stat_density2d()  
+
+```
+
+
+
+
+
+### Interactive Maps; Leaflet
+
+```{r}
+
+## Subsetting for just ASB 
+asb <- subset(crime, crime_type == "Anti-social behaviour")
+
+m <- leaflet(data = asb) %>%
+  addProviderTiles("Stamen.Toner") %>% 
+  addMarkers(lng=~longitude, lat=~latitude, popup=~as.character(location), label = ~as.character(location))
+m
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
