@@ -1,7 +1,7 @@
 ---
 title: "Topic 2: Shapefiles"
 author: "Nadia Kennar"
-date: "08/06/2022"
+date: "8th of June 2022"
 output: html_notebook
 toc: true
 ---
