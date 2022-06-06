@@ -32,6 +32,47 @@ library(tmap)
 
 
 
+## Explore the data using ggmap and ggplot (Google API)
+
+The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map. In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function
+
+It is important to note that when using ggmap, users have to first setup an account with Google, enable the relevant API, and then tell R about the user's setup. Do not worry about doing this for this workshop as we will demonstrate the code below. If you would like to run this in your own time then please refer to the steps in 'Google_API.rmd' which details how to obtain your API and how to enable the services. 
+
+
+```{r using ggmap}
+# ## Ariel Map of Surrey
+qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), darken = .3)
+# 
+
+# ## Lets just say you were interested in a specific area (in this example we will use Crawley 002B)
+# 
+# ## Ariel Map of Crawley 002B
+ geocode("Crawley 002B")
+# 
+
+Crawley <- c(long = -0.152210, lat = 51.15813)
+map <- get_map(Crawley, zoom = 13, scale = 1)
+ggmap(map)
+# 
+ggmap(map) +
+  geom_point(aes(longitude, latitude), data = crime) 
+# 
+# 
+# ## Colour the Crime Type
+# 
+
+ggmap(map) +
+   geom_point(aes(longitude, latitude, colour = crime_type), data = crime) 
+
+# 
+
+ ggmap(map) +
+   geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime) 
+```
+
+
+
+
 ### Binning data
 
 Binning, can be thought of as a two-dimensional histogram (shading of the bins take the heights of the bars). You first need to convert the sf data.frame geometry column into a data.frame with separate x, y columns. 
