@@ -102,7 +102,7 @@ sf <- st_as_sf(crime,
                       coords = c("longitude", "latitude"),
                       crs = 4326,     
                       na.fail = FALSE)
-st_crs(sf2)
+st_crs(sf)
 
 glimpse(sf)
 head(sf)

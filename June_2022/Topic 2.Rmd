@@ -129,7 +129,6 @@ ggplot() +
 
 
 
-
 ## Plotting via the 'tmap' package
 
 The tmap package allows you tp create thematic maps, the syntax is very similar to the ggplot2. Each map can be plot as an image or as an interactive map via the *tmap_mode("view" / "plot" )* function. 
@@ -144,8 +143,6 @@ tm_shape(surrey_lsoa) +
   #tm_text("name", size = "AREA", col = "black")
   #tmap_style("col_blind")
 ```
-
-
 
 
 
@@ -300,31 +297,30 @@ tm_shape(surrey_lsoa)+
 
 #1)
 
-h <- tm_shape(surrey_lsoa) + 
-  tm_fill("count", style = "bclust") + 
+... <- tm_shape(.....) + 
+  tm_fill("...", style = "....") + 
   tm_borders(alpha = 0.3)
 
 
-b <- tm_shape(surrey_lsoa) + 
-  tm_fill("count", style = "hclust") + 
+... <- tm_shape(........) + 
+  tm_fill("...", style = ".....") + 
   tm_borders(alpha = 0.3)
 
 
 #2) 
 
-
-tmap_arrange(h, b)
+tmap_arrange(...., ....)
 
 
 
 #3) 
 
-tmap_mode("view")
+tmap_mode("....")
 
-
-tm_shape(surrey_lsoa) + 
-  tm_fill("count", style = "hclust") + 
+tm_shape(.....) + 
+  tm_fill(....., style = .....) + 
   tm_borders(alpha = 0.3)
+
 
 
 ```

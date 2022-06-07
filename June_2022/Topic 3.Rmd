@@ -116,10 +116,6 @@ tm_shape(surrey_lsoa) +
 
 
 
-
-
-
-
 ## Cartograms and ggplot
 
 A cartogram is a type of map where different geographic areas are modified based on a variable associated to those areas. There are two two types of cartograms: contiguous vs non-contiguous (sharing a common border) 

@@ -1,7 +1,7 @@
 ---
-title: "Crime mapping in R (Topics 1-4)"
+title: "Code and Solutions from Topics 1-3"
 author: "Nadia Kennar"
-date: "25/10/2021"
+date: "8th of June 2022"
 output: html_notebook
 toc: true
 ---
@@ -362,17 +362,45 @@ tm_shape(surrey_lsoa) +
 
 1. Explore some of the different classification methods such as "bclust"
    To get help on the different methods available use *??tmap-package* or search in the help tab 
+   
+
+2. Assign your new bclust and hclust classification maps into separate objects (call them "h" and "b" and plot them together using tmap_arrange()
+
+
+3. Plot an interactive map using the "bclust" classification method by changing the command in the tmap_mode() function 
 
 
 ```{r type your answer here}
 
 ##solution
 
+#1
+
+h <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "bclust") + 
+  tm_borders(alpha = 0.3)
+
+
+b <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "hclust") + 
+  tm_borders(alpha = 0.3)
+
+
+#2) 
+
+
+tmap_arrange(h, b)
+
+
+
+#3) 
+
+tmap_mode("view")
+
+
 tm_shape(surrey_lsoa) + 
   tm_fill("count", style = "bclust") + 
-  tm_borders(alpha = 0.3) + 
-  tmap_style("col_blind")
-
+  tm_borders(alpha = 0.3)
 
 
 
@@ -547,6 +575,48 @@ ggplot(cart) +
 
 
 # Topic 4 - Additional Material
+
+
+## Explore the data using ggmap and ggplot (Google API)
+
+The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map. In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function
+
+It is important to note that when using ggmap, users have to first setup an account with Google, enable the relevant API, and then tell R about the user's setup. Do not worry about doing this for this workshop as we will demonstrate the code below. If you would like to run this in your own time then please refer to the steps in 'Google_API.rmd' which details how to obtain your API and how to enable the services. 
+
+
+```{r using ggmap}
+# ## Ariel Map of Surrey
+qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), darken = .3)
+# 
+
+# ## Lets just say you were interested in a specific area (in this example we will use Crawley 002B)
+# 
+# ## Ariel Map of Crawley 002B
+ geocode("Crawley 002B")
+# 
+
+Crawley <- c(long = -0.152210, lat = 51.15813)
+map <- get_map(Crawley, zoom = 13, scale = 1)
+ggmap(map)
+# 
+ggmap(map) +
+  geom_point(aes(longitude, latitude), data = crime) 
+# 
+# 
+# ## Colour the Crime Type
+# 
+
+ggmap(map) +
+   geom_point(aes(longitude, latitude, colour = crime_type), data = crime) 
+
+# 
+
+ ggmap(map) +
+   geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime) 
+```
+
+
+
 
 
 
