@@ -32,6 +32,7 @@ library(spdep)
 library(leaflet) 
 library(RColorBrewer)
 library(tmap)
+library(rgdal)
 
 ```
 
@@ -124,7 +125,7 @@ Now we have an sf object which contains point-level, spatially sensitive data ab
 ```{r}
 #### Plot the point data
 ggplot() + 
-  geom_sf(data = sf2)
+  geom_sf(data = sf)
 
 #### Colour the different crime type
 ggplot() + 
@@ -134,8 +135,11 @@ ggplot() +
 ggplot() + 
   annotation_map_tile() +
   geom_sf(data = sf, aes(col = crime_type))
+```
 
 
+
+```{r}
 #### Sub-setting for just ASB 
 asb <- subset(sf, crime_type == "Anti-social behaviour") %>% 
   select(-c(1, 9, 10))
@@ -145,7 +149,6 @@ head(asb)
 asb_map <- ggplot() +
   annotation_map_tile() +
   geom_sf(data = asb)
-
 
 
 
