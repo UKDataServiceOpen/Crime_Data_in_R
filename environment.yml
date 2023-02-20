@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+dependencies:
+  - r-base=3.6
+  - r-tidyverse
+  - r-desctools
+  - r-lsr
+  - r-ggplot2
