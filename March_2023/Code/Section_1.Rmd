@@ -1,0 +1,262 @@
+---
+title: "Mapping Crime Data in R - Exploring Crime Data"
+author: "Nadia Kennar, Research Associate with the UKDS"
+date: "8th March 2023"
+output:
+  html_notebook: default
+toc: yes
+---
+
+```{r set up, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+
+
+## Intro 
+
+In this first section I will show you how to read in the data, run some basic exploratory analysis and produce some point maps. 
+
+## Load pacakges
+
+As always the first step is to load the necessary R packages via the library function. If you do not have these packages installed then please follow the instructions in the *Preliminary Task.Rmd* file. 
+
+
+```{r}
+#install.packages(")
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+library(rgdal)
+
+```
+
+
+  
+## Downloading the crime data 
+
+ We will be using crime data from *https://data.police.uk/*. This is the site for open data about policing and crime in England, Wales and Northern Ireland. You can download street-level crime, outcome, and stop and search data in clear and simple CSV format and explore the API containing detailed crime data and information about individual police forces and neighborhood teams. You can also download data on police activity, and a range of data collected under the police annual data requirement (ADR) including arrests and 101 call handling.
+ 
+ We will be using data from 2021-2022 and in order to save time I have included the data in this R  Project under the Data folder. However, if you were interested in how I collected this then you can view the *downloading the data" doc* word document, In summary this would involve....
+ 
+Select Downloads -> Select December 2021 to December 2022 -> select Surrey and click 'Include Crime Data'. Download and unzip the data into your working directory.
+
+Read in just the month of February 2022. 
+
+
+```{r crime data}
+#unzip(file.choose())
+
+library(readr)
+crime <- read_csv("~/Documents/Crime_R_Workshop/Crime_Data_in_R/March_2023/Data/crime_data/2022-02/2022-02-surrey-street.csv") %>% janitor::clean_names()
+```
+
+
+WE can use the head() and glimpse() function to explore our data.
+
+
+```{r, eval=TRUE}
+#explore variables
+head(crime)
+glimpse(crime)
+
+```
+
+
+Points, lines and polygon 
+
+- Our coordinate variables (the latitude and longitude) are known as point data 
+- The 'location' variable represents the line. This is normally define by a street or junction 
+- The 'lsoa name' represent our polygon (borough, wards, districts etc). LSOA refers to the Lower Layer Super Output Areas which are a unit measure in census geography 
+
+
+In this data, the "crime_type' column contains the general names of each of the different crimes.
+
+Using the unique() function lists creates an array of the different possible values in the column.
+
+
+```{r}
+unique(crime$crime_type)
+```
+
+
+Before moving on to some of the more complicated spatial topics, lets create somne frequency tables for each different crime_type.  
+
+The table() can be used to create a frequency table for each different Primary.Type of crime.
+By default, the table is sorted by the category. order() can be used to order the table by count. In this example, we list the top ten crimes by activity.
+
+```{r}
+counts = table(crime$crime_type)
+
+counts = counts[order(counts, decreasing=T)]
+
+print(counts[1:10])
+```
+
+Now we hava nice summarised table of all our crime counts. Lets go ahead and plot this to view this a bit better 
+
+```{r}
+par(mar = c(5,10,1,1))
+
+y = barplot(counts[1:10], horiz=T, las=1, cex.names=0.7, col="whitesmoke")
+ 
+text(1000, y, counts[1:10], pos=4, cex=0.8)
+```
+
+
+
+## Simple Features and Projection methods
+
+Simple Features is a common R language, also known as sf, that allow you to handle and manipulate the UoA (points, lines and polyons). Simple Features allows you store spatial objects
+
+Features refers to the property that linestring and polygons are built from points by straight line segments. 
+
+One of the fastest growing packages in this area is [sf](https://github.com/r-spatial/sf), which gives you access to a whole host of features and functions for use with spatial data, including visualisation. html) to spatial data out there. For this exercise, we'll keep things simple, and focus on how to use sf to make spatial data visualisations in combination with ggplot. Should you want to know more, or would like additional resources on using spatial data in R, please do not hesitate to ask!
+
+
+CRS and Projection: 
+
+CRS are  is a coordinate-based local, regional or global system used to locate geographical entities. A spatial reference system defines a specific map projection, as well as transformations between different spatial reference systems. […] spatial reference systems can be referred to using a SRID integer, including EPSG codes
+
+In short "Projection methods allow us to move move from the 3D to the 2D, CRS allow us to identify specific locations within these 
+
+There are thousands of CRS, the most common being BNG and the WGS 84 
+
+Each crs has an ESPG identifier
+i.e. the BNG = 27700 (British National Grid)
+i.e. the WGS 84 is 4326 (World Geodetic System)
+i.e. the ETRS 1980 = 3035 (European Terrestial Reference System)
+
+
+First step is to transform you ordinary data into an sf object using 'st_as_sf' - which converts our latitude and longitutde to a geometry attribute
+
+To recap, sf objects are just data-frames that are collections of spatial objects. Each row is a spatial object (e.g. a polgyon), that may have data associated with it (e.g. its area) and a special geo variable that contains the coordinates
+
+
+```{r}
+st_crs(crime)   # to check the crs
+
+sf <- st_as_sf(crime,                                
+                      coords = c("longitude", "latitude"),
+                      crs = 4326,     
+                      na.fail = FALSE)
+st_crs(sf)
+
+glimpse(sf)
+head(sf)
+```
+
+
+Other functions 
+
+- agr (atribute-geometry-relationship) = character vector. 
+- Specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, NA_agr_, implies we don't know.
+
+
+
+## Mapping point data 
+
+Now we have an sf object which contains point-level, spatially sensitive data about Crime in Surrey 2019, We can now create a basic point map of these
+
+### Plot the point data
+
+```{r}
+ggplot() + 
+  geom_sf(data = sf)
+```
+
+
+### Colour the different crime type
+
+```{r}
+ggplot() + 
+  geom_sf(data = sf, aes(col = crime_type))
+
+#### with titles
+ggplot() + 
+  geom_sf(data = sf, aes(fill = crime_type, col = crime_type)) + 
+  labs(title = "Crime Count in Surrey", 
+       subtitle = "February 2022", 
+       caption = "Police Recorded Crime Statistics")
+
+```
+
+### Reference map / base map  
+
+```{r}
+ggplot() + 
+  annotation_map_tile() +
+  geom_sf(data = sf, aes(col = crime_type))
+```
+
+### Sub-setting for just ASB 
+
+```{r}
+asb <- subset(sf, crime_type == "Anti-social behaviour") %>% 
+  select(-c(1, 9, 10))
+head(asb)
+
+
+ggplot() +
+  annotation_map_tile() +
+  geom_sf(data = asb)
+
+
+```
+
+
+
+
+
+
+
+
+## Activity 1
+
+How does this compare to the crime_type 'drugs'?
+
+Steps; 
+*1. Subset the data for the those crime types recorded as 'drugs', 
+*2. create this into a new object like we did for ASB and name it 'drugs' 
+*3. Using ggplot plot the point data over a base map (reference map)
+
+
+```{r}
+
+#1)
+subset(sf, ..... ==  .....  )
+
+
+#2) 
+drugs <- subset(sf, ..... == ..... ) 
+
+
+#3)
+ggplot() +
+  ..............() +
+  geom_sf(data = .....) 
+
+```
+
+
+
+
+
+
+
+
+
+
+
