@@ -10,3 +10,4 @@ If you have a Google account then please click the *Open in Colab* link. Otherwi
 
 ### Code
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/UKDataServiceOpen/Crime_Data_in_R.git/HEAD)
