@@ -7,7 +7,7 @@ This is a repository collecting all the materials, code, resources and extras fo
 * A 3-day workshop was held in Feb 2021. R markdown files for days 2 and 3 are available at https://rpubs.com/langton_/ but this link may not be permanent.  
 * A 1/2 day workshop was held in Dec 2021. 
 * A 2 day workshop held in June 2022. 
-* A 2 day workshop held in March 2022
+* A 2 day workshop held in March 2023
 
 Users should feel free to peruse the materials here as well as watch the recordings made during the various workshops on the UK Data Service YouTube channel. https://www.youtube.com/user/UKDataService
 
