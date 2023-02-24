@@ -13,7 +13,8 @@ Users should feel free to peruse the materials here as well as watch the recordi
 
 ## Materials 
 
-
+The training materials for the latest workshop can be found here:
+* [March_2023/code](.March_2023/code) - RProject and Jupyter Notebooks containing executable R code.
 
 ## Further Information
 
