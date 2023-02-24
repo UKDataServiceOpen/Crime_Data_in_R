@@ -8,6 +8,15 @@ However you can complete the lessons online without the need to install or downl
 
 If you have a Google account then please click the *Open in Colab* link. Otherwise please click the *Launch Binder* link.
 
-### Code
+## Preliminary Tasks 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/UKDataServiceOpen/Crime_Data_in_R/4f151d9bfde842b53a0c40f5dc0d0c2e427d4a64?urlpath=lab%2Ftree%2FMarch_2023%2FCode%2FPreliminary%20Tasks.ipy)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/UKDataServiceOpen/Crime_Data_in_R.git/HEAD)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Additional%20Topics.ipynb)
+
+
+## Section 1 
+## Section 2 
+## SEction 3 
+## Code and Solutions to 1-3
+## Additional Toptics 
+
