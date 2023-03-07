@@ -60,7 +60,8 @@ Read in just the month of February 2022.
 #unzip(file.choose())
 
 library(readr)
-crime <- read_csv("~/Documents/Crime_R_Workshop/Crime_Data_in_R/March_2023/Data/crime_data/2022-02/2022-02-surrey-street.csv") %>% janitor::clean_names()
+crime <- read_csv("~/Documents/Crime_R_Workshop/March_2023/Data/crime_data/2022-02/2022-02-surrey-street.csv") %>% janitor::clean_names()
+
 ```
 
 
