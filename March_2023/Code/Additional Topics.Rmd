@@ -54,12 +54,16 @@ Setting up a connetion to Google's API;
  - Select 'API key'
  - Select copy and now you have your personal API key 
  
+ 
+ *You will be asked to set up a billing account but you will not need to pay to follow along with the below steps. Google Cloud has a limited amount of free storage (200 dollars free a month) so remember to always check your storage use and the usage cost under the 'cost breakdown' panel.*
+ 
 
 3. To authorise the API you have to enable some of Google's API which are required for the project. This includes 
 - Google Maps JavaScript API
 - Google Maps Geocoding API
 - Google Maps Geolocation API
 - Google Maps Places API
+- Google Maps Static API
 
 If you do not authorise the above API you will recieve and error message as such "Geocoding Service: This API project is not authorised to use the API". To authorise said APIs go to 
 a. https://console.cloud.google.com/apis/dashboard?project=missing-314119
@@ -79,8 +83,10 @@ For more information on how to register your decive to the Google API please vis
 
 The basic idea driving ggmap is to take a downloaded map image, plot it as a context layer using ggplot2, and then plot additional content layers of data, statistics, or models on top of the map. In ggmap, downloading a map as an image and formatting the image for plotting is done with the get_map function. More specifically, the get_map is a wrapper function
 
-It is important to note that when using ggmap, users have to first setup an account with Google, enable the relevant API, and then tell R about the user's setup. Do not worry about doing this for this workshop as we will demonstrate the code below. If you would like to run this in your own time then please refer to the steps in 'Google_API.rmd' which details how to obtain your API and how to enable the services. 
+It is important to note that when using ggmap, users have to first setup an account with Google, enable the relevant API, and then tell R about the user's setup. Do not worry about doing this for this workshop as we will demonstrate the code below. If you would like to run this in your own time then please refer to the steps above which details how to obtain your API and how to enable the services. 
 
+
+## For one specific area
 
 ```{r using ggmap}
 # ## Ariel Map of Surrey
@@ -90,7 +96,7 @@ qmplot(longitude, latitude, data = crime, colour = crime_type, size = I(3), dark
 # ## Lets just say you were interested in a specific area (in this example we will use Crawley 002B)
 # 
 # ## Ariel Map of Crawley 002B
- geocode("Crawley 002B")
+ geocode("Crawley")
 # 
 
 Crawley <- c(long = -0.152210, lat = 51.15813)
@@ -111,6 +117,52 @@ ggmap(map) +
 
  ggmap(map) +
    geom_point(aes(longitude, latitude, size = crime_type, colour = crime_type), data = crime) 
+```
+
+
+
+
+
+## For one specific crime type 
+
+
+```{r}
+#subset for just ASB
+subset <- crime[which(crime$crime_type == "Anti-social behaviour"),]
+
+#Create the crawley map again 
+map <- ggmap(get_googlemap(center = c(long = -0.152210, lat = 51.15813), 
+                           zoom = 10, 
+                           maptype = "terrain", 
+                           color = "color"))
+#print the map
+print(map)
+
+
+#overlay the crime data 
+map <- ggmap(get_googlemap(center = c(long = -0.631027, lat = 51.215485), 
+                           zoom = 9, 
+                           maptype = "terrain", 
+                           color = "color")) +
+  geom_point(data = subset, aes(x = longitude, y = latitude), 
+             colour = "red", size = .5)
+
+#print 
+print(map)
+
+
+#lets make a density map using ggplot
+map <- ggmap(get_googlemap(center = c(long = -0.152210, lat = 51.15813), 
+                           zoom = 9, 
+                           maptype = "terrain", 
+                           color = "color")) +
+  stat_density2d(aes(x = longitude, y = latitude, fill = ..level..), 
+               alpha = .2, 
+               bins = 10, data = subset, geom = "polygon")
+
+
+print(map)
+
 ```
 
 
