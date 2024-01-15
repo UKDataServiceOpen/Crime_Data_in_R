@@ -1,0 +1,50 @@
+---
+title: "Google_API"
+author: "Nadia Kennar"
+date: "1st December 2021"
+output: html_notebook
+toc: true
+---
+
+Setting up a connetion to Google's API;
+
+
+1. First: set up an account with Google.
+
+
+2. Second: to obtain an API go to [https://cloud.google.com/maps-platform/] and follow the onscreen instructions. This documentation shows you how to input the requisite information (e.g. your API key) into R, and it also shows you a few tools that can help you work with the credentialing. In summary the onscreen instructions are as follows. 
+ - click 'get started' 
+ - click the credentials tab on the left hand side of the screen 
+ - click 'create credentials at the top of the screen (visible by the '+' symbol)
+ - Select 'API key'
+ - Select copy and now you have your personal API key 
+ 
+
+3. To authorise the API you have to enable some of Google's API which are required for the project. This includes 
+- Google Maps JavaScript API
+- Google Maps Geocoding API
+- Google Maps Geolocation API
+- Google Maps Places API
+
+If you do not authorise the above API you will recieve and error message as such "Geocoding Service: This API project is not authorised to use the API". To authorise said APIs go to 
+a. https://console.cloud.google.com/apis/dashboard?project=missing-314119
+b. Click '+ Enable APIS and SERVICES' at the top of the screen
+c. Search for each API listed above and click the 'Enable button' 
+
+Once all APIs are enabled, wait 5 minutes for changes to take place, and then move on to the next step to register your Google API to ggmaps. 
+
+
+4. Third; you need to tell ggmap about your API by using the 'register_google()' function. It would look something like *register_google(key = "hahfuibfiu324898249dbhsgag")* (this is a fake key). This will then set your API key for the current session, Every time you restart R you will have to request a new API key or you can set it permanently by adding 'write = TRUE', the full code being....
+
+*register_google(key = "[your key]", write = TRUE)*
+
+For more information on how to register your decive to the Google API please visit [https://rdrr.io/cran/ggmap/man/register_google.html]. It is incredibly important to not that each API is private and should not be shared with anyone. Users should also be aware that ggmap has no mechanism with which to safeguard the private key once registered with R. 
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+*This sctipt may be updated with additional information on how to set up an API with Google, this is not the final version nor have all the steps been tested fully*
+
+
+
+

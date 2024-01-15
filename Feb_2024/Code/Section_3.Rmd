@@ -1,0 +1,289 @@
+---
+title: "Mapping Crime Data in R - Crime Rate vs Crime Count"
+author: "Nadia Kennar, Research Associate with the UKDS"
+date: "8th March 2023"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+toc: yes
+---
+
+```{r set up, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+
+## Intro 
+
+In this final section we incorporate some census data onto our shapefile so we can calculate and explore the differences between crime rate and crime counts. We then introduce cartograms as an alternative thematic map 
+
+## Load packages
+
+As always the first step is to load the necessary R packages via the library function. If you do not have these packages installed then please follow the instructions in the *Preliminary Task.Rmd* file. 
+
+## Load Packages
+
+```{r setup}
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+## Read in the population statistics
+
+Count data is not entirely accurate of population density. Whilst the code in Section_1 and Section_2 might help us identify interesting patterns, point-level open crime data is rarely used in isolation for detailed analysis. 
+
+For one thing, the data is points are geomasked. This means that points are highly likely to be overlapped, giving a skewed picture of the distribution. There are ways round this, such as through jittering or applying census based data. To view more information about jittering please view the 'Additional Topic.rmd' file,
+
+
+### Census 2022
+
+We will be using the new census 2022 data to calculate the crime rate across both residential population vs working population,
+
+The data was downloaded from CKAN which can be accessed from the front page of our website *https://statistics.ukdataservice.ac.uk/dataset/?vocab_Area_type=Lower%20Super%20Output%20Areas*
+
+I simply searched for 'residents' and 'work' as I want to calculate the difference in crime counts compared to the usual resident population and then to the usual workday population. Download the super layer output areas and once opened in excel, you can select just the rows that correspond to 'Surrey Heath'.
+
+But have no fear if you don't know how to do this or are simply feeling a little lazy (I get it), you can just read in the data that has been cleaned for you in the Data folder. There is more information via the *Dowloading the Data* doc if you are interested in the download process. 
+
+So lets read in the data and use the clean_names() function again to lowercase and tidy all variable names. 
+
+We are going to start with just the resident population which is the data set named 'res_count.xlsx'
+
+```{r}
+library(readxl)
+residential_count <- read_excel("~/Documents/Crime_R_Workshop/March_2023/Data/census_data/res_count.xlsx") %>% clean_names() %>%
+  rename(lsoa = e01030757, #rename the variables 
+         name = surrey_heath_002a, 
+         res_count = x330) 
+
+head(residential_count)
+```
+
+
+
+
+## Join the data to our new shapefile
+
+The next step is to join these new statistics to our previously created shapefile named 'surrey_lsoa". We do thus by using the left_join() function in the dplyr package and attach them by the same LSOA codes. 
+
+```{r}
+surrey_lsoa <- left_join(surrey_lsoa, residential_count, by = c("lsoa21cd"="lsoa"))
+
+head(surrey_lsoa)
+
+```
+
+
+Now you will see the census data has merged into the shapefile, Great lets move on to calculating crime rate.
+
+
+
+## How to calculate the crime rate?
+
+A crime rate is calculated by dividing the number of reported crimes by the total population, and then multiplying by 100,000. 
+
+So for our dataset, we take the count variable, divide by the 'pop' variable (workday or residential), and then times by 1000 (in this instance we use 1000 as this is the average population of an LSOA, if you were using larger UoA you can choose to multiply by 100,000. Just remember what affect this will have on your rate and how this then interprets across your results.
+
+In order to work out the crime rate, we need to create a new variable that takes the count/pop*1000. We can use the mutate() function from the dplyr package to calculate this for us. 
+
+
+```{r}
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate = (count/res_count*1000))
+         
+head(surrey_lsoa)
+
+```
+
+
+## Now lets explore these trends using ggplot and tmaps;
+
+
+### First ggplot
+
+```{r}
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = crime_rate), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+```
+
+
+
+### What about tmaps 
+
+```{r}
+tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile") + 
+  tm_borders(alpha = 0.3)
+```
+
+
+
+
+## Cartograms and ggplot
+
+A cartogram is a type of map where different geographic areas are modified based on a variable associated to those areas. There are two two types of cartograms: contiguous vs non-contiguous (sharing a common border). 
+
+The cartogram package allows to build cartograms in R. It requires a geospatial object as input, with a numeric variable in the data slot. This variable will be used to distort region shape.
+
+
+```{r}
+# library(cartogram)
+# 
+# #In our data set we have a variable “res_count_wrk” which refers to the total number of people in our LSOA 
+# cart <- cartogram_cont(surrey_lsoa, weight = "res_count") 
+# 
+# 
+# ## simple plot 
+# ggplot(cart) + 
+#   geom_sf()
+# 
+# 
+# ## fill with our count variable 
+# ggplot(cart) + 
+#   geom_sf(aes(fill = pop_count_wrk))
+# 
+# 
+# ## add in some aesthetics 
+# ggplot(cart) + 
+#   geom_sf(aes(fill = pop_count_wrk), 
+#           color = "gray50", 
+#           linetype = 1, 
+#           lwd = 0.35) + 
+#   scale_fill_gradientn(colours = heat.colors(n =10, 
+#                                             alpha = 0.5, 
+#                                             rev = TRUE)) + 
+#   theme_gray() + 
+#   labs(title = "Surrey Heath: Population by LSOA", 
+#        subtitle = "August 2020")
+# ```
+```
+
+
+
+
+# Activity 3
+
+We have succesfully mapped theresidential population, now lets do the same with the variable workday (economic activity). First step is to read and clean the data as seen here:
+
+
+```{r}
+workday_count <- read_excel("~/Documents/Crime_R_Workshop/Crime_Data_in_R/March_2023/Data/census_data/work_count.xlsx") %>% clean_names() %>%
+  rename(lsoa = e01030757, #rename the variables 
+         name = surrey_heath_002a, 
+         work_count = x330) 
+
+  
+head(workday_count)  
+```
+
+
+And then remember you need to join this to our shapefile by using the left join function.
+
+```{r}
+surrey_lsoa <- left_join(surrey_lsoa, workday_count, by = c("lsoa21cd"="lsoa"))
+
+head(surrey_lsoa)
+
+```
+
+
+So now you've added the work population count, it time to calculate the crime run. Follow the steps below to try and complete the activity. 
+
+
+Steps: 
+
+1  First calculate the crime rate 
+2. Plot using ggplot 
+3. Plot using tmap 
+4. Plot both maps (residential and workday) together using tmap_arrange 
+5. Plot a cartogram of residential population
+
+Is there a difference between the crime rate when using workday population compared to residential population? Would we expect to see these trends?
+
+
+```{r fill in the code here}
+
+# 1) First calculate the crime rate, assign it a new variable and named it crimerate2
+
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate2 = (count/......)*...)
+
+
+#2) Plot using ggplot 
+
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = ....., aes(fill = ......), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+
+
+#3) Plot using tmap 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill(....., style = "quantile") + 
+  tm_borders(alpha = 0.3)
+
+
+#4) Compare the workday vs residential population 
+
+e <- tm_shape(surrey_lsoa) + 
+  tm_fill(....., style = "quantile", title = "Workday Pop") + 
+  tm_borders(alpha = 0.3)
+
+f <- tm_shape(surrey_lsoa) + 
+  tm_fill(....., style = "quantile", title = "Residential pop") + 
+  tm_borders(alpha = 0.3)
+
+
+tmap_arrange(...., .....)
+
+
+
+#5) Cartogram
+
+# ggplot(.....) + 
+#   geom_sf(aes(fill = ......), 
+#           color = "gray50", 
+#           linetype = 1, 
+#           lwd = 0.35) + 
+#   scale_fill_gradientn(colours = heat.colors(n =10, 
+#                                             alpha = 0.5, 
+#                                             rev = TRUE)) + 
+#   theme_gray() + 
+#   labs(title = "Surrey Heath: Population by LSOA", 
+#        subtitle = "August 2020")
+
+```
+ 
+
+
+
+
+
+
+
+
+
+
+
+
