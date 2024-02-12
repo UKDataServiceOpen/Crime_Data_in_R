@@ -12,7 +12,7 @@
 <meta name="author" content="Nadia Kennar, Research Associate with the UKDS" />
 
 
-<title>Mapping Crime Data in R - Preliminary Tasks</title>
+<title>Mapping Crime Data in R - Shapefiles</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1683,23 +1683,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -1753,10 +1747,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Mapping Crime Data in R - Preliminary
-Tasks</h1>
+<h1 class="title toc-ignore">Mapping Crime Data in R - Shapefiles</h1>
 <h4 class="author">Nadia Kennar, Research Associate with the UKDS</h4>
-<h4 class="date">8th March 2023</h4>
+<h4 class="date">16th of February 2024</h4>
 
 </div>
 
@@ -1765,85 +1758,443 @@ true
 </div>
 
 <!-- rnb-text-begin -->
-<div id="prerequisite" class="section level1">
-<h1>Prerequisite</h1>
-<p>This workshop is suitable for those beginner to intermediate in R. It
-requires you know how to set your working directory and how to read data
-into R.</p>
-<p>Using open source police recorded crime statistics this workshop will
-demonstrate how to map crime data in R using sf and ggplot. More
-specifically looking at the area of Surrey we will</p>
-<ol style="list-style-type: decimal">
-<li>briefly explore the crime data and introduce key topics in spatial
-data</li>
-<li>demonstrate how to join crime data to shapefiles and how to map
-data</li>
-<li>identify how to map and calculate crime rate</li>
-</ol>
-<p>The datasets needed in this workshop include crime data, population
-statistics and shapefiles. Information on how to download these will be
-available in the R file names <em>downloading the data</em> but feel
-free to obtain these via git <em><a href="https://github.com/UKDataServiceOpen/Crime_Data_in_R" class="uri">https://github.com/UKDataServiceOpen/Crime_Data_in_R</a></em>.
-Ensure these are loaded into your environment before starting the
-workshop</p>
-<div id="set-your-working-directory" class="section level2">
-<h2>Set your working directory</h2>
-<p>The working directory is just a file path on your computer that sets
-the default location of any files you read into R, or save out of R. You
-need to set your current working directory in order to follow along with
-this workshop, You can read more about working directories here <em><a href="https://bookdown.org/ndphillips/YaRrr/the-working-directory.html" class="uri">https://bookdown.org/ndphillips/YaRrr/the-working-directory.html</a></em></p>
-<p>You can use the <em>setwd()</em> function to set your current working
-directory, and the <em>getwd()</em> function to print your current
-working directory.</p>
-<p>I would suggest however, creating an R project with a version control
-repository. This will allow you to work with the complete set of code
-provided. To do so follow these steps from the task menu found at the
-top left of your RStudio;</p>
-<p>File -&gt; new project -&gt; version control -&gt; click git -&gt;
-paste the github link in the ‘’repository url’ box <em>(<a href="https://github.com/UKDataServiceOpen/Crime_Data_in_R.git" class="uri">https://github.com/UKDataServiceOpen/Crime_Data_in_R.git</a>)</em>
--&gt; give your project directory a name -&gt; tick open in new session
--&gt; click create new project.</p>
-<p>Perfect! Now you can work along side me as I go through the various
-markdown files.</p>
-</div>
-<div id="install-and-load-the-packages-required-for-this-workshop" class="section level2">
-<h2>Install and load the packages required for this workshop</h2>
-<p>Below are a list of packages that need to be installed and loaded
-into your version of RStudio. To install a package use the function
-<em>install.packages(“…”)</em> - the quotation marks around the package
-names are essential.</p>
-<p>Once installed you then need to load the packages which can be down
-via the <em>library(…)</em> function - the quotation marks here are not
-essential.</p>
 <!-- rnb-text-end -->
 <!-- rnb-text-begin -->
+<div id="intro" class="section level2">
+<h2>Intro</h2>
+<p>In this section we will be working with shapefiles. More specifically
+how to read in a shapefile and join this to our aggregated crime count
+data frame. From there we introduce classification methods as a way to
+better visualize crime counts.</p>
 </div>
-<div id="connecting-github-and-r-extra-step" class="section level2">
-<h2>Connecting GitHub and R (extra step)</h2>
-<p>In order to clone a repository from Github you might be asked to set
-up a PAT (personal authentication token), if so follow these simple
-instructions from this link. <em><a href="https://happygitwithr.com/https-pat.html" class="uri">https://happygitwithr.com/https-pat.html</a></em>. (Do not
-share this token with anyone, it is a unique password for your Github
-account)</p>
-<p>In summary:</p>
+<div id="load-packages" class="section level2">
+<h2>Load packages</h2>
+<p>As always the first step is to load the necessary R packages via the
+library function. If you do not have these packages installed then
+please follow the instructions in the <em>Preliminary Task.Rmd</em>
+file.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudXNldGhpczo6Y3JlYXRlX2dpdGh1Yl90b2tlbigpXG5cbmdpdGNyZWRzOjpnaXRjcmVkc19zZXQoKVxuI2FuZCB0aGVuIGVudGVyIHlvdXIgdG9rZW4gXG5cbmBgYFxuYGBgIn0= -->
-<pre class="r"><code>```r
-usethis::create_github_token()
-
-gitcreds::gitcreds_set()
-#and then enter your token 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jIGZvciBkYXRhIHJlYWRpbmcvbWFuaXB1bGF0aW9uIFxubGlicmFyeShkcGx5cilcbmxpYnJhcnkodGlkeXIpXG5saWJyYXJ5KHJlYWRyKVxubGlicmFyeSh0aWJibGUpXG5saWJyYXJ5KGphbml0b3IpXG5saWJyYXJ5KHJlYWR4bClcbiMgZm9yIHNwYXRpYWwgZGF0YSBhbmQgZ2lzXG5saWJyYXJ5KHNmKVxubGlicmFyeShnZ21hcClcbmxpYnJhcnkoZ2dwbG90MilcbmxpYnJhcnkoZ2dzcGF0aWFsKVxubGlicmFyeShzcGRlcClcbmxpYnJhcnkobGVhZmxldCkgXG5saWJyYXJ5KFJDb2xvckJyZXdlcilcbmxpYnJhcnkodG1hcClcblxuYGBgIn0= -->
+<pre class="r"><code>
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+library(readxl)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
 </code></pre>
-<p>```</p>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="what-is-a-shapefile" class="section level2">
+<h2>What is a Shapefile?</h2>
+<p>They represent a geospatial vector that is used for GIS software.
+Shapefiles store both geogrpahic location and its associated attribute
+information</p>
+<p>The Shapefile format stores the data as primitive geometric shapes
+like points, lines, and polygons. These shapes, together with data
+attributes that are linked to each shape, create the representation of
+the geographic data.</p>
+<p>They contain four mandatory file extensions (.shx, .shp, .dbf and the
+.prj). - The .shp contains the geometry data (a 2D axis ordering of
+coordinate data) - The .shx contains the positional index of the feature
+geometry - The .dbf contins the attributes for each shape - The .prj
+contains the cs and projection information</p>
+<p>In criminological research, the LSOA is quite frequently used as the
+main census geography</p>
+</div>
+<div id="where-to-obtain-shapefiles" class="section level2">
+<h2>Where to obtain shapefiles</h2>
+<p>I collected my shapefile data via the UKDS Census Support <em>(<a href="https://borders.ukdataservice.ac.uk/bds.html" class="uri">https://borders.ukdataservice.ac.uk/bds.html</a>)</em>. If
+you want specific information about how to use the website, please refer
+to the <em>Downloading the data</em> document again</p>
+</div>
+<div id="read-in-the-shapefile-for-surrey-heath" class="section level2">
+<h2>Read in the Shapefile for ‘Surrey Heath’</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2hwX2ZpbGUgPC0gc2Y6OnN0X3JlYWQoXCJ+L0RvY3VtZW50cy9DcmltZV9SX1dvcmtzaG9wL0ZlYl8yMDI0L0RhdGEvc2hhcGVmaWxlL2VuZ2xhbmRfbHNvYV8yMDIxLnNocFwiKVxuXG5cbmBgYCJ9 -->
+<pre class="r"><code>shp_file &lt;- sf::st_read(&quot;~/Documents/Crime_R_Workshop/Feb_2024/Data/shapefile/england_lsoa_2021.shp&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>You can also use the head() function in shapefiles!</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZChzaHBfZmlsZSlcbiNvciB1c2UgJ1ZpZXcoc2hwX2ZpbGUpIHRvIHZpZXcgdGhlIGZ1bGwgZGF0YXNldCB3aGljaCB3aWxsIG9wZW4gdXAgaW4gYSBuZXcgcGFuZWxcbmBgYCJ9 -->
+<pre class="r"><code>head(shp_file)
+#or use &#39;View(shp_file) to view the full dataset which will open up in a new panel</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><em>Further Information - To clarify, this is an ‘empty shapefile’,
+it simply contains the boundary profile of Surrey Heath and does not
+contain any further attribute information. However, if it did contain
+further attribute information such as the crime counts, population
+statistics, IMD counts, then you would not need to join the data as we
+do in this workshop, but instead you could layer the shapefile over our
+simple feature object created in Topic 1. More information on this
+method is available from the workshop that was held in February - all
+resources are available via the ‘Feb_2021’ folder from the github link
+[<a href="https://github.com/UKDataServiceOpen/Crime_Data_in_R.git" class="uri">https://github.com/UKDataServiceOpen/Crime_Data_in_R.git</a>]
+</em></p>
+<p>Lets plot the empty shapefile for Surrey Heath to see what we’re
+actually looking at.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgUGxvdCB0aGUgU2hhcGVmaWxlIFxuZ2dwbG90KCkgKyBcbiAgZ2VvbV9zZihkYXRhID0gc2hwX2ZpbGUpXG5gYGAifQ== -->
+<pre class="r"><code>## Plot the Shapefile 
+ggplot() + 
+  geom_sf(data = shp_file)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>As you can seem, we have a map that details the borders (i.e. shape)
+between each LSOA in Surrey.</p>
+<p>This workshop instead joins the ‘crime’ datatset (in tibble format)
+to the above shapefile. Our newly created object ‘shp_file’ is in fact a
+sf object, which is short for a ‘simple feature object’. You can check
+this by typing <em>class(shp_file)</em>.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xhc3Moc2hwX2ZpbGUpXG5gYGAifQ== -->
+<pre class="r"><code>class(shp_file)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>So in total, the shapefile consits of 5 variables. The first 4
+variables indicate information about that specific LSOA, we are given
+the name, LSOA code and LSOA name. We can ignore the column ‘label’ as
+this is just another reference point.</p>
+<p>The column I want to draw attention to is the ‘geometry column’</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXR0cmlidXRlcyhzaHBfZmlsZSRnZW9tZXRyeSlcbmBgYCJ9 -->
+<pre class="r"><code>attributes(shp_file$geometry)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The geometry column can be split into two key sections; the feature
+and the geometry - The feature in this case is our polygon level
+(referenced by the multipolygon) which is in fact a <em>simple feature
+geometery list- column (sfc)</em> - The geometery are the numbers that
+follow, and more technically known as a <em>’simple feature geometry
+(sfg)</em></p>
+<p>The column in the sf data.frame that contains the geometries is a
+list, of class sfc. We can retrieve the geometry list-column in this
+case by using st_geometry.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RfZ2VvbWV0cnkoc2hwX2ZpbGUpXG5gYGAifQ== -->
+<pre class="r"><code>st_geometry(shp_file)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Now we have a basic understanding of what a shapefile is and how we
+can import them into r, the next step is run some data manipulation and
+create some new dataframes that can work with the format of
+shapefiles.</p>
+</div>
+<div id="group-the-crimes-per-lsoa" class="section level2">
+<h2>Group the crimes per lsoa</h2>
+<p>The original crime data set contains the individual count of reported
+crime types across LSOAS, therefore the LSOAs are repeated multiple
+times. This is because you would expect to see multiple crime counts in
+one LSOA.</p>
+<p>In order to highlight how many crimes have occurred in each LSOA, we
+can count the crimes per LSOA and obtained grouped statistics.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3JpbWVzX2dyb3VwZWRfYnlfbHNvYSA8LSBjcmltZSAlPiVcbiAgZ3JvdXBfYnkobHNvYV9jb2RlKSAlPiVcbiAgc3VtbWFyaXNlKGNvdW50PW4oKSlcblxuaGVhZChjcmltZXNfZ3JvdXBlZF9ieV9sc29hKVxuXG5gYGAifQ== -->
+<pre class="r"><code>crimes_grouped_by_lsoa &lt;- crime %&gt;%
+  group_by(lsoa_code) %&gt;%
+  summarise(count=n())
+
+head(crimes_grouped_by_lsoa)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="merge-the-shapefile-to-the-crime-dataset" class="section level2">
+<h2>Merge the shapefile to the crime dataset</h2>
+<p>In our new object you will see two variables, the LSOA and the count
+of crime in each one.</p>
+<p>We can now join the Shapefile (the geospatial vector) and the
+crimes_grouped_by_losa (the aggregated data)</p>
+<p>To join the crimes per lsoa to the shapefile we can use the left_join
+function that returns all the rows of the table on the left side of the
+join and matching rows for the table on the right side of join.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VycmV5X2xzb2EgPC0gbGVmdF9qb2luKHNocF9maWxlLCBjcmltZXNfZ3JvdXBlZF9ieV9sc29hLCBieSA9IGMoXCJsc29hMjFjZFwiID0gXCJsc29hX2NvZGVcIikpXG5cbmhlYWQoc3VycmV5X2xzb2EpXG5cbnN0X2dlb21ldHJ5X3R5cGUoc3VycmV5X2xzb2EpICAgICN2aWV3IHRoZSBnZW9tZXRlcnkgdHlwZSBcbnN0X2Jib3goc3VycmV5X2xzb2EpICAgICAgICAgICAgICNvYnRhaW5zIHRoZSBvYmplY3RzIHZhbHVlIGFzIHNwZWNpZmljIHVuaXRzIFxuXG5cbiNUaGUgc3BhdGlhbCBleHRlbnQgb2YgYSBzaGFwZWZpbGUgb3IgUiBzcGF0aWFsIG9iamVjdCByZXByZXNlbnRzIHRoZSBnZW9ncmFwaGljIOKAnGVkZ2XigJ0gb3IgbG9jYXRpb24gdGhhdCBpcyB0aGUgI2Z1cnRoZXN0IG5vcnRoLCBzb3V0aCBlYXN0IGFuZCB3ZXN0LiBUaHVzIGlzIHJlcHJlc2VudHMgdGhlIG92ZXJhbGwgZ2VvZ3JhcGhpYyBjb3ZlcmFnZSBvZiB0aGUgc3BhdGlhbCBvYmplY3QuXG5gYGAifQ== -->
+<pre class="r"><code>surrey_lsoa &lt;- left_join(shp_file, crimes_grouped_by_lsoa, by = c(&quot;lsoa21cd&quot; = &quot;lsoa_code&quot;))
+
+head(surrey_lsoa)
+
+st_geometry_type(surrey_lsoa)    #view the geometery type 
+st_bbox(surrey_lsoa)             #obtains the objects value as specific units 
+
+
+#The spatial extent of a shapefile or R spatial object represents the geographic “edge” or location that is the #furthest north, south east and west. Thus is represents the overall geographic coverage of the spatial object.</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Now lets map the new data!</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI21hcCB0aGUgZGF0YVxuZ2dwbG90KCkgKyBcbiAgYW5ub3RhdGlvbl9tYXBfdGlsZSgpICsgXG4gIGdlb21fc2YoZGF0YSA9IHN1cnJleV9sc29hLCBhZXMoZmlsbCA9IGNvdW50KSwgYWxwaGEgPSAwLjUpICsgXG4gIHNjYWxlX2ZpbGxfZ3JhZGllbnQyKG5hbWUgPVwiTnVtYmVyIG9mIGNyaW1lc1wiKVxuXG5gYGAifQ== -->
+<pre class="r"><code>#map the data
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = count), alpha = 0.5) + 
+  scale_fill_gradient2(name =&quot;Number of crimes&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="plotting-via-the-tmap-package" class="section level2">
+<h2>Plotting via the ‘tmap’ package</h2>
+<p>The tmap package allows you tp create thematic maps, the syntax is
+very similar to the ggplot2. Each map can be plot as an image or as an
+interactive map via the <em>tmap_mode(“view” / “plot” )</em>
+function.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG1hcF9tb2RlKFwidmlld1wiKVxuXG50bV9zaGFwZShzdXJyZXlfbHNvYSkgKyBcbiAgdG1fZmlsbChcImNvdW50XCIpICsgXG4gIHRtX2JvcmRlcnMoXCJncmVlblwiLCBsd2QgPSAwLjcsIGFscGhhID0gMC41KVxuICAjdG1fdGV4dChcIm5hbWVcIiwgc2l6ZSA9IFwiQVJFQVwiLCBjb2wgPSBcImJsYWNrXCIpXG4gICN0bWFwX3N0eWxlKFwiY29sX2JsaW5kXCIpXG5gYGAifQ== -->
+<pre class="r"><code>tmap_mode(&quot;view&quot;)
+
+tm_shape(surrey_lsoa) + 
+  tm_fill(&quot;count&quot;) + 
+  tm_borders(&quot;green&quot;, lwd = 0.7, alpha = 0.5)
+  #tm_text(&quot;name&quot;, size = &quot;AREA&quot;, col = &quot;black&quot;)
+  #tmap_style(&quot;col_blind&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="classification-methods" class="section level3">
+<h3>Classification methods</h3>
+<p>How can we better visualise counts? Count data does not equally
+represent the population distribution at hand, tmaps allows you to alter
+the characteristics of theamatic maps via the ‘styles’ function. The
+different styles result in different binning techniques. Now, when
+mapping quantitiatve data such as crime counts, typicaly the variables
+needed to be put into to ‘bins’. As seen in the previous example, the
+default binning applied to highlight the LSOAs grouped started from
+1-10, 11-20, 21-20, 31-40, 41-50 and 51-60 crimes.</p>
+<p>These bins were decided on automatically, however we can define more
+accurate classes that best refelct the distributional character of the
+data set.</p>
+<p>In this example I’ve used the “kmeans”, “jenks” and “sd”.</p>
+<ul>
+<li>k-means is a method of vector quantisation, originally from signal
+processing, that aims to partition n observations into k clusters in
+which each observation belongs to the cluster with the nearest mean,
+serving as a prototype of the cluster.</li>
+<li>Jenks (also known as natural breaks, or goodness of fit variance)
+classifcaiton aims to arrange a set of values into natural classes, that
+is the most optimal class range found naturally. This method minimizes
+the variation within each range, so the areas within each range are as
+close as possible in value to each other.</li>
+<li>sd classification is a standarised measure of observations deviated
+from the mean. By showing which values are above or below the mean, this
+method helps to show which locations are above or below an average
+mean.</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5hIDwtIHRtX3NoYXBlKHN1cnJleV9sc29hKSArIFxuICB0bV9maWxsKFwiY291bnRcIiwgc3R5bGUgPSBcImttZWFuc1wiKSArIFxuICB0bV9ib3JkZXJzKGFscGhhID0gMC4zKVxuXG5iIDwtIHRtX3NoYXBlKHN1cnJleV9sc29hKSArIFxuICB0bV9maWxsKFwiY291bnRcIiwgc3R5bGUgPSBcImplbmtzXCIpICsgXG4gIHRtX2JvcmRlcnMoYWxwaGEgPSAwLjMpXG5cbmMgPC0gdG1fc2hhcGUoc3VycmV5X2xzb2EpICsgXG4gIHRtX2ZpbGwoXCJjb3VudFwiLCBzdHlsZSA9IFwic2RcIikgKyBcbiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuMylcblxuXG4jIyB0bWFwX2FycmFuZ2VcblxudG1hcF9tb2RlKFwicGxvdFwiKVxudG1hcF9hcnJhbmdlKGEsIGIsIGMpXG5cblxuYGBgIn0= -->
+<pre class="r"><code>
+a &lt;- tm_shape(surrey_lsoa) + 
+  tm_fill(&quot;count&quot;, style = &quot;kmeans&quot;) + 
+  tm_borders(alpha = 0.3)
+
+b &lt;- tm_shape(surrey_lsoa) + 
+  tm_fill(&quot;count&quot;, style = &quot;jenks&quot;) + 
+  tm_borders(alpha = 0.3)
+
+c &lt;- tm_shape(surrey_lsoa) + 
+  tm_fill(&quot;count&quot;, style = &quot;sd&quot;) + 
+  tm_borders(alpha = 0.3)
+
+
+## tmap_arrange
+
+tmap_mode(&quot;plot&quot;)
+tmap_arrange(a, b, c)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="using-categorical-variables-tm_facets" class="section level2">
+<h2>Using categorical variables (tm_facets)</h2>
+<p>Just like the tmap_arrange function, tmap_facets are way to produce
+side-by-side maps (known as <em>small multiples</em>). It is similar to
+the ‘facet_grid’ function in ggplot2</p>
+<p>Following the rdocumentation [<a href="https://www.rdocumentation.org/packages/tmap/versions/3.3-2/topics/tm_facets" class="uri">https://www.rdocumentation.org/packages/tmap/versions/3.3-2/topics/tm_facets</a>]
+“Small multiples can be created in two ways: 1) by specifying the by
+argument with one or two variable names, by which the data is grouped,
+2) by specifying multiple variable names in any of the aesthetic
+argument of the layer functions (for instance, the argument col in
+tm_fill).”</p>
+<p>Typically tm_facets are defined by a categorical variables. For
+example in this example, I am using tm_facets() to seperate the map into
+multiple components by lsoa (This isnt’t the best example of a
+categorical variable, but something like the urban or rural landscape,
+or deprivation decile, would be more of interest in criminology). You
+could for example download the 2011 rural/urban classification from open
+geography portal and join this to our ‘surrey_lsoa’ sf object (using
+left_join).</p>
+<p>If you are interested in doing so the dataset can be found here; [<a href="https://www.ons.gov.uk/methodology/geography/geographicalproducts/ruralurbanclassifications/2011ruralurbanclassification" class="uri">https://www.ons.gov.uk/methodology/geography/geographicalproducts/ruralurbanclassifications/2011ruralurbanclassification</a>]</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG1fc2hhcGUoc3VycmV5X2xzb2EpICtcbiAgdG1fZmlsbChcImNvdW50XCIsXG4gICAgICAgICAgc3R5bGUgPSBcInF1YW50aWxlXCIsXG4gICAgICAgICAgcGFsZXR0ZSA9IFwiQmx1ZXNcIixcbiAgICAgICAgICB0aHJlcy5wb2x5ID0gMCkgKyBcbiAgdG1fZmFjZXRzKGJ5PVwibmFtZVwiLCBcbiAgICAgICAgICAgIGZyZWUuY29vcmRzPVRSVUUsIFxuICAgICAgICAgICAgZHJvcC5zaGFwZXM9VFJVRSkgK1xuICB0bV9sYXlvdXQobGVnZW5kLnNob3cgPSBGQUxTRSxcbiAgICAgICAgICAgIHRpdGxlLnBvc2l0aW9uID0gYyhcImNlbnRlclwiLCBcImNlbnRlclwiKSwgXG4gICAgICAgICAgICB0aXRsZS5zaXplID0gMjApICtcbiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuNSlcbmBgYCJ9 -->
+<pre class="r"><code>tm_shape(surrey_lsoa) +
+  tm_fill(&quot;count&quot;,
+          style = &quot;quantile&quot;,
+          palette = &quot;Blues&quot;,
+          thres.poly = 0) + 
+  tm_facets(by=&quot;name&quot;, 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c(&quot;center&quot;, &quot;center&quot;), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="map-layouts---additional-features-of-tmap-optional-task" class="section level2">
+<h2>Map Layouts - additional features of tmap (optional task)</h2>
+<div id="map-style" class="section level3">
+<h3>map style</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG1fc2hhcGUoc3VycmV5X2xzb2EpICsgXG4gIHRtX2ZpbGwoXCJjb3VudFwiLCBzdHlsZSA9IFwic2RcIikgKyBcbiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuMykgKyBcbiAgdG1hcF9zdHlsZShcImNvbF9ibGluZFwiKVxuYGBgIn0= -->
+<pre class="r"><code>tm_shape(surrey_lsoa) + 
+  tm_fill(&quot;count&quot;, style = &quot;sd&quot;) + 
+  tm_borders(alpha = 0.3) + 
+  tmap_style(&quot;col_blind&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="map-legends" class="section level3">
+<h3>map legends</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG1fc2hhcGUoc3VycmV5X2xzb2EpK1xuICB0bV9maWxsKFwiY291bnRcIiwgXG4gICAgICAgICAgc3R5bGUgPSBcInF1YW50aWxlXCIsIFxuICAgICAgICAgIHBhbGV0dGUgPSBcIkJsdWVzXCIsIFxuICAgICAgICAgIGxlZ2VuZC5oaXN0ID0gVFJVRSwgXG4gICAgICAgICAgbGVnZW5kLmlzLnBvcnRyYWl0ID0gVFJVRSxcbiAgICAgICAgICBsZWdlbmQuaGlzdC56ID0gMC4xKSArXG4gIHRtX2xheW91dChsZWdlbmQuaGVpZ2h0ID0gMC40NSwgXG4gICAgICAgICAgICBsZWdlbmQud2lkdGggPSAwLjM1LFxuICAgICAgICAgICAgbGVnZW5kLm91dHNpZGUgPSBGQUxTRSxcbiAgICAgICAgICAgIGxlZ2VuZC5wb3NpdGlvbiA9IGMoXCJyaWdodFwiLCBcImJvdHRvbVwiKSxcbiAgICAgICAgICAgIGZyYW1lID0gRkFMU0UpICtcbiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuNSlcbmBgYCJ9 -->
+<pre class="r"><code>tm_shape(surrey_lsoa)+
+  tm_fill(&quot;count&quot;, 
+          style = &quot;quantile&quot;, 
+          palette = &quot;Blues&quot;, 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c(&quot;right&quot;, &quot;bottom&quot;),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="compass-scale-bar-and-grid" class="section level3">
+<h3>compass, scale bar and grid</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG1fc2hhcGUoc3VycmV5X2xzb2EpK1xuICB0bV9maWxsKFwiY291bnRcIiwgXG4gICAgICAgICAgc3R5bGUgPSBcInF1YW50aWxlXCIsIFxuICAgICAgICAgIHBhbGV0dGUgPSBcIkJsdWVzXCIsIFxuICAgICAgICAgIGxlZ2VuZC5oaXN0ID0gVFJVRSwgXG4gICAgICAgICAgbGVnZW5kLmlzLnBvcnRyYWl0ID0gVFJVRSxcbiAgICAgICAgICBsZWdlbmQuaGlzdC56ID0gMC4xKSArXG4gIHRtX2xheW91dChsZWdlbmQuaGVpZ2h0ID0gMC40NSwgXG4gICAgICAgICAgICBsZWdlbmQud2lkdGggPSAwLjM1LFxuICAgICAgICAgICAgbGVnZW5kLm91dHNpZGUgPSBGQUxTRSxcbiAgICAgICAgICAgIGxlZ2VuZC5wb3NpdGlvbiA9IGMoXCJyaWdodFwiLCBcImJvdHRvbVwiKSxcbiAgICAgICAgICAgIGZyYW1lID0gRkFMU0UpICtcbiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuNSkgK1xuICB0bV9jb21wYXNzKHR5cGU9XCI4c3RhclwiLCBzaXplID0gMikgKyAgICNjb21wYXNzIFxuICB0bV9zY2FsZV9iYXIod2lkdGggPSAwLjE1KSArICAgICAgICAgICAjc2NhbGUgYmFyIFxuICB0bV9ncmlkKCkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjZ3JpZFxuXG5gYGAifQ== -->
+<pre class="r"><code>tm_shape(surrey_lsoa)+
+  tm_fill(&quot;count&quot;, 
+          style = &quot;quantile&quot;, 
+          palette = &quot;Blues&quot;, 
+          legend.hist = TRUE, 
+          legend.is.portrait = TRUE,
+          legend.hist.z = 0.1) +
+  tm_layout(legend.height = 0.45, 
+            legend.width = 0.35,
+            legend.outside = FALSE,
+            legend.position = c(&quot;right&quot;, &quot;bottom&quot;),
+            frame = FALSE) +
+  tm_borders(alpha = 0.5) +
+  tm_compass(type=&quot;8star&quot;, size = 2) +   #compass 
+  tm_scale_bar(width = 0.15) +           #scale bar 
+  tm_grid()                              #grid
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="activity-2" class="section level2">
+<h2>Activity 2</h2>
+<ol style="list-style-type: decimal">
+<li><p>Explore some of the different classification methods such as
+“bclust” and “hclust” - what are the main differences? To get help on
+the different methods available use <em>??tmap-package</em> or search in
+the help tab</p></li>
+<li><p>Assign your new bclust and hclust classification maps into
+separate objects (call them “h” and “b” and plot them together using
+tmap_arrange()</p></li>
+<li><p>Plot an interactive map using the “bclust” classification method
+by changing the command in the tmap_mode() function</p></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jMSlcblxuLi4uIDwtIHRtX3NoYXBlKC4uLi4uKSArIFxuICB0bV9maWxsKFwiLi4uXCIsIHN0eWxlID0gXCIuLi4uXCIpICsgXG4gIHRtX2JvcmRlcnMoYWxwaGEgPSAwLjMpXG5cblxuLi4uIDwtIHRtX3NoYXBlKC4uLi4uLi4uKSArIFxuICB0bV9maWxsKFwiLi4uXCIsIHN0eWxlID0gXCIuLi4uLlwiKSArIFxuICB0bV9ib3JkZXJzKGFscGhhID0gMC4zKVxuXG5cbiMyKSBcblxudG1hcF9hcnJhbmdlKC4uLi4sIC4uLi4pXG5cblxuXG4jMykgXG5cbnRtYXBfbW9kZShcIi4uLi5cIilcblxudG1fc2hhcGUoLi4uLi4pICsgXG4gIHRtX2ZpbGwoLi4uLi4sIHN0eWxlID0gLi4uLi4pICsgXG4gIHRtX2JvcmRlcnMoYWxwaGEgPSAwLjMpXG5cblxuXG5gYGAifQ== -->
+<pre class="r"><code>
+#1)
+
+... &lt;- tm_shape(.....) + 
+  tm_fill(&quot;...&quot;, style = &quot;....&quot;) + 
+  tm_borders(alpha = 0.3)
+
+
+... &lt;- tm_shape(........) + 
+  tm_fill(&quot;...&quot;, style = &quot;.....&quot;) + 
+  tm_borders(alpha = 0.3)
+
+
+#2) 
+
+tmap_arrange(...., ....)
+
+
+
+#3) 
+
+tmap_mode(&quot;....&quot;)
+
+tm_shape(.....) + 
+  tm_fill(....., style = .....) + 
+  tm_borders(alpha = 0.3)
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
-</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWFwcGluZyBDcmltZSBEYXRhIGluIFIgLSBQcmVsaW1pbmFyeSBUYXNrcyIKYXV0aG9yOiAiTmFkaWEgS2VubmFyLCBSZXNlYXJjaCBBc3NvY2lhdGUgd2l0aCB0aGUgVUtEUyIKZGF0ZTogIjh0aCBNYXJjaCAyMDIzIgpvdXRwdXQ6CiAgaHRtbF9ub3RlYm9vazogZGVmYXVsdAp0b2M6IHllcwotLS0KCgojIFByZXJlcXVpc2l0ZSAKClRoaXMgd29ya3Nob3AgaXMgc3VpdGFibGUgZm9yIHRob3NlIGJlZ2lubmVyIHRvIGludGVybWVkaWF0ZSBpbiBSLiBJdCByZXF1aXJlcyB5b3Uga25vdyBob3cgdG8gc2V0IHlvdXIgd29ya2luZyBkaXJlY3RvcnkgYW5kIGhvdyB0byByZWFkIGRhdGEgaW50byBSLgoKVXNpbmcgb3BlbiBzb3VyY2UgcG9saWNlIHJlY29yZGVkIGNyaW1lIHN0YXRpc3RpY3MgdGhpcyB3b3Jrc2hvcCB3aWxsIGRlbW9uc3RyYXRlIGhvdyB0byBtYXAgY3JpbWUgZGF0YSBpbiBSIHVzaW5nIHNmIGFuZCBnZ3Bsb3QuIE1vcmUgc3BlY2lmaWNhbGx5IGxvb2tpbmcgYXQgdGhlIGFyZWEgb2YgU3VycmV5IHdlIHdpbGwgCgogIDEpIGJyaWVmbHkgZXhwbG9yZSB0aGUgY3JpbWUgZGF0YSBhbmQgaW50cm9kdWNlIGtleSB0b3BpY3MgaW4gc3BhdGlhbCBkYXRhCiAgMikgZGVtb25zdHJhdGUgaG93IHRvIGpvaW4gY3JpbWUgZGF0YSB0byBzaGFwZWZpbGVzIGFuZCBob3cgdG8gbWFwIGRhdGEgCiAgMykgaWRlbnRpZnkgaG93IHRvIG1hcCBhbmQgY2FsY3VsYXRlIGNyaW1lIHJhdGUgCgpUaGUgZGF0YXNldHMgbmVlZGVkIGluIHRoaXMgd29ya3Nob3AgaW5jbHVkZSBjcmltZSBkYXRhLCBwb3B1bGF0aW9uIHN0YXRpc3RpY3MgYW5kIHNoYXBlZmlsZXMuIEluZm9ybWF0aW9uIG9uIGhvdyB0byBkb3dubG9hZCB0aGVzZSB3aWxsIGJlIGF2YWlsYWJsZSBpbiB0aGUgUiBmaWxlIG5hbWVzICpkb3dubG9hZGluZyB0aGUgZGF0YSogYnV0IGZlZWwgZnJlZSB0byBvYnRhaW4gdGhlc2UgdmlhIGdpdCAqaHR0cHM6Ly9naXRodWIuY29tL1VLRGF0YVNlcnZpY2VPcGVuL0NyaW1lX0RhdGFfaW5fUiouIEVuc3VyZSB0aGVzZSBhcmUgbG9hZGVkIGludG8geW91ciBlbnZpcm9ubWVudCBiZWZvcmUgc3RhcnRpbmcgdGhlIHdvcmtzaG9wCgoKCiMjIFNldCB5b3VyIHdvcmtpbmcgZGlyZWN0b3J5IAoKVGhlIHdvcmtpbmcgZGlyZWN0b3J5IGlzIGp1c3QgYSBmaWxlIHBhdGggb24geW91ciBjb21wdXRlciB0aGF0IHNldHMgdGhlIGRlZmF1bHQgbG9jYXRpb24gb2YgYW55IGZpbGVzIHlvdSByZWFkIGludG8gUiwgb3Igc2F2ZSBvdXQgb2YgUi4gWW91IG5lZWQgdG8gc2V0IHlvdXIgY3VycmVudCB3b3JraW5nIGRpcmVjdG9yeSBpbiBvcmRlciB0byBmb2xsb3cgYWxvbmcgd2l0aCB0aGlzIHdvcmtzaG9wLCBZb3UgY2FuIHJlYWQgbW9yZSBhYm91dCB3b3JraW5nIGRpcmVjdG9yaWVzIGhlcmUgICpodHRwczovL2Jvb2tkb3duLm9yZy9uZHBoaWxsaXBzL1lhUnJyL3RoZS13b3JraW5nLWRpcmVjdG9yeS5odG1sKiAKCllvdSBjYW4gdXNlIHRoZSAqc2V0d2QoKSogZnVuY3Rpb24gdG8gc2V0IHlvdXIgY3VycmVudCB3b3JraW5nIGRpcmVjdG9yeSwgYW5kIHRoZSAqZ2V0d2QoKSogZnVuY3Rpb24gdG8gcHJpbnQgeW91ciBjdXJyZW50IHdvcmtpbmcgZGlyZWN0b3J5LiAKCkkgd291bGQgc3VnZ2VzdCBob3dldmVyLCBjcmVhdGluZyBhbiBSIHByb2plY3Qgd2l0aCBhIHZlcnNpb24gY29udHJvbCByZXBvc2l0b3J5LiBUaGlzIHdpbGwgYWxsb3cgeW91IHRvIHdvcmsgd2l0aCB0aGUgY29tcGxldGUgc2V0IG9mIGNvZGUgcHJvdmlkZWQuIFRvIGRvIHNvIGZvbGxvdyB0aGVzZSBzdGVwcyBmcm9tIHRoZSB0YXNrIG1lbnUgZm91bmQgYXQgdGhlIHRvcCBsZWZ0IG9mIHlvdXIgUlN0dWRpbzsKCkZpbGUgLT4gbmV3IHByb2plY3QgLT4gdmVyc2lvbiBjb250cm9sIC0+IGNsaWNrIGdpdCAtPiBwYXN0ZSB0aGUgZ2l0aHViIGxpbmsgaW4gdGhlICcncmVwb3NpdG9yeSB1cmwnIGJveCAgKihodHRwczovL2dpdGh1Yi5jb20vVUtEYXRhU2VydmljZU9wZW4vQ3JpbWVfRGF0YV9pbl9SLmdpdCkqIC0+IGdpdmUgeW91ciBwcm9qZWN0IGRpcmVjdG9yeSBhIG5hbWUgLT4gdGljayBvcGVuIGluIG5ldyBzZXNzaW9uIC0+IGNsaWNrIGNyZWF0ZSBuZXcgcHJvamVjdC4KClBlcmZlY3QhIE5vdyB5b3UgY2FuIHdvcmsgYWxvbmcgc2lkZSBtZSBhcyBJIGdvIHRocm91Z2ggdGhlIHZhcmlvdXMgbWFya2Rvd24gZmlsZXMuIAoKCiMjIEluc3RhbGwgYW5kIGxvYWQgdGhlIHBhY2thZ2VzIHJlcXVpcmVkIGZvciB0aGlzIHdvcmtzaG9wCgpCZWxvdyBhcmUgYSBsaXN0IG9mIHBhY2thZ2VzIHRoYXQgbmVlZCB0byBiZSBpbnN0YWxsZWQgYW5kIGxvYWRlZCBpbnRvIHlvdXIgdmVyc2lvbiBvZiBSU3R1ZGlvLiBUbyBpbnN0YWxsIGEgcGFja2FnZSB1c2UgdGhlIGZ1bmN0aW9uICppbnN0YWxsLnBhY2thZ2VzKCIuLi4iKSogLSB0aGUgcXVvdGF0aW9uIG1hcmtzIGFyb3VuZCB0aGUgcGFja2FnZSBuYW1lcyBhcmUgZXNzZW50aWFsLiAKCk9uY2UgaW5zdGFsbGVkIHlvdSB0aGVuIG5lZWQgdG8gbG9hZCB0aGUgcGFja2FnZXMgd2hpY2ggY2FuIGJlIGRvd24gdmlhIHRoZSAqbGlicmFyeSguLi4pKiBmdW5jdGlvbiAtIHRoZSBxdW90YXRpb24gbWFya3MgaGVyZSBhcmUgbm90IGVzc2VudGlhbC4gCgoKYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9CmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkKCiMjIEluc3RhbGwgcGFja2FnZXMgCgppbnN0YWxsLnBhY2thZ2VzKCJkcGx5ciIpCmluc3RhbGwucGFja2FnZXMoInRpZHlyIikKaW5zdGFsbC5wYWNrYWdlcygicmVhZHIiKQppbnN0YWxsLnBhY2thZ2VzKCJ0aWJibGUiKQppbnN0YWxsLnBhY2thZ2VzKCJqYW5pdG9yIikKaW5zdGFsbC5wYWNrYWdlcygic2YiKQppbnN0YWxsLnBhY2thZ2VzKCJnZ21hcCIpCmluc3RhbGwucGFja2FnZXMoImdncGxvdDIiKQppbnN0YWxsLnBhY2thZ2VzKCJnZ3NwYXRpYWwiKQppbnN0YWxsLnBhY2thZ2VzKCJzcGRlcCIpCmluc3RhbGwucGFja2FnZXMoImxlYWZsZXQiKQppbnN0YWxsLnBhY2thZ2VzKCJSQ29sb3JCcmV3ZXIiKQppbnN0YWxsLnBhY2thZ2VzKCJ0bWFwIikKaW5zdGFsbC5wYWNrYWdlcygiY2FydG9ncmFtIikKCgojIyBMb2FkIHBhY2thZ2VzCgojIGZvciBkYXRhIHJlYWRpbmcvbWFuaXB1bGF0aW9uIApsaWJyYXJ5KGRwbHlyKQpsaWJyYXJ5KHRpZHlyKQpsaWJyYXJ5KHJlYWRyKQpsaWJyYXJ5KHRpYmJsZSkKbGlicmFyeShqYW5pdG9yKQojIGZvciBzcGF0aWFsIGRhdGEgYW5kIGdpcwpsaWJyYXJ5KHNmKQpsaWJyYXJ5KGdnbWFwKQpsaWJyYXJ5KGdncGxvdDIpCmxpYnJhcnkoZ2dzcGF0aWFsKQpsaWJyYXJ5KHNwZGVwKQpsaWJyYXJ5KGxlYWZsZXQpIApsaWJyYXJ5KFJDb2xvckJyZXdlcikKbGlicmFyeSh0bWFwKQpsaWJyYXJ5KGNhcnRvZ3JhbSkKCmBgYAoKCgoKIyMgQ29ubmVjdGluZyBHaXRIdWIgYW5kIFIgKGV4dHJhIHN0ZXApCgpJbiBvcmRlciB0byBjbG9uZSBhIHJlcG9zaXRvcnkgZnJvbSBHaXRodWIgeW91IG1pZ2h0IGJlIGFza2VkIHRvIHNldCB1cCBhIFBBVCAocGVyc29uYWwgYXV0aGVudGljYXRpb24gdG9rZW4pLCBpZiBzbyBmb2xsb3cgdGhlc2Ugc2ltcGxlIGluc3RydWN0aW9ucyBmcm9tIHRoaXMgbGluay4gKmh0dHBzOi8vaGFwcHlnaXR3aXRoci5jb20vaHR0cHMtcGF0Lmh0bWwqLiAoRG8gbm90IHNoYXJlIHRoaXMgdG9rZW4gd2l0aCBhbnlvbmUsIGl0IGlzIGEgdW5pcXVlIHBhc3N3b3JkIGZvciB5b3VyIEdpdGh1YiBhY2NvdW50KQoKSW4gc3VtbWFyeTogCgpgYGB7cn0KdXNldGhpczo6Y3JlYXRlX2dpdGh1Yl90b2tlbigpCgpnaXRjcmVkczo6Z2l0Y3JlZHNfc2V0KCkKI2FuZCB0aGVuIGVudGVyIHlvdXIgdG9rZW4gCgpgYGAKCgoKCgoKCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTWFwcGluZyBDcmltZSBEYXRhIGluIFIgLSBTaGFwZWZpbGVzIgphdXRob3I6ICJOYWRpYSBLZW5uYXIsIFJlc2VhcmNoIEFzc29jaWF0ZSB3aXRoIHRoZSBVS0RTIgpkYXRlOiAiMTZ0aCBvZiBGZWJydWFyeSAyMDI0IgpvdXRwdXQ6CiAgaHRtbF9ub3RlYm9vazogZGVmYXVsdAp0b2M6IHllcwotLS0KCmBgYHtyIHNldCB1cCwgaW5jbHVkZT1GQUxTRX0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFLCBldmFsID0gVFJVRSkKYGBgCgojIyBJbnRybyAKCkluIHRoaXMgc2VjdGlvbiB3ZSB3aWxsIGJlIHdvcmtpbmcgd2l0aCBzaGFwZWZpbGVzLiBNb3JlIHNwZWNpZmljYWxseSBob3cgdG8gcmVhZCBpbiBhIHNoYXBlZmlsZSBhbmQgam9pbiB0aGlzIHRvIG91ciBhZ2dyZWdhdGVkIGNyaW1lIGNvdW50IGRhdGEgZnJhbWUuIEZyb20gdGhlcmUgd2UgaW50cm9kdWNlIGNsYXNzaWZpY2F0aW9uIG1ldGhvZHMgYXMgYSB3YXkgdG8gYmV0dGVyIHZpc3VhbGl6ZSBjcmltZSBjb3VudHMuIAoKIyMgTG9hZCBwYWNrYWdlcwoKQXMgYWx3YXlzIHRoZSBmaXJzdCBzdGVwIGlzIHRvIGxvYWQgdGhlIG5lY2Vzc2FyeSBSIHBhY2thZ2VzIHZpYSB0aGUgbGlicmFyeSBmdW5jdGlvbi4gSWYgeW91IGRvIG5vdCBoYXZlIHRoZXNlIHBhY2thZ2VzIGluc3RhbGxlZCB0aGVuIHBsZWFzZSBmb2xsb3cgdGhlIGluc3RydWN0aW9ucyBpbiB0aGUgKlByZWxpbWluYXJ5IFRhc2suUm1kKiBmaWxlLiAKCmBgYHtyIHNldHVwfQoKIyBmb3IgZGF0YSByZWFkaW5nL21hbmlwdWxhdGlvbiAKbGlicmFyeShkcGx5cikKbGlicmFyeSh0aWR5cikKbGlicmFyeShyZWFkcikKbGlicmFyeSh0aWJibGUpCmxpYnJhcnkoamFuaXRvcikKbGlicmFyeShyZWFkeGwpCiMgZm9yIHNwYXRpYWwgZGF0YSBhbmQgZ2lzCmxpYnJhcnkoc2YpCmxpYnJhcnkoZ2dtYXApCmxpYnJhcnkoZ2dwbG90MikKbGlicmFyeShnZ3NwYXRpYWwpCmxpYnJhcnkoc3BkZXApCmxpYnJhcnkobGVhZmxldCkgCmxpYnJhcnkoUkNvbG9yQnJld2VyKQpsaWJyYXJ5KHRtYXApCgpgYGAKCgojIyBXaGF0IGlzIGEgU2hhcGVmaWxlPyAKClRoZXkgcmVwcmVzZW50IGEgZ2Vvc3BhdGlhbCB2ZWN0b3IgdGhhdCBpcyB1c2VkIGZvciBHSVMgc29mdHdhcmUuIFNoYXBlZmlsZXMgc3RvcmUgYm90aCBnZW9ncnBhaGljIGxvY2F0aW9uIGFuZCBpdHMgYXNzb2NpYXRlZCBhdHRyaWJ1dGUgaW5mb3JtYXRpb24gCgpUaGUgU2hhcGVmaWxlIGZvcm1hdCBzdG9yZXMgdGhlIGRhdGEgYXMgcHJpbWl0aXZlIGdlb21ldHJpYyBzaGFwZXMgbGlrZSBwb2ludHMsIGxpbmVzLCBhbmQgcG9seWdvbnMuIFRoZXNlIHNoYXBlcywgdG9nZXRoZXIgd2l0aCBkYXRhIGF0dHJpYnV0ZXMgdGhhdCBhcmUgbGlua2VkIHRvIGVhY2ggc2hhcGUsIGNyZWF0ZSB0aGUgcmVwcmVzZW50YXRpb24gb2YgdGhlIGdlb2dyYXBoaWMgZGF0YS4KClRoZXkgY29udGFpbiBmb3VyIG1hbmRhdG9yeSBmaWxlIGV4dGVuc2lvbnMgKC5zaHgsIC5zaHAsIC5kYmYgYW5kIHRoZSAucHJqKS4gCi0gVGhlIC5zaHAgY29udGFpbnMgdGhlIGdlb21ldHJ5IGRhdGEgKGEgMkQgYXhpcyBvcmRlcmluZyBvZiBjb29yZGluYXRlIGRhdGEpCi0gVGhlIC5zaHggY29udGFpbnMgdGhlIHBvc2l0aW9uYWwgaW5kZXggb2YgdGhlIGZlYXR1cmUgZ2VvbWV0cnkgCi0gVGhlIC5kYmYgY29udGlucyB0aGUgYXR0cmlidXRlcyBmb3IgZWFjaCBzaGFwZQotIFRoZSAucHJqIGNvbnRhaW5zIHRoZSBjcyBhbmQgcHJvamVjdGlvbiBpbmZvcm1hdGlvbgoKSW4gY3JpbWlub2xvZ2ljYWwgcmVzZWFyY2gsIHRoZSBMU09BIGlzIHF1aXRlIGZyZXF1ZW50bHkgdXNlZCBhcyB0aGUgbWFpbiBjZW5zdXMgZ2VvZ3JhcGh5IAoKCiMjIFdoZXJlIHRvIG9idGFpbiBzaGFwZWZpbGVzIAoKSSBjb2xsZWN0ZWQgbXkgc2hhcGVmaWxlIGRhdGEgdmlhIHRoZSBVS0RTIENlbnN1cyBTdXBwb3J0ICooaHR0cHM6Ly9ib3JkZXJzLnVrZGF0YXNlcnZpY2UuYWMudWsvYmRzLmh0bWwpKi4gSWYgeW91IHdhbnQgc3BlY2lmaWMgaW5mb3JtYXRpb24gYWJvdXQgaG93IHRvIHVzZSB0aGUgd2Vic2l0ZSwgcGxlYXNlIHJlZmVyIHRvIHRoZSAqRG93bmxvYWRpbmcgdGhlIGRhdGEqIGRvY3VtZW50IGFnYWluIAoKCiMjIFJlYWQgaW4gdGhlIFNoYXBlZmlsZSBmb3IgJ1N1cnJleSBIZWF0aCcgCgpgYGB7cn0Kc2hwX2ZpbGUgPC0gc2Y6OnN0X3JlYWQoIn4vRG9jdW1lbnRzL0NyaW1lX1JfV29ya3Nob3AvRmViXzIwMjQvRGF0YS9zaGFwZWZpbGUvZW5nbGFuZF9sc29hXzIwMjEuc2hwIikKCgpgYGAKCllvdSBjYW4gYWxzbyB1c2UgdGhlIGhlYWQoKSBmdW5jdGlvbiBpbiBzaGFwZWZpbGVzIQoKYGBge3J9CmhlYWQoc2hwX2ZpbGUpCiNvciB1c2UgJ1ZpZXcoc2hwX2ZpbGUpIHRvIHZpZXcgdGhlIGZ1bGwgZGF0YXNldCB3aGljaCB3aWxsIG9wZW4gdXAgaW4gYSBuZXcgcGFuZWwKYGBgCgoqRnVydGhlciBJbmZvcm1hdGlvbiAtIFRvIGNsYXJpZnksIHRoaXMgaXMgYW4gJ2VtcHR5IHNoYXBlZmlsZScsIGl0IHNpbXBseSBjb250YWlucyB0aGUgYm91bmRhcnkgcHJvZmlsZSBvZiBTdXJyZXkgSGVhdGggYW5kIGRvZXMgbm90IGNvbnRhaW4gYW55IGZ1cnRoZXIgYXR0cmlidXRlIGluZm9ybWF0aW9uLiBIb3dldmVyLCBpZiBpdCBkaWQgY29udGFpbiBmdXJ0aGVyIGF0dHJpYnV0ZSBpbmZvcm1hdGlvbiBzdWNoIGFzIHRoZSBjcmltZSBjb3VudHMsIHBvcHVsYXRpb24gc3RhdGlzdGljcywgSU1EIGNvdW50cywgdGhlbiB5b3Ugd291bGQgbm90IG5lZWQgdG8gam9pbiB0aGUgZGF0YSBhcyB3ZSBkbyBpbiB0aGlzIHdvcmtzaG9wLCBidXQgaW5zdGVhZCB5b3UgY291bGQgbGF5ZXIgdGhlIHNoYXBlZmlsZSBvdmVyIG91ciBzaW1wbGUgZmVhdHVyZSBvYmplY3QgY3JlYXRlZCBpbiBUb3BpYyAxLiBNb3JlIGluZm9ybWF0aW9uIG9uIHRoaXMgbWV0aG9kIGlzIGF2YWlsYWJsZSBmcm9tIHRoZSB3b3Jrc2hvcCB0aGF0IHdhcyBoZWxkIGluIEZlYnJ1YXJ5IC0gYWxsIHJlc291cmNlcyBhcmUgYXZhaWxhYmxlIHZpYSB0aGUgJ0ZlYl8yMDIxJyBmb2xkZXIgZnJvbSB0aGUgZ2l0aHViIGxpbmsgW2h0dHBzOi8vZ2l0aHViLmNvbS9VS0RhdGFTZXJ2aWNlT3Blbi9DcmltZV9EYXRhX2luX1IuZ2l0XSAqCgpMZXRzIHBsb3QgdGhlIGVtcHR5IHNoYXBlZmlsZSBmb3IgU3VycmV5IEhlYXRoIHRvIHNlZSB3aGF0IHdlJ3JlIGFjdHVhbGx5IGxvb2tpbmcgYXQuCgoKYGBge3J9CiMjIFBsb3QgdGhlIFNoYXBlZmlsZSAKZ2dwbG90KCkgKyAKICBnZW9tX3NmKGRhdGEgPSBzaHBfZmlsZSkKYGBgCgoKQXMgeW91IGNhbiBzZWVtLCB3ZSBoYXZlIGEgbWFwIHRoYXQgZGV0YWlscyB0aGUgYm9yZGVycyAoaS5lLiBzaGFwZSkgYmV0d2VlbiBlYWNoIExTT0EgaW4gU3VycmV5LiAKClRoaXMgd29ya3Nob3AgaW5zdGVhZCBqb2lucyB0aGUgJ2NyaW1lJyBkYXRhdHNldCAoaW4gdGliYmxlIGZvcm1hdCkgdG8gdGhlIGFib3ZlIHNoYXBlZmlsZS4gT3VyIG5ld2x5IGNyZWF0ZWQgb2JqZWN0ICdzaHBfZmlsZScgaXMgaW4gZmFjdCBhIHNmIG9iamVjdCwgd2hpY2ggaXMgc2hvcnQgZm9yIGEgJ3NpbXBsZSBmZWF0dXJlIG9iamVjdCcuIFlvdSBjYW4gY2hlY2sgdGhpcyBieSB0eXBpbmcgKmNsYXNzKHNocF9maWxlKSouIAoKCmBgYHtyfQpjbGFzcyhzaHBfZmlsZSkKYGBgCgoKU28gaW4gdG90YWwsIHRoZSBzaGFwZWZpbGUgY29uc2l0cyBvZiA1IHZhcmlhYmxlcy4gVGhlIGZpcnN0IDQgdmFyaWFibGVzIGluZGljYXRlIGluZm9ybWF0aW9uIGFib3V0IHRoYXQgc3BlY2lmaWMgTFNPQSwgd2UgYXJlIGdpdmVuIHRoZSBuYW1lLCBMU09BIGNvZGUgYW5kIExTT0EgbmFtZS4gV2UgY2FuIGlnbm9yZSB0aGUgY29sdW1uICdsYWJlbCcgYXMgdGhpcyBpcyBqdXN0IGFub3RoZXIgcmVmZXJlbmNlIHBvaW50LgoKClRoZSBjb2x1bW4gSSB3YW50IHRvIGRyYXcgYXR0ZW50aW9uIHRvIGlzIHRoZSAnZ2VvbWV0cnkgY29sdW1uJyAKCmBgYHtyfQphdHRyaWJ1dGVzKHNocF9maWxlJGdlb21ldHJ5KQpgYGAKCgpUaGUgZ2VvbWV0cnkgY29sdW1uIGNhbiBiZSBzcGxpdCBpbnRvIHR3byBrZXkgc2VjdGlvbnM7IHRoZSBmZWF0dXJlIGFuZCB0aGUgZ2VvbWV0cnkgCiAgLSBUaGUgZmVhdHVyZSBpbiB0aGlzIGNhc2UgaXMgb3VyIHBvbHlnb24gbGV2ZWwgKHJlZmVyZW5jZWQgYnkgdGhlIG11bHRpcG9seWdvbikgd2hpY2ggaXMgaW4gZmFjdCBhICAqc2ltcGxlIGZlYXR1cmUgZ2VvbWV0ZXJ5IGxpc3QtIGNvbHVtbiAoc2ZjKSogCiAgLSBUaGUgZ2VvbWV0ZXJ5IGFyZSB0aGUgbnVtYmVycyB0aGF0IGZvbGxvdywgYW5kIG1vcmUgdGVjaG5pY2FsbHkga25vd24gYXMgYSAqJ3NpbXBsZSBmZWF0dXJlIGdlb21ldHJ5IChzZmcpKgoKVGhlIGNvbHVtbiBpbiB0aGUgc2YgZGF0YS5mcmFtZSB0aGF0IGNvbnRhaW5zIHRoZSBnZW9tZXRyaWVzIGlzIGEgbGlzdCwgb2YgY2xhc3Mgc2ZjLiBXZSBjYW4gcmV0cmlldmUgdGhlIGdlb21ldHJ5IGxpc3QtY29sdW1uIGluIHRoaXMgY2FzZSBieSB1c2luZyBzdF9nZW9tZXRyeS4gCgoKYGBge3IgdG8gdmlldyB0aGUgc2ZjIGFuZCBzZmd9CnN0X2dlb21ldHJ5KHNocF9maWxlKQpgYGAKCgoKTm93IHdlIGhhdmUgYSBiYXNpYyB1bmRlcnN0YW5kaW5nIG9mIHdoYXQgYSBzaGFwZWZpbGUgaXMgYW5kIGhvdyB3ZSBjYW4gaW1wb3J0IHRoZW0gaW50byByLCB0aGUgbmV4dCBzdGVwIGlzIHJ1biBzb21lIGRhdGEgbWFuaXB1bGF0aW9uIGFuZCBjcmVhdGUgc29tZSBuZXcgZGF0YWZyYW1lcyB0aGF0IGNhbiB3b3JrIHdpdGggdGhlIGZvcm1hdCBvZiBzaGFwZWZpbGVzLiAKCgoKIyMgR3JvdXAgdGhlIGNyaW1lcyBwZXIgbHNvYSAKClRoZSBvcmlnaW5hbCBjcmltZSBkYXRhIHNldCBjb250YWlucyB0aGUgaW5kaXZpZHVhbCBjb3VudCBvZiByZXBvcnRlZCBjcmltZSB0eXBlcyBhY3Jvc3MgTFNPQVMsIHRoZXJlZm9yZSB0aGUgTFNPQXMgYXJlIHJlcGVhdGVkIG11bHRpcGxlIHRpbWVzLiBUaGlzIGlzIGJlY2F1c2UgeW91IHdvdWxkIGV4cGVjdCB0byBzZWUgbXVsdGlwbGUgY3JpbWUgY291bnRzIGluIG9uZSBMU09BLgoKSW4gb3JkZXIgdG8gaGlnaGxpZ2h0IGhvdyBtYW55IGNyaW1lcyBoYXZlIG9jY3VycmVkIGluIGVhY2ggTFNPQSwgd2UgY2FuIGNvdW50IHRoZSBjcmltZXMgcGVyIExTT0EgYW5kIG9idGFpbmVkIGdyb3VwZWQgc3RhdGlzdGljcy4KCgpgYGB7cn0KY3JpbWVzX2dyb3VwZWRfYnlfbHNvYSA8LSBjcmltZSAlPiUKICBncm91cF9ieShsc29hX2NvZGUpICU+JQogIHN1bW1hcmlzZShjb3VudD1uKCkpCgpoZWFkKGNyaW1lc19ncm91cGVkX2J5X2xzb2EpCgpgYGAKCgoKCgojIyBNZXJnZSB0aGUgc2hhcGVmaWxlIHRvIHRoZSBjcmltZSBkYXRhc2V0CgpJbiBvdXIgbmV3IG9iamVjdCB5b3Ugd2lsbCBzZWUgdHdvIHZhcmlhYmxlcywgdGhlIExTT0EgYW5kIHRoZSBjb3VudCBvZiBjcmltZSBpbiBlYWNoIG9uZS4gIAoKV2UgY2FuIG5vdyBqb2luIHRoZSBTaGFwZWZpbGUgKHRoZSBnZW9zcGF0aWFsIHZlY3RvcikgYW5kIHRoZSBjcmltZXNfZ3JvdXBlZF9ieV9sb3NhICh0aGUgYWdncmVnYXRlZCBkYXRhKQoKVG8gam9pbiB0aGUgY3JpbWVzIHBlciBsc29hIHRvIHRoZSBzaGFwZWZpbGUgd2UgY2FuIHVzZSB0aGUgbGVmdF9qb2luIGZ1bmN0aW9uIHRoYXQgcmV0dXJucyBhbGwgdGhlIHJvd3Mgb2YgdGhlIHRhYmxlIG9uIHRoZSBsZWZ0IHNpZGUgb2YgdGhlIGpvaW4gYW5kIG1hdGNoaW5nIHJvd3MgZm9yIHRoZSB0YWJsZSBvbiB0aGUgcmlnaHQgc2lkZSBvZiBqb2luLgoKCmBgYHtyfQpzdXJyZXlfbHNvYSA8LSBsZWZ0X2pvaW4oc2hwX2ZpbGUsIGNyaW1lc19ncm91cGVkX2J5X2xzb2EsIGJ5ID0gYygibHNvYTIxY2QiID0gImxzb2FfY29kZSIpKQoKaGVhZChzdXJyZXlfbHNvYSkKCnN0X2dlb21ldHJ5X3R5cGUoc3VycmV5X2xzb2EpICAgICN2aWV3IHRoZSBnZW9tZXRlcnkgdHlwZSAKc3RfYmJveChzdXJyZXlfbHNvYSkgICAgICAgICAgICAgI29idGFpbnMgdGhlIG9iamVjdHMgdmFsdWUgYXMgc3BlY2lmaWMgdW5pdHMgCgoKI1RoZSBzcGF0aWFsIGV4dGVudCBvZiBhIHNoYXBlZmlsZSBvciBSIHNwYXRpYWwgb2JqZWN0IHJlcHJlc2VudHMgdGhlIGdlb2dyYXBoaWMg4oCcZWRnZeKAnSBvciBsb2NhdGlvbiB0aGF0IGlzIHRoZSAjZnVydGhlc3Qgbm9ydGgsIHNvdXRoIGVhc3QgYW5kIHdlc3QuIFRodXMgaXMgcmVwcmVzZW50cyB0aGUgb3ZlcmFsbCBnZW9ncmFwaGljIGNvdmVyYWdlIG9mIHRoZSBzcGF0aWFsIG9iamVjdC4KYGBgCgoKTm93IGxldHMgbWFwIHRoZSBuZXcgZGF0YSEKCmBgYHtyfQojbWFwIHRoZSBkYXRhCmdncGxvdCgpICsgCiAgYW5ub3RhdGlvbl9tYXBfdGlsZSgpICsgCiAgZ2VvbV9zZihkYXRhID0gc3VycmV5X2xzb2EsIGFlcyhmaWxsID0gY291bnQpLCBhbHBoYSA9IDAuNSkgKyAKICBzY2FsZV9maWxsX2dyYWRpZW50MihuYW1lID0iTnVtYmVyIG9mIGNyaW1lcyIpCgpgYGAKCgoKIyMgUGxvdHRpbmcgdmlhIHRoZSAndG1hcCcgcGFja2FnZQoKVGhlIHRtYXAgcGFja2FnZSBhbGxvd3MgeW91IHRwIGNyZWF0ZSB0aGVtYXRpYyBtYXBzLCB0aGUgc3ludGF4IGlzIHZlcnkgc2ltaWxhciB0byB0aGUgZ2dwbG90Mi4gRWFjaCBtYXAgY2FuIGJlIHBsb3QgYXMgYW4gaW1hZ2Ugb3IgYXMgYW4gaW50ZXJhY3RpdmUgbWFwIHZpYSB0aGUgKnRtYXBfbW9kZSgidmlldyIgLyAicGxvdCIgKSogZnVuY3Rpb24uIAoKCmBgYHtyfQp0bWFwX21vZGUoInZpZXciKQoKdG1fc2hhcGUoc3VycmV5X2xzb2EpICsgCiAgdG1fZmlsbCgiY291bnQiKSArIAogIHRtX2JvcmRlcnMoImdyZWVuIiwgbHdkID0gMC43LCBhbHBoYSA9IDAuNSkKICAjdG1fdGV4dCgibmFtZSIsIHNpemUgPSAiQVJFQSIsIGNvbCA9ICJibGFjayIpCiAgI3RtYXBfc3R5bGUoImNvbF9ibGluZCIpCmBgYAoKCgojIyMgQ2xhc3NpZmljYXRpb24gbWV0aG9kcwoKSG93IGNhbiB3ZSBiZXR0ZXIgdmlzdWFsaXNlIGNvdW50cz8gQ291bnQgZGF0YSBkb2VzIG5vdCBlcXVhbGx5IHJlcHJlc2VudCB0aGUgcG9wdWxhdGlvbiBkaXN0cmlidXRpb24gYXQgaGFuZCwgdG1hcHMgYWxsb3dzIHlvdSB0byBhbHRlciB0aGUgY2hhcmFjdGVyaXN0aWNzIG9mIHRoZWFtYXRpYyBtYXBzIHZpYSB0aGUgJ3N0eWxlcycgZnVuY3Rpb24uIFRoZSBkaWZmZXJlbnQgc3R5bGVzIHJlc3VsdCBpbiBkaWZmZXJlbnQgYmlubmluZyB0ZWNobmlxdWVzLiAgTm93LCB3aGVuIG1hcHBpbmcgcXVhbnRpdGlhdHZlIGRhdGEgc3VjaCBhcyBjcmltZSBjb3VudHMsIHR5cGljYWx5IHRoZSB2YXJpYWJsZXMgbmVlZGVkIHRvIGJlIHB1dCBpbnRvIHRvICdiaW5zJy4gQXMgc2VlbiBpbiB0aGUgcHJldmlvdXMgZXhhbXBsZSwgdGhlIGRlZmF1bHQgYmlubmluZyBhcHBsaWVkIHRvIGhpZ2hsaWdodCB0aGUgTFNPQXMgZ3JvdXBlZCBzdGFydGVkIGZyb20gMS0xMCwgMTEtMjAsIDIxLTIwLCAzMS00MCwgNDEtNTAgYW5kIDUxLTYwIGNyaW1lcy4KClRoZXNlIGJpbnMgd2VyZSBkZWNpZGVkIG9uIGF1dG9tYXRpY2FsbHksIGhvd2V2ZXIgd2UgY2FuIGRlZmluZSBtb3JlIGFjY3VyYXRlIGNsYXNzZXMgdGhhdCBiZXN0IHJlZmVsY3QgdGhlIGRpc3RyaWJ1dGlvbmFsIGNoYXJhY3RlciBvZiB0aGUgZGF0YSBzZXQuCgoKSW4gdGhpcyBleGFtcGxlIEkndmUgdXNlZCB0aGUgImttZWFucyIsICJqZW5rcyIgYW5kICJzZCIuCgotIGstbWVhbnMgaXMgYSBtZXRob2Qgb2YgdmVjdG9yIHF1YW50aXNhdGlvbiwgb3JpZ2luYWxseSBmcm9tIHNpZ25hbCBwcm9jZXNzaW5nLCB0aGF0IGFpbXMgdG8gcGFydGl0aW9uIG4gb2JzZXJ2YXRpb25zIGludG8gayBjbHVzdGVycyBpbiB3aGljaCBlYWNoIG9ic2VydmF0aW9uIGJlbG9uZ3MgdG8gdGhlIGNsdXN0ZXIgd2l0aCB0aGUgbmVhcmVzdCBtZWFuLCBzZXJ2aW5nIGFzIGEgcHJvdG90eXBlIG9mIHRoZSBjbHVzdGVyLgotIEplbmtzIChhbHNvIGtub3duIGFzIG5hdHVyYWwgYnJlYWtzLCBvciBnb29kbmVzcyBvZiBmaXQgdmFyaWFuY2UpIGNsYXNzaWZjYWl0b24gYWltcyB0byBhcnJhbmdlIGEgc2V0IG9mIHZhbHVlcyBpbnRvIG5hdHVyYWwgY2xhc3NlcywgdGhhdCBpcyB0aGUgbW9zdCBvcHRpbWFsIGNsYXNzIHJhbmdlIGZvdW5kIG5hdHVyYWxseS4gVGhpcyBtZXRob2QgbWluaW1pemVzIHRoZSB2YXJpYXRpb24gd2l0aGluIGVhY2ggcmFuZ2UsIHNvIHRoZSBhcmVhcyB3aXRoaW4gZWFjaCByYW5nZSBhcmUgYXMgY2xvc2UgYXMgcG9zc2libGUgaW4gdmFsdWUgdG8gZWFjaCBvdGhlci4gCi0gc2QgY2xhc3NpZmljYXRpb24gaXMgYSBzdGFuZGFyaXNlZCBtZWFzdXJlIG9mIG9ic2VydmF0aW9ucyBkZXZpYXRlZCBmcm9tIHRoZSBtZWFuLiBCeSBzaG93aW5nIHdoaWNoIHZhbHVlcyBhcmUgYWJvdmUgb3IgYmVsb3cgdGhlIG1lYW4sIHRoaXMgbWV0aG9kIGhlbHBzIHRvIHNob3cgd2hpY2ggbG9jYXRpb25zIGFyZSBhYm92ZSBvciBiZWxvdyBhbiBhdmVyYWdlIG1lYW4uCgoKCmBgYHtyfQoKYSA8LSB0bV9zaGFwZShzdXJyZXlfbHNvYSkgKyAKICB0bV9maWxsKCJjb3VudCIsIHN0eWxlID0gImttZWFucyIpICsgCiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuMykKCmIgPC0gdG1fc2hhcGUoc3VycmV5X2xzb2EpICsgCiAgdG1fZmlsbCgiY291bnQiLCBzdHlsZSA9ICJqZW5rcyIpICsgCiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuMykKCmMgPC0gdG1fc2hhcGUoc3VycmV5X2xzb2EpICsgCiAgdG1fZmlsbCgiY291bnQiLCBzdHlsZSA9ICJzZCIpICsgCiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuMykKCgojIyB0bWFwX2FycmFuZ2UKCnRtYXBfbW9kZSgicGxvdCIpCnRtYXBfYXJyYW5nZShhLCBiLCBjKQoKCmBgYAoKCgoKCiMjIFVzaW5nIGNhdGVnb3JpY2FsIHZhcmlhYmxlcyAodG1fZmFjZXRzKQoKSnVzdCBsaWtlIHRoZSB0bWFwX2FycmFuZ2UgZnVuY3Rpb24sIHRtYXBfZmFjZXRzIGFyZSB3YXkgdG8gcHJvZHVjZSBzaWRlLWJ5LXNpZGUgbWFwcyAoa25vd24gYXMgKnNtYWxsIG11bHRpcGxlcyopLiBJdCBpcyBzaW1pbGFyIHRvIHRoZSAnZmFjZXRfZ3JpZCcgZnVuY3Rpb24gaW4gZ2dwbG90MgoKRm9sbG93aW5nIHRoZSByZG9jdW1lbnRhdGlvbiBbaHR0cHM6Ly93d3cucmRvY3VtZW50YXRpb24ub3JnL3BhY2thZ2VzL3RtYXAvdmVyc2lvbnMvMy4zLTIvdG9waWNzL3RtX2ZhY2V0c10gIlNtYWxsIG11bHRpcGxlcyBjYW4gYmUgY3JlYXRlZCBpbiB0d28gd2F5czogMSkgYnkgc3BlY2lmeWluZyB0aGUgYnkgYXJndW1lbnQgd2l0aCBvbmUgb3IgdHdvIHZhcmlhYmxlIG5hbWVzLCBieSB3aGljaCB0aGUgZGF0YSBpcyBncm91cGVkLCAyKSBieSBzcGVjaWZ5aW5nIG11bHRpcGxlIHZhcmlhYmxlIG5hbWVzIGluIGFueSBvZiB0aGUgYWVzdGhldGljIGFyZ3VtZW50IG9mIHRoZSBsYXllciBmdW5jdGlvbnMgKGZvciBpbnN0YW5jZSwgdGhlIGFyZ3VtZW50IGNvbCBpbiB0bV9maWxsKS4iIAoKVHlwaWNhbGx5IHRtX2ZhY2V0cyBhcmUgZGVmaW5lZCBieSBhIGNhdGVnb3JpY2FsIHZhcmlhYmxlcy4gRm9yIGV4YW1wbGUgaW4gdGhpcyBleGFtcGxlLCBJIGFtIHVzaW5nIHRtX2ZhY2V0cygpIHRvIHNlcGVyYXRlIHRoZSBtYXAgaW50byBtdWx0aXBsZSBjb21wb25lbnRzIGJ5IGxzb2EgKFRoaXMgaXNudCd0IHRoZSBiZXN0IGV4YW1wbGUgb2YgYSBjYXRlZ29yaWNhbCB2YXJpYWJsZSwgYnV0IHNvbWV0aGluZyBsaWtlIHRoZSB1cmJhbiBvciBydXJhbCBsYW5kc2NhcGUsIG9yIGRlcHJpdmF0aW9uIGRlY2lsZSwgd291bGQgYmUgbW9yZSBvZiBpbnRlcmVzdCBpbiBjcmltaW5vbG9neSkuIFlvdSBjb3VsZCBmb3IgZXhhbXBsZSBkb3dubG9hZCB0aGUgMjAxMSBydXJhbC91cmJhbiBjbGFzc2lmaWNhdGlvbiBmcm9tIG9wZW4gZ2VvZ3JhcGh5IHBvcnRhbCBhbmQgam9pbiB0aGlzIHRvIG91ciAnc3VycmV5X2xzb2EnIHNmIG9iamVjdCAodXNpbmcgbGVmdF9qb2luKS4gCgpJZiB5b3UgYXJlIGludGVyZXN0ZWQgaW4gZG9pbmcgc28gdGhlIGRhdGFzZXQgY2FuIGJlIGZvdW5kIGhlcmU7CltodHRwczovL3d3dy5vbnMuZ292LnVrL21ldGhvZG9sb2d5L2dlb2dyYXBoeS9nZW9ncmFwaGljYWxwcm9kdWN0cy9ydXJhbHVyYmFuY2xhc3NpZmljYXRpb25zLzIwMTFydXJhbHVyYmFuY2xhc3NpZmljYXRpb25dCgoKCmBgYHtyfQp0bV9zaGFwZShzdXJyZXlfbHNvYSkgKwogIHRtX2ZpbGwoImNvdW50IiwKICAgICAgICAgIHN0eWxlID0gInF1YW50aWxlIiwKICAgICAgICAgIHBhbGV0dGUgPSAiQmx1ZXMiLAogICAgICAgICAgdGhyZXMucG9seSA9IDApICsgCiAgdG1fZmFjZXRzKGJ5PSJuYW1lIiwgCiAgICAgICAgICAgIGZyZWUuY29vcmRzPVRSVUUsIAogICAgICAgICAgICBkcm9wLnNoYXBlcz1UUlVFKSArCiAgdG1fbGF5b3V0KGxlZ2VuZC5zaG93ID0gRkFMU0UsCiAgICAgICAgICAgIHRpdGxlLnBvc2l0aW9uID0gYygiY2VudGVyIiwgImNlbnRlciIpLCAKICAgICAgICAgICAgdGl0bGUuc2l6ZSA9IDIwKSArCiAgdG1fYm9yZGVycyhhbHBoYSA9IDAuNSkKYGBgCgoKCgoKCiMjIE1hcCBMYXlvdXRzIC0gYWRkaXRpb25hbCBmZWF0dXJlcyBvZiB0bWFwIChvcHRpb25hbCB0YXNrKQoKIyMjIG1hcCBzdHlsZSAKCmBgYHtyfQp0bV9zaGFwZShzdXJyZXlfbHNvYSkgKyAKICB0bV9maWxsKCJjb3VudCIsIHN0eWxlID0gInNkIikgKyAKICB0bV9ib3JkZXJzKGFscGhhID0gMC4zKSArIAogIHRtYXBfc3R5bGUoImNvbF9ibGluZCIpCmBgYAoKIyMjIG1hcCBsZWdlbmRzCgpgYGB7cn0KdG1fc2hhcGUoc3VycmV5X2xzb2EpKwogIHRtX2ZpbGwoImNvdW50IiwgCiAgICAgICAgICBzdHlsZSA9ICJxdWFudGlsZSIsIAogICAgICAgICAgcGFsZXR0ZSA9ICJCbHVlcyIsIAogICAgICAgICAgbGVnZW5kLmhpc3QgPSBUUlVFLCAKICAgICAgICAgIGxlZ2VuZC5pcy5wb3J0cmFpdCA9IFRSVUUsCiAgICAgICAgICBsZWdlbmQuaGlzdC56ID0gMC4xKSArCiAgdG1fbGF5b3V0KGxlZ2VuZC5oZWlnaHQgPSAwLjQ1LCAKICAgICAgICAgICAgbGVnZW5kLndpZHRoID0gMC4zNSwKICAgICAgICAgICAgbGVnZW5kLm91dHNpZGUgPSBGQUxTRSwKICAgICAgICAgICAgbGVnZW5kLnBvc2l0aW9uID0gYygicmlnaHQiLCAiYm90dG9tIiksCiAgICAgICAgICAgIGZyYW1lID0gRkFMU0UpICsKICB0bV9ib3JkZXJzKGFscGhhID0gMC41KQpgYGAKCiMjIyBjb21wYXNzLCBzY2FsZSBiYXIgYW5kIGdyaWQKCmBgYHtyfQp0bV9zaGFwZShzdXJyZXlfbHNvYSkrCiAgdG1fZmlsbCgiY291bnQiLCAKICAgICAgICAgIHN0eWxlID0gInF1YW50aWxlIiwgCiAgICAgICAgICBwYWxldHRlID0gIkJsdWVzIiwgCiAgICAgICAgICBsZWdlbmQuaGlzdCA9IFRSVUUsIAogICAgICAgICAgbGVnZW5kLmlzLnBvcnRyYWl0ID0gVFJVRSwKICAgICAgICAgIGxlZ2VuZC5oaXN0LnogPSAwLjEpICsKICB0bV9sYXlvdXQobGVnZW5kLmhlaWdodCA9IDAuNDUsIAogICAgICAgICAgICBsZWdlbmQud2lkdGggPSAwLjM1LAogICAgICAgICAgICBsZWdlbmQub3V0c2lkZSA9IEZBTFNFLAogICAgICAgICAgICBsZWdlbmQucG9zaXRpb24gPSBjKCJyaWdodCIsICJib3R0b20iKSwKICAgICAgICAgICAgZnJhbWUgPSBGQUxTRSkgKwogIHRtX2JvcmRlcnMoYWxwaGEgPSAwLjUpICsKICB0bV9jb21wYXNzKHR5cGU9IjhzdGFyIiwgc2l6ZSA9IDIpICsgICAjY29tcGFzcyAKICB0bV9zY2FsZV9iYXIod2lkdGggPSAwLjE1KSArICAgICAgICAgICAjc2NhbGUgYmFyIAogIHRtX2dyaWQoKSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICNncmlkCgpgYGAKCgoKCgoKCgoKCgoKIyMgQWN0aXZpdHkgMgoKMS4gRXhwbG9yZSBzb21lIG9mIHRoZSBkaWZmZXJlbnQgY2xhc3NpZmljYXRpb24gbWV0aG9kcyBzdWNoIGFzICJiY2x1c3QiIGFuZCAiaGNsdXN0IiAgLSB3aGF0IGFyZSB0aGUgbWFpbiBkaWZmZXJlbmNlcz8gVG8gZ2V0IGhlbHAgb24gdGhlIGRpZmZlcmVudCBtZXRob2RzIGF2YWlsYWJsZSB1c2UgKj8/dG1hcC1wYWNrYWdlKiBvciBzZWFyY2ggaW4gdGhlIGhlbHAgdGFiIAoKMi4gQXNzaWduIHlvdXIgbmV3IGJjbHVzdCBhbmQgaGNsdXN0IGNsYXNzaWZpY2F0aW9uIG1hcHMgaW50byBzZXBhcmF0ZSBvYmplY3RzIChjYWxsIHRoZW0gImgiIGFuZCAiYiIgYW5kIHBsb3QgdGhlbSB0b2dldGhlciB1c2luZyB0bWFwX2FycmFuZ2UoKQoKCjMuIFBsb3QgYW4gaW50ZXJhY3RpdmUgbWFwIHVzaW5nIHRoZSAiYmNsdXN0IiBjbGFzc2lmaWNhdGlvbiBtZXRob2QgYnkgY2hhbmdpbmcgdGhlIGNvbW1hbmQgaW4gdGhlIHRtYXBfbW9kZSgpIGZ1bmN0aW9uIAoKICAgCmBgYHtyIHR5cGUgeW91ciBhbnN3ZXIgaGVyZX0KCiMxKQoKLi4uIDwtIHRtX3NoYXBlKC4uLi4uKSArIAogIHRtX2ZpbGwoIi4uLiIsIHN0eWxlID0gIi4uLi4iKSArIAogIHRtX2JvcmRlcnMoYWxwaGEgPSAwLjMpCgoKLi4uIDwtIHRtX3NoYXBlKC4uLi4uLi4uKSArIAogIHRtX2ZpbGwoIi4uLiIsIHN0eWxlID0gIi4uLi4uIikgKyAKICB0bV9ib3JkZXJzKGFscGhhID0gMC4zKQoKCiMyKSAKCnRtYXBfYXJyYW5nZSguLi4uLCAuLi4uKQoKCgojMykgCgp0bWFwX21vZGUoIi4uLi4iKQoKdG1fc2hhcGUoLi4uLi4pICsgCiAgdG1fZmlsbCguLi4uLiwgc3R5bGUgPSAuLi4uLikgKyAKICB0bV9ib3JkZXJzKGFscGhhID0gMC4zKQoKCgpgYGAKIAoKCgoKCgoKCgoKCgoKCgoKCg==</div>
 
 
 
@@ -1890,7 +2241,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("Preliminary Tasks.Rmd");
+  window.initializeSourceEmbed("Section_2_2024.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

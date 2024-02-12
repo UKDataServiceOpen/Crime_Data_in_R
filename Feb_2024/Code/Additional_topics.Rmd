@@ -1,12 +1,12 @@
 ---
 title: "Mapping Crime Data in R - Additional Topics"
 author: "Nadia Kennar, Research Associate with the UKDS"
-date: "8th March 2023"
+date: "16th of February 2024"
 output:
   html_document:
     df_print: paged
   html_notebook: default
-toc: yes
+toc: yes 
 
 ---
 
@@ -21,6 +21,7 @@ library(tidyr)
 library(readr)
 library(tibble)
 library(janitor)
+library(readxl)
 # for spatial data and gis
 library(sf)
 library(ggmap)

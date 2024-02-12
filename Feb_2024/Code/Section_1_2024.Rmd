@@ -1,7 +1,7 @@
 ---
 title: "Mapping Crime Data in R - Exploring Crime Data"
 author: "Nadia Kennar, Research Associate with the UKDS"
-date: "8th March 2023"
+date: "16th of February 2024"
 output:
   html_notebook: default
 toc: yes
@@ -30,6 +30,7 @@ library(tidyr)
 library(readr)
 library(tibble)
 library(janitor)
+library(readxl)
 # for spatial data and gis
 library(sf)
 library(ggmap)
@@ -60,7 +61,7 @@ Read in just the month of February 2022.
 #unzip(file.choose())
 
 library(readr)
-crime <- read_csv("~/Documents/Crime_R_Workshop/March_2023/Data/crime_data/2022-02/2022-02-surrey-street.csv") %>% janitor::clean_names()
+crime <- read_csv("~/Documents/Crime_R_Workshop/Feb_2024/Data/crime_data/2023-02/2023-02-surrey-street.csv") %>% janitor::clean_names()
 
 ```
 
@@ -106,7 +107,7 @@ counts = counts[order(counts, decreasing=T)]
 print(counts[1:10])
 ```
 
-Now we hava nice summarised table of all our crime counts. Lets go ahead and plot this to view this a bit better 
+Now we have a nice summarised table of all our crime counts. Lets go ahead and plot this to view this a bit better 
 
 ```{r}
 par(mar = c(5,10,1,1))
@@ -213,7 +214,6 @@ head(asb)
 ggplot() +
   annotation_map_tile() +
   geom_sf(data = asb)
-
 
 ```
 

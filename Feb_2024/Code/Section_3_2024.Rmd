@@ -1,12 +1,12 @@
 ---
 title: "Mapping Crime Data in R - Crime Rate vs Crime Count"
 author: "Nadia Kennar, Research Associate with the UKDS"
-date: "8th March 2023"
+date: "16th of February 2024"
 output:
   html_document:
     df_print: paged
   html_notebook: default
-toc: yes
+toc: yes 
 ---
 
 ```{r set up, include=FALSE}
@@ -31,6 +31,7 @@ library(tidyr)
 library(readr)
 library(tibble)
 library(janitor)
+library(readxl)
 # for spatial data and gis
 library(sf)
 library(ggmap)
@@ -68,8 +69,8 @@ So lets read in the data and use the clean_names() function again to lowercase a
 We are going to start with just the resident population which is the data set named 'res_count.xlsx'
 
 ```{r}
-library(readxl)
-residential_count <- read_excel("~/Documents/Crime_R_Workshop/March_2023/Data/census_data/res_count.xlsx") %>% clean_names() %>%
+
+residential_count <- read_excel("~/Documents/Crime_R_Workshop/Feb_2024/Data/census_data/res_count.xlsx") %>% clean_names() %>%
   rename(lsoa = e01030757, #rename the variables 
          name = surrey_heath_002a, 
          res_count = x330) 
@@ -149,31 +150,31 @@ The cartogram package allows to build cartograms in R. It requires a geospatial 
 ```{r}
 # library(cartogram)
 # 
-# #In our data set we have a variable “res_count_wrk” which refers to the total number of people in our LSOA 
-# cart <- cartogram_cont(surrey_lsoa, weight = "res_count") 
+# #In our data set we have a variable “res_count_wrk” which refers to the total number of people in our LSOA
+# cart <- cartogram_cont(surrey_lsoa, weight = "res_count")
 # 
 # 
-# ## simple plot 
-# ggplot(cart) + 
+# ## simple plot
+# ggplot(cart) +
 #   geom_sf()
 # 
 # 
-# ## fill with our count variable 
-# ggplot(cart) + 
+# ## fill with our count variable
+# ggplot(cart) +
 #   geom_sf(aes(fill = pop_count_wrk))
 # 
 # 
-# ## add in some aesthetics 
-# ggplot(cart) + 
-#   geom_sf(aes(fill = pop_count_wrk), 
-#           color = "gray50", 
-#           linetype = 1, 
-#           lwd = 0.35) + 
-#   scale_fill_gradientn(colours = heat.colors(n =10, 
-#                                             alpha = 0.5, 
-#                                             rev = TRUE)) + 
-#   theme_gray() + 
-#   labs(title = "Surrey Heath: Population by LSOA", 
+# ## add in some aesthetics
+# ggplot(cart) +
+#   geom_sf(aes(fill = pop_count_wrk),
+#           color = "gray50",
+#           linetype = 1,
+#           lwd = 0.35) +
+#   scale_fill_gradientn(colours = heat.colors(n =10,
+#                                             alpha = 0.5,
+#                                             rev = TRUE)) +
+#   theme_gray() +
+#   labs(title = "Surrey Heath: Population by LSOA",
 #        subtitle = "August 2020")
 # ```
 ```
@@ -183,21 +184,21 @@ The cartogram package allows to build cartograms in R. It requires a geospatial 
 
 # Activity 3
 
-We have succesfully mapped theresidential population, now lets do the same with the variable workday (economic activity). First step is to read and clean the data as seen here:
+We have successfully mapped the residential population, now lets do the same with the variable workday (economic activity). First step is to read and clean the data as seen here:
 
 
 ```{r}
-workday_count <- read_excel("~/Documents/Crime_R_Workshop/Crime_Data_in_R/March_2023/Data/census_data/work_count.xlsx") %>% clean_names() %>%
+
+workday_count <- read_excel("~/Documents/Crime_R_Workshop/Feb_2024/Data/census_data/work_count.xlsx") %>% clean_names() %>%
   rename(lsoa = e01030757, #rename the variables 
          name = surrey_heath_002a, 
          work_count = x330) 
 
-  
 head(workday_count)  
 ```
 
 
-And then remember you need to join this to our shapefile by using the left join function.
+And then remember you need to join this to our shapefile by using the left_join function.
 
 ```{r}
 surrey_lsoa <- left_join(surrey_lsoa, workday_count, by = c("lsoa21cd"="lsoa"))

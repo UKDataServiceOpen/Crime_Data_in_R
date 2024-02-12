@@ -1,7 +1,7 @@
 ---
 title: "Mapping Crime Data in R - Shapefiles"
 author: "Nadia Kennar, Research Associate with the UKDS"
-date: "8th March 2023"
+date: "16th of February 2024"
 output:
   html_notebook: default
 toc: yes
@@ -27,6 +27,7 @@ library(tidyr)
 library(readr)
 library(tibble)
 library(janitor)
+library(readxl)
 # for spatial data and gis
 library(sf)
 library(ggmap)
@@ -63,7 +64,9 @@ I collected my shapefile data via the UKDS Census Support *(https://borders.ukda
 ## Read in the Shapefile for 'Surrey Heath' 
 
 ```{r}
-shp_file <- sf::st_read("~/Documents/Crime_R_Workshop/Crime_Data_in_R/March_2023/Data/Shapefile/england_lsoa_2021.shp")
+shp_file <- sf::st_read("~/Documents/Crime_R_Workshop/Feb_2024/Data/shapefile/england_lsoa_2021.shp")
+
+
 ```
 
 You can also use the head() function in shapefiles!

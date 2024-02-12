@@ -1,14 +1,14 @@
 ---
-title: "Mapping Crime Data in R - Code and Solutions from Sections 1-3"
+title: "Mapping Crime Data in R - Code and Solutions"
 author: "Nadia Kennar, Research Associate with the UKDS"
-date: "8th March 2023"
+date: "16th of February 2024"
 output:
   html_document:
     df_print: paged
   html_notebook: default
 toc: yes
 
----
+--- 
 
 ## Load Packages
 
@@ -21,6 +21,7 @@ library(tidyr)
 library(readr)
 library(tibble)
 library(janitor)
+library(readxl)
 # for spatial data and gis
 library(sf)
 library(ggmap)

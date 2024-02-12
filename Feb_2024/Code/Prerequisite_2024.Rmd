@@ -1,10 +1,10 @@
 ---
 title: "Mapping Crime Data in R - Preliminary Tasks"
 author: "Nadia Kennar, Research Associate with the UKDS"
-date: "8th March 2023"
+date: "16th of February 2024"
 output:
   html_notebook: default
-toc: yes
+toc: yes 
 ---
 
 
@@ -61,8 +61,10 @@ install.packages("leaflet")
 install.packages("RColorBrewer")
 install.packages("tmap")
 install.packages("cartogram")
+```
 
 
+```{r, include=FALSE}
 ## Load packages
 
 # for data reading/manipulation 
@@ -71,6 +73,7 @@ library(tidyr)
 library(readr)
 library(tibble)
 library(janitor)
+library(readxl)
 # for spatial data and gis
 library(sf)
 library(ggmap)
