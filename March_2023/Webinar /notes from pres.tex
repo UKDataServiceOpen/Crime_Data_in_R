@@ -1,0 +1,1184 @@
+\documentclass[12pt]{article}
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\begin{document}
+Slide breakdown
+
+\subsection{slides 1}
+
+All introductory 
+
+	Presentation; 
+- Introduction to GIS and Spatial Data 
+''This presentation will be treated as a recap to the main topics and issues involved with GIS and mapping data, it isn't going to provide a huge array of information but will detail what is necessary in order to understanding the following code demo, that specifically demonstrates how to map crime data"
+- There'll also be some interactive acivities throughout -
+- Break
+
+
+\subsection(slide 2 - upcoming events)
+
+Talk about the upcoming talks etc 
+
+- How to be a CSS=  This free workshop is an introduction to computational social science. It offers attendees a chance to understand and discuss what computational social science is, what it is good for, how to become a computational social scientist, and the basic steps to follow in an ideal computational social science research project.
+
+The workshop intersperses instruction with discussion and gives participants the chance to develop a research project idea through several steps.
+
+
+
+\subsection(slide 3 - interaction in this workshop)
+
+ 
+
+
+\subection(slide 4 +5 - testing mentimeter )
+
+Testing mentimeter
+
+
+
+\subsection (slide 6)
+
+trouble shooting
+
+
+
+\subsection (slide 7 + 8)
+
+Day 1: 
+What is GIS
+Spatial Data vs Non-Spatial Data 
+Different types of maps (reference vs thematic)
+Projection Methods and Coordinate Reference Systems
+Challenges of Mapping Crime Data
+
+
+Day2: 
+Code Demo: 
+Topic 1 – Intro to spatial data
+Topic 2 – Shapefiles 
+Topic 3 – Combining census data (crime rate vs crime count)
+Extra Topic – Interactive maps via Leaflet Package
+
+
+
+Just to clarify, the topics covered in this workshop are only introductory but they will help to understand the code demo ran in the second half. Frankly, it'd be impossible to cover every topic on GIS/Spatial Data in such a short presentation, but of course there are loads of readings online that expand the content provided in these slides
+
+
+\subsection{what is GIS}
+
+Main Topics 
+
+1) GIS 
+
+GIS, or geographical information systems, are a theoretical framework that allows for the creation and analysis of spatial and geographical data. 
+It can be viewed as an abstract platform that integrates data onto a map through various methods.
+GIS is present in virtually every filed and every organisation; its a way to share information and to solve complex problems around the world. The biggest bennefit allowing for trends and patterns to be studied visually, which provides a new form of analysis 
+
+Quick history of GIS;
+- 1960s by a pionner named Roger Tomlinson's, he was commissioned by the Canadian government to create a useable and efficent inventory of its natural resources. 
+- He tried various manual methods for overlaying various environmental, cultural, and economic variables, but all were too costly. He helped to create automated computing. He was known as 'the father of GIS' where this
+- From there, we have researcheres such as Laura and Jack Dangermond who develoed the 'Environmental Systems Research Institute' also known as ESRI, which is software developed for mapping and spatial analytics 
+
+
+\subsection(table 1 
+
+It’s important to note that most datasets you will encounter in your lifetime can all be assigned a spatial location whether on the earth’s surface or within some arbitrary coordinate system (such as a soccer field or a gridded petri dish). So the question you need to ask your self is “does it need to be analyzed in a GIS environment?”
+
+Lets look an example.....imagine you are interested in a) identify the ten cities with the highest average income, 
+then all we need is a simple table listing. 
+
+However,  if you are interested in b) ..... then we kinda need more information, specifically about the shape of the country and the geographical location 
+
+
+\subsection(.table 2 
+
+maybe something like this 
+
+
+
+
+\subsection(cont...)
+
+
+Geographic information contains either an explicit geographic reference such as a latitude and
+longitude or national grid coordinate, or an implicit reference such as an address, postal code,
+census tract name, forest stand identifier, or road name. 
+
+An automated process called geocoding is used to create explicit geographic references (multiple locations) from implicit references (descriptions such as addresses). These geographic references allow you to locate features such
+as a business or forest stand and events such as an earthquake on the Earth's surface for analysis.
+
+for crime data,  an attribute might include who/where the call was received or just the type of crime type etc 
+
+
+
+\subsection(Software)
+
+There are various softwares available; 
+- Spatial data analysis, geovisualization, spatial autocorrelation and spatial modeling. It runs on different versions of Windows, Mac OS, and Linux.
+- However, this workshop uses R, and its IDE RStudios due to the 
+	- increasing amount of packages that have become available for spatial analysis and mapping 
+       -Additionnally, R has an analytical tool has been increasing over the last decade, and I support its promotion
+
+
+.....
+
+ArcGIS
+Pros:
+
+Comprehensive Suite: Offers a wide range of spatial analysis tools, including advanced modeling, geostatistics, and spatial data management.
+User-friendly Interface: Designed with an intuitive GUI that makes it accessible for users of all levels.
+Integration and Support: Provides extensive documentation, tutorials, and community support. Also integrates well with other ESRI products and services.
+Cons:
+
+Cost: One of the more expensive options for GIS software, which might not be feasible for individuals or small organizations.
+Resource Intensive: Can require a significant amount of system resources, especially for complex analyses.
+Closed Source: Limits user customization and extension compared to open-source alternatives.
+GeoDa
+Pros:
+
+Ease of Use: Designed to be user-friendly, making it suitable for those new to spatial analysis.
+Focus on Spatial Data Exploration: Excellent for exploratory spatial data analysis (ESDA) with tools for visualization and basic statistical analysis.
+Free and Open Source: Accessible without cost, and allows for community contributions and modifications.
+Cons:
+
+Limited Advanced Features: Not as feature-rich as some other GIS software for advanced spatial analysis or modeling.
+Support and Resources: While there is some documentation, it may not be as extensive as that for larger platforms like ArcGIS.
+FME (Feature Manipulation Engine)
+Pros:
+
+Data Integration: Specializes in integrating and transforming spatial data between different formats without losing integrity.
+Automation: Offers powerful tools for automating spatial data workflows, reducing manual processing time.
+User Support: Strong customer support and a wide range of training materials.
+Cons:
+
+Cost: Commercial software that requires a license, which may be expensive for some users.
+Learning Curve: While it provides a graphical interface for designing workflows, mastering its full capabilities can take time.
+R
+Pros:
+
+Advanced Statistical Analysis: Offers a wide range of packages for statistical modeling and analysis, making it powerful for data science applications.
+Free and Open Source: No cost to use and allows for extensive customization and extension by users.
+Large Community: Benefits from a vast community of users and developers, providing numerous packages and resources for spatial analysis.
+Cons:
+
+Steep Learning Curve: Requires knowledge of R programming, which can be daunting for those without a coding background.
+Performance: For very large datasets, some operations may be slower compared to software specifically optimized for spatial data.
+Python
+Pros:
+
+Versatility: Widely used in various domains beyond GIS, making skills in Python highly transferable.
+Strong Libraries: Libraries like GeoPandas, Shapely, and Pyproj make it powerful for spatial data manipulation and analysis.
+Large Community: Benefits from a vast ecosystem and community support, with extensive documentation and resources.
+Cons:
+
+Programming Required: Requires knowledge of Python programming, which can be a barrier for non-programmers.
+Integration: While it integrates well with other systems and software, setting up an environment with all necessary libraries can sometimes be complex for beginners.
+Each of these tools has its own set of strengths and weaknesses, and the best choice depends on the specific needs of the project, the user's budget, and their comfort level with programming or GUIs.
+
+
+\subsection(what software do you use?)
+
+Menti 
+
+
+\subsection(How is GIS used?) 
+
+Identify problems
+Monitor change 
+Manage and respond to events
+Perform forecasting
+Set priorities 
+Understand trends 
+
+
+
+\subseection(Redlining) 
+
+ Identify problems
+	- One example for identify problems,  as addressed by Esri,  was how GIS addresses the inequality of urban renewal.  Through the use of redlined maps
+	- in 1936, there was a company called HOLC which was a home owners loan company. They hired reak estate accessors to create color coded security maps - these maps used a rating system to assign grades to neighborhoods reflecting their "residential security
+	- basically,  it shows which neighbourhoods are more risky and therefore less likely for banks to own 
+	- now back then, you can imagine who was making these maps, probally older white males,  more establised and very much opiniated 
+	- green = upper class
+	-bllue = white collar class 
+	- yellow = working class
+	- red = lower-class.  These areas were actually marked as 'hazardous' as they were foreign born people,  lower class white and black people.  And this is where the term 'redlining' comes from 
+	
+	
+	So Lenders used the maps to determine which neighborhoods would be safest for financial investment, but these assumptions were based solely on neighborhood descriptions, not information about individual borrowers.
+	
+	So these maps were already upholding racist policeis/systems etc
+	
+	So now with the advancement of GIS analysis and new datasets,  they were able to uncover relationships between redlined areas and environmental conditions such as tree coverage, temperature, infrastructure, and topography.
+	
+	The  Digital Scholarship Lab  at the University of Richmond performed a text analysis on the keywords in these HOLC forms. Researchers conducted their analysis by transcribing primary source documents, like the one above, into a database. Using the transcribed text, they were able to make the connection between environmental terms and their relationship to favorable or less favorable grade designations. Thanks to new advances in high-resolution datasets, we can thoroughly examine the environmental legacy of redlining on neighborhoods. 
+	
+	Now im going to take you through the rest of the list addressed by ESRI,  but we'll hone this in abit and look at how GIS works in special regards to crime data. 
+
+
+\subsection(crime questions)
+
+Question 1)  For example, if
+individuals want to use crime maps to safeguard their personal
+safety – for example by avoiding areas with a high level of
+street robberies – then clearly a geographical representation of
+crime would be appropriate.
+
+
+Question 2) Several theories help explain why crime occurs in some places and not others. 
+  	Routine Activity Theory
+	Situational Crime Prevention Theory
+	Broken Windows Theory
+	Crime Opportunity Theory
+	Social Disorganization Theory
+	Crime Pattern Theory - Crime Pattern Theory integrates crime within a geographic context that demonstrates how the environments people live in and pass through influence criminality. The theory specifically focuses on places and the lack of social control or other measures of guardianship that are informally needed to control crime. For example, a suburban neighborhood can become a hot spot for burglaries because some homes have inadequate protection and nobody home to guard the property.
+
+Question 3) In other words, what is it about one specific place that convinces an offender to commit a crime there, over an alternate location? 
+
+so there a few reasons offence that affect how far a offender travels 
+- The first being offence type,. So one interesting bit of research done by Ackerman and Rossmo (2015) found that in general, violent crimes had shorter median distance to crimes than property crimes (4.2 miles and 5.7 miles, respectively) 
+
+- also another reason is the age of the offender.  In general, adolescent offenders travel shorter distances compared to older offenders 
+
+- gender of offender. So some research has shown females trabel further than males offenders for property crimes, while others have shown the opposite - there isn;t actually a clear trend, but rather age was a more consistent finding 
+
+- and there's things like neighbothood affluence and target sutiability 
+
+Question 4) So by comparing the actual distribution of crime, and the level of stop and search we can start to question the necessity of stop and search.  Is it a tool of crime reduction or crime detection? Or you know start to question police powers etc. 
+
+
+
+\subsection (reference vs thematic maps)
+
+GIS are known to produce two broad types of maps; reference and thematic maps:
+
+Read slides
+
+
+\subesction(image of reference vs thematic)
+
+- Reference maps highlight natural patterns or synthetic features including the positioning and heights of mountains or the layout of bus routes. This type of map is simply referencinig what exists in our physical environment
+
+- Whereas thematic maps highlight spatial relationships. Thematic mapping is how we map a particular theme to a geographic area. It tells us a story about a place and is commonly used to map subjects such as climate issues, population densities or health issues.
+
+
+\subsection (con.....)
+
+Sometimes the differences between reference and thematic maps can become confusing, so lets have a look at an example
+/
+
+\subsection (Tube MAP example 1)
+
+Lets have a look at the tube maps in london as a tool to predict life expectancy. 
+
+'Lives on the line' - 
+Most government statistics are mapped according to official geographical units such as wards or lower super output areas. Whilst such units are essential for data analysis and making decisions about, for example, government spending, they are hard for many people to relate to and they don’t particularly stand out on a map. This is why we tried a new method back in July to show life expectancy statistics in a fresh light by mapping them on to London Tube stations. 
+
+
+\subsection (Tube MAP example 2)
+
+
+one might think they are reference, or one might think they are thematic (becausee they are mapping a particular theme to a geographic area) 
+
+If you'd like to head over to Mentimeter to participate in the quiz, then pop in the code shown at the top of the screen - Julia can also pop that in the chat 
+
+
+\subsection (MM - road networks )
+
+1) Scenario One:  Accident analysis – visualising road networks to improve road safety measures (thematic)
+
+You can break this scenario down into two aspects; At first glance - this might be said to be a type of reference map, as we are pinpointing existing road networks onto a map. 
+
+However, this might be said to be a type of thematic map as we are studying the existing road networks to improve safety measures whcih can be seen as a type of accident analysis. 
+
+Might be the introduction of speed signs or zebra crossings outsides schools or residential areas due to reports of accidents/dangerous driving i.e. we are studying spatially the relationship between road networks and accidents, we are mapping a particular theme to a geogrpahic area 
+
+
+\subsection (MM - earths surface)
+
+Toppgrahic map - The visualisation of the earths surface, showing it's elevation (reference).  Topographic maps refer to a graphical representation of the three-dimensional configuration of the surface of the Earth. In short, it is simiply describing where the earths surface is elevated. These maps are normally represented by contour lines 
+
+Arugably, you might also see this a type of reference map. For example, research has suggested that studynig a topographic map of is a great way to learn how to match terrain features with the contour lines on a map. Such as the steepness of the terrain, the shape of the terrain or whether above or below sea level . So in this instance you might intepret that we are studying spatially the relationship of contour lines to different features of the earth 
+
+So, if you answered any of the options that you can consider your self to be correct - 
+
+
+Either way the answer is open to debate - It’s the difference between mapping places and mapping data.
+
+
+
+\subsection(MM - bird species ) 
+
+Creating a map that shows the location of different species of birds in a particular area is an example of a thematic map. This type of map is used to show the spatial distribution of a particular phenomenon, in this case the distribution of different bird species.
+
+
+\subsection (MM - navigation tools)
+
+
+Immedietely you might assume this is an obvious type of reference map, as it highlights the important physical features needed for travel such as bus routes, walking routes, cycle lanes etc 
+
+However, yes reference maps portray a basic set of features such as coastlines, terrain and transport routes, but can we say that an app that plans your travel is a type of reference map? It uses an AI alograthim to get you to one place to another, normally choosing you the fatest or cheapesr route? So can we call this a thematic map instead since it is overlaying information on a base map? 
+
+
+'Anaolgue vs digital/electronic : Roger Thomilson's, the father of gis, and is automated computing system, it draws importance to analougue vs digitial maps and there place that they have in GIS. 
+
+Recently researchers consider Navigation tools to be fundementally different from both reference and thematic maps, which kinda opens debate for a third category. But it could be argued that all maps are navigational, depending on how you use them - the difference is that a digital map, one that is specfically interactive, whereas an anologue is not. But this links us back to the father of gis, he couldn't overlay his data on an anologue map so moved towards computation 
+
+One main difference betwween referennce and thematic is that thematic maps are more interactive, which is why navigation tools might be considered to be a type of thematic map' 
+
+
+
+
+\subsection (To Sum up )
+
+What can we sum up? 
+
+- All though maps fallls broadly into two categories, there are ways in which these types of map overlap or share similarities 
+- Almost every thematic maps is also a reference map, but not every reference map is a thematic map 
+- The decision is up to you, it is not entirely neccesay to define these in your work but it is important to now what type of map you want to make as these can be affected by the data you have
+
+
+\subsection (MM - any other examples)
+
+Some examples include: EXPAND SECTION
+
+Crime (hot-spot) - analysing where crimes are most prevalent in order to reduce crime or introduce/amend policy (thematic).
+referennce maps; 
+- Road Maps, Topographical Maps, Time-Zone Maps, World Maps 
+
+thematic maps; 
+- Heat Maps, Choropleth Maps, Cartograms, Dasymmetric Maps, Flow Maps
+
+
+
+
+\subsection (What is spatial data)
+
+
+2) Spatial Data 
+
+Representation of the real world.  Attempts to represent the physical features of the data in an accurate way
+
+Spatial data, or geospatial data, is a data frame that contains information about a specific location, which can be analysed to better understand that location. GIS enables this spatial data to be processed and analysed.
+
+There are typically two types of spatial data:
+
+\subsection(vector vs raster)
+
+Raster and vector are two very different but common data formats used to store geospatial data. ..
+
+- Vector data is the most common form and consists of points, lines and polygons.
+     - Points are a pair of coordinates (i.e. a location of a missing person call)		.
+     - Lines extend the points and include at least 2 points (i.e. the street that missing person call was received).
+     - Polygons extend the lines and include 3 or more points (i.e. the area, city or ward that street belongs in).
+
+Raster data normally refers to imagery or satellite data that are formed from a grid of pixels.
+
+A raster map is basically a 'dumb' electronic map image made up of a set number of pixels. You can't manipulate the information, move a place name around for example, and when you zoom into the map, it quickly becomes pixellated and unreadable, just like a photo taken on a digital camera.
+
+Rasters are well suited for representing data that changes continuously across a landscape (surface). They provide an effective method of storing the continuity as a surface. They also provide a regularly spaced representation of surfaces.
+
+So yeah they're better for continous data,  things like temperature or elevation (each pixel can represent a different value,  attribute,  within the overall range of values for the data)
+
+
+\subsection (GIS Data management) 
+
+In the GIS world, you will encounter many different GIS file formats. Some file formats are unique to specific GIS applications, others are universal. For this course, we will focus on a subset of spatial data file formats: shapefiles for vector data, Imagine and GeoTiff files for rasters and file geodatabases and geopackages for both vector and raster data.
+
+A shapefile is a file-based data format native to ArcView 3.x software (a much older version of ArcMap). Conceptually, a shapefile is a feature class–it stores a collection of features that have the same geometry type (point, line, or polygon), the same attributes, and a common spatial extent. A feature class is a collection of geographic features that share the same geometry type (such as point, line, or polygon) and the same attribute fields for a common area. Streets, well points, parcels, soil types, and census tracts are examples of feature classes.
+
+Despite what its name may imply, a “single” shapefile is actually composed of at least three files, and as many as eight. Each file that makes up a “shapefile” has a common filename but different extension type.
+
+The list of files that define a “shapefile” are shown in the following table. Note that each file has a specific role in defining a shapefile
+
+Other file formats for vector data exist such as a 'file geodatabase'. These are a more complex data strucutre and constists of what is known as a .gfb folder, it allows you to store multiple feature classes and it allows users to define rules that govern the way different featre classes relate to one one another. 
+- There are also geopackaes, which happen to store all forms, so thats the coordinate value, meta data, attribute table, projections etx into one single file 
+
+For raster data file formats, the most common file formates include GeoTiff and Imagine file formates. But you can slos store raster date into geodatabse files, this allows users to created 'stiched' images from multiple image files
+
+
+\subsectiom (managing GIS fies in R) 
+
+When managing GIS (Geographic Information System) files in R, several key points and packages are essential for handling spatial data effectively.  it's essential to understand how to import, manipulate, and visualize spatial data effectively. Here's a concise overview tailored for a slide presentation:
+
+
+Vector data provides us with a precise way to represent spatial features as points, lines, and polygons. 
+
+However, while vector data excels in representing the geometry of spatial features, it introduces us to a complex interplay between spatial accuracy and spatial analysis. This interplay is where we encounter the Modifiable Areal Unit Problem (MAUP), a fundamental challenge in spatial analysis that affects our interpretation of spatial data."
+
+
+
+\subsection(MAUP)
+
+In short, the same basic data yield different results when aggregated in different ways. This applies where data are aggrefated to areal units which could take many forms e.g. tract, postcode, stree address, local governmant units, etc 
+
+There are two aspects to understanding MAUP, the scaling effect and the zoning effect (or the aggregation effect as defined by Openshaw)
+
+Scale Effect: This occurs when the size of the spatial units (e.g., census tracts, counties, states) used in an analysis influences the results. Generally, as the size of the spatial units increases, the variability within each unit decreases. This can lead to different conclusions about patterns and relationships within the data at different scales. For example, an analysis of crime rates by neighborhoods might show a different pattern compared to an analysis of the same data by city-wide districts.
+
+Zone/Aggregation Effect: This effect is observed when the way spatial units are aggregated (how boundaries are drawn) changes the outcome of the analysis. Even if the scale remains constant, altering the boundaries of the units can lead to different interpretations. For instance, grouping neighborhoods into districts in various ways can reveal or hide different spatial patterns of a phenomenon like poverty or disease
+
+
+\subsection (MAUP example)
+
+Scale effcts: we see a sort of similair thing with the scale  effect, when aggregating to a large grain spatial region or much finer spatialregion. We see a different picture with whats ha[pening in the datset based on which scale we are doing the aggegation. 
+
+The first image demonstrates how changing the scale from small to large spatial units affects the perception of data variability. It contrasts a detailed view of an area divided into many tiny squares, each representing a different level of a phenomenon (like population density), against a simplified view where the area is represented by a few large squares. Each large square averages the variability of the tiny squares it replaces, showing less apparent variability and a more homogenized view. This visualizes how analysis outcomes can vary dramatically with the scale of observation.
+
+(what scale are we doing this aggregation)
+
+Zone effect: at a given scale,  it is changing the boundaries i.e. colour code these regions depending on how many dotes are in them
+
+The second image illustrates the aggregation effect by showing a region first divided into several irregularly shaped areas (each representing different neighborhoods with varying levels of a phenomenon like crime rates) and then aggregated into larger, differently shaped districts. Each new district averages the characteristics of the neighborhoods it combines, resulting in a generalized view that masks finer, neighborhood-level variations. This exemplifies how the method of aggregating spatial units can influence the interpretation of data patterns, potentially obscuring important local details.
+
+--- gerrymandering
+
+The zonal effect can occur by accident or on purpose. For example, this can occur when a political party wants to favor an election. As an example in the diagram above, you can manipulate any of the political boundaries below to favor either blue or red. This is how to rig an election so it’s in favor of one political party.
+
+"The Modifiable Areal Unit Problem (MAUP) is a phenomenon that reminds us of the importance of scale and zoning in spatial analysis. It occurs because the results of our analysis can vary significantly based on the size and shape of the spatial units we use. Just as vector data allows us to capture the intricate details of the earth's surface, it also exposes us to the complexities of choosing the 'right' scale for our analysis. 
+
+\subsection (mentimeter 1)
+
+Question: True or False: The scale effect in MAUP refers to changes in statistical results caused by the size of the geographical units used in the analysis. 
+
+Answer TRUE: The scale effect refers to changes in statistical results caused by the size of the geographical units used in the analysis.
+
+so yeah, using finer analysis units will inevitably lead to different analysis results. and this is because...the scale effect causes variation in statistical results between different levels of aggregation (radial distance).
+
+\subsection (mentimeter 2)
+
+Question: Which of the following best describes the aggregation effect in MAUP?
+
+A) It refers to the impact of data collection methods on analysis outcomes.
+B) It describes how the arrangement and shape of spatial units can alter statistical results.
+C) It is the effect of atmospheric conditions on aerial unit measurements.
+D) It denotes the influence of unit size on data storage requirements.
+
+
+B) It describes how the arrangement and shape of spatial units can alter statistical results.
+
+The zone effect is observed when the scale of analysis is fixed, but the shape of the aggregation units is changed. For example, analysis using data aggregated into one-mile grid cells will differ from analysis using one-mile hexagon cells. The zone effect is a problem because it is an analysis, at least in part, of the aggregation scheme rather than the data itself.
+
+\subsection (mentimeter 3)
+
+Question: What are some potential implications of ignoring the MAUP in crime spatial analysis?  spatial 
+
+Answer: Expected words might include "misinterpretation," "bias," "data distortion," "policy errors," etc.
+
+
+- The Modifiable Areal Unit Problem (MAUP) affects crime rate analysis, by changing the perceived crime hotspots depending on the area size used
+
+Misinterpretation of Crime Patterns and Trends:
+Ignoring MAUP can lead to incorrect interpretations of crime patterns and trends. For example, what appears to be a crime hotspot in an analysis at one scale may not be identified as such when the analysis is conducted at a different scale or with differently aggregated spatial units. This can mislead law enforcement and policymakers about where resources are most needed.
+
+Ineffective Resource Allocation:
+Law enforcement agencies rely on spatial analysis of crime to allocate resources efficiently. If MAUP is not considered, there is a risk of misallocating these resources—either by focusing too much on areas that appear to have high crime rates due to aggregation effects or by overlooking areas that actually need more attention but are masked by the scale of analysis.
+
+Impact on Policy Development and Evaluation:
+Policies aimed at reducing crime rates often depend on accurate spatial analysis. Ignoring MAUP can lead to the development of policies based on flawed interpretations of crime data, potentially resulting in ineffective or misdirected crime prevention strategies. Furthermore, it can complicate the evaluation of policy effectiveness over time and across different regions.
+
+Public Perception and Community Relations:
+Public perception of safety and crime can be significantly influenced by how crime data is presented. If MAUP is ignored, misleading conclusions about crime rates in certain areas can exacerbate fears or stigmatize communities unnecessarily. This can affect community relations with law enforcement and undermine efforts to engage the community in crime prevention.
+
+Research and Academic Implications:
+For academics and researchers studying crime patterns, ignoring MAUP can lead to the publication of studies with findings that may not be replicable or valid across different scales or methods of aggregation. This undermines the scientific rigor of crime research and can misguide future studies.
+
+Comparative Analysis Challenges:
+Ignoring MAUP complicates the comparative analysis of crime across different jurisdictions or over time. Differences in how spatial units are defined or aggregated can make it difficult to accurately compare crime rates or identify trends, potentially leading to incorrect conclusions about the effectiveness of crime reduction strategies.
+
+Ethical Considerations:
+Ethical considerations arise when the implications of ignoring MAUP lead to policies or actions that disproportionately affect certain communities. It's essential to consider the fairness and justice of crime prevention strategies that are based on potentially biased spatial analyses.
+
+Opportunities for Innovation and Improvement:
+Recognizing the implications of MAUP presents an opportunity for innovation in crime spatial analysis methods. Developing and applying new analytical techniques that account for MAUP can improve the accuracy of crime pattern analysis and lead to more effective crime prevention strategies.
+
+
+
+
+BREAKKKKKK
+
+
+\subsection (Projection Methods)
+
+3) Projection methods and CRS 
+
+So, now we have a basic understanding of spatial data, this is where we ask how do we actually pinpoint a location to a map?
+
+Projection Methods:
+
+- Map projections try to portray the surface of the earth, or a portion of the earth, on a flat piece of paper or computer screen. In layman’s term, map projections try to transform the earth from its spherical shape (3D) to a planar shape (2D).
+
+
+
+\subsection (Football example)
+
+Imagine you have a football, and you begun cutting it up with a knife - it wouldn't fit together perfectly if you tried to recreate this into a rectangle, square or triangle 
+
+So these projections are simply equations that tells a mapping system out to populate an new shape or area. So if we wanted to create a rectangle, we might have something this where all area is populated
+
+
+
+\subsetion (Distortion 1)
+
+http://www.geography.hunter.cuny.edu/~jochen/gtech361/lectures/lecture04/concepts/Map%20coordinate%20systems/Map%20projections%20and%20distortion.htm
+
+ Its important to note, during the projection methods the data can become distorted affecting the area, shape, distance and direction of points. Although there are algorithms in place to control for this, all four features are rarely persevered. 
+
+Imagine a map projection as an attempt to reconstruct your face in two dimensions. Some maps will get the shapes of all your features just right, but not the sizes—your forehead and chin, for instance, may come out huge. Other maps will get the sizes right, but the shapes will be stretched—maybe your full, round mouth will appear wide, thin, and rather mean.
+
+Some maps preserve distances. Measurements from the tip of your nose to your chin, ears, and eyes will be right, even though the size and shape of your features is wrong. Other maps preserve direction.
+
+
+
+It all depends on which attributes you are willing to compromise, some try to maintain the correct distance, others the correct shape, and others the correct area
+ - typically you aim to find a sweet spot, some sort of balance between all these factors
+
+This is why you may see projections that are for individual contries, regions, districts or states
+
+
+\subsetion (Distortion 2)
+
+There are three projection families
+
+Within each projection family there are hundreds to thousnads of different types of projections, they're not necessary to know but here is an example of how the same maps can be distorted because of different projection methods 
+
+
+
+\subsection (Example of distortion)
+
+For example the Mercator vs Gall-Peters projections 
+
+The M:
+
+The mercator uses something called angular conformity (uses the conical), where as the gall-peters (part of the cylindirical map projection)
+
+
+The Peters projection is unique among world maps because the area ratios of all the continents are the same as they are in reality. That is, Greenland doesn’t seem larger than Africa, as the much-more-popular Mercator projection shows. On the Peters projection, the gargantuan continents of Africa and Asia appear quite large, while usually-inflated polar regions such as Canada and Greenland shrink back to their proper sizes.
+
+The Mercator projection, by comparison, grossly distorts the sizes of the continents – causing the Greenland-is-larger-than-Africa effect – but stays true to their shapes. Geographically speaking, the shapes are more important. It is far easier to change the scale of a map for different areas of the world than to adjust the length-width ratio, as one needs to do with Peters. In addition, Mercator only distorts longitudinal distances (except very close to the poles), whereas Peters screws up the scale almost everywhere for both longitude and latitude. This is why Mercator beats out Peters in the world of cartography, and why Google Maps uses a modified Mercator projection. The Peters simply isn’t practical.
+
+the Mercator projection of intentionally enlarging northern areas where white people live and shrinking continents such as Africa to diminish their importance. The Peters projection, by contrast, shows all the continents according to their true sizes, which is apparently fairer
+
+
+
+
+- The WGS 84 is a variant of the mercator map projection. 
+- Europe is not the center of the universe — Mercator just moved the equator. North. There has been arguments that the The Mercator projection vastly exaggerates aged imperialist power, at the expense of developing countries and continents like Africa that are shrunk to inferiority. - There’s a reason why the Northern Hemisphere is associated with wealth and significance — it’s because it’s literally on top, permanently etched into our subconsciousness as superior from our earliest encounters with learning.
+
+- James Gall, which means it accurately scales land according to surface area, creating a far more balanced reflection of what the world really looks like. It’s totally free of colonial bias.
+
+/////   This is important as it shows us how different map projections can potray different percentopns of countries 
+
+
+
+**
+Web Mercator:
+
+Distorts area significantly towards the poles
+Maintains direction and shape but distorts distance, particularly at high latitudes
+Used extensively in web mapping applications and services, particularly for its compatibility with GPS technology and ability to show data at multiple scales
+Generally not suitable for analysis that requires accurate area or distance calculations, particularly at high latitudes
+Gall-Peters:
+
+Maintains accurate area representation, meaning that land masses are shown in proportion to their actual size on the earth's surface
+Distorts shape and direction, particularly near the poles and at low latitudes
+Often used in educational contexts to illustrate the unequal distribution of land masses around the world, particularly with respect to issues such as development, population density, and resource allocation
+Not as commonly used in navigation or web mapping applications due to its distortion of shape and direction
+
+It's worth noting that both projections have their strengths and weaknesses, and the choice of projection will depend on the specific needs of the analysis or application. In general, it's important to be aware of the potential for distortion in any map projection and to choose the projection that best meets the needs of the intended analysis or audience.
+
+
+\subsection(so how do we actually...)
+
+NA
+
+
+\subsection (Coordinate Reference System)
+
+CRS (coordinate reference system):
+
+The move from the 3D to the 2D is done with the help of CRS where every place on earth is specified by three main numbers (i.e. our coodinates). 
+
+ Each numbers indicate the distance between some point and your fixed reference, also known as origin
+
+
+\subsection (Continued)
+
+There are two main CRS
+- 
+
+1) The Geographic Coordinate Reference system = uses three coordniates (longitude and lattidue)
+     A geographic coordinate system (GCS) is a reference framework that defines the locations of features on a model of the earth. It’s shaped like a globe—spherical. Its units are angular, usually degrees.
+	i.e. WGS 84. 
+          - The most commonly used system is the World Geodetic System 1984, so if your data contains longitude and latitude data this is the CRS you would most likely use.
+
+
+"A GCS defines where the data is located on the earth’s surface"
+
+
+2) The Projected Coorindate reference system = uses two coorindates 
+	A projected coordinate system (PCS) is flat. It contains a GCS, but it converts that GCS into a flat surface, using math (the projection algorithm) and other parameters. Its units are linear, most commonly in meters.
+	i.e. UTM 
+
+"A PCS tells the data how to draw on a flat surface, like on a paper map or a computer screen"
+
+
+So this is why we have the angular units for the GCS , the degrees . And for the PCS, we have linear units, the meters, because its flat. 
+
+\subsection(CRS example)
+
+So lets have a quick look an example of a CRS
+
+- So remember that a PCS, by definition, uses a Projection. The second line tells you that this PCS uses the Fuller projection, which was invented by Buckminster Fuller in 1954.
+- WKID (well known ID) is a unique identifier number for the PCS, defined by its Authority.
+
+- The WGS is a datum,  that speifies long/lat 
+- The EPSG (European Petroleum Survey Group)
+
+
+Remember !! 
+	Geographic CRS however, fail to measure distance. Therefore, projected systems then 					become meaningful when this information is needed on a flat screen, which can be done via various 			projection methods, moving the object from a 3D space to a 2D space.
+
+**
+
+Difference between projection and PCS;
+The projection = mathematical algortithm 
+The PCS  = how specific round earth model is projected onto a map. The PCS includes a geographic coordinate system (which defines the earth model)
+
+**
+
+When working with more than one form of spatial data, it’s important to ensure that the data is stored in the same CRS or they will fail to line up with GIS
+
+The decision of which map projection and CRS to use depends on the regional extent of the area you want to work in, on the analysis you want to do, and often on the availability of data.
+
+-
+
+\subsection(spatial analysis // spatial relations in GIS
+
+- Definitions of spatial relations / spatial analysis 
+- Importance of crime analysis 
+- Overview of spatial statistics / analysis 
+
+
+- Introduce the concept of spatial relations by explaining that in GIS, spatial relations refer to the ways in which different locations, areas, or objects are situated in relation to each other on the Earth's surface.   (So we know we can use two types of maps, thematic and reference to understand these spatial relations).
+- Emphasize the importance of spatial relations in crime analysis.  And this is because we know the crimes don't occur randomly; they have patterns influenced by geographic and environmental factors.
+- So we use these spatial statistics will allow us to quantify these patterns and make data-driven decisions in crime prevention and resource allocation.
+
+- Spatial Analysis would be the next step.  To put it into words that might be more familiar, spatial analysis can be seen as the 'methods' section of your paper,  this would be the bulk of it 
+
+- Spatial analysis refers to studying entities by examining, assessing, evaluating, and modeling spatial data features such as locations, attributes, and relationships that reveal data’s geometric or geographic properties. 
+
+- It uses a variety of computational models, analytical techniques, and algorithmic approaches to assimilate geographic information and define its suitability for a target system.   
+- So lets takr a brief look at the three most common analysis methods you might see when working with crime data
+
+
+\subsection A) point pattern analyss 
+
+
+
+
+
+
+\subsection B) Spatial Autocorrelation
+
+Spatial autocorrelation is a technique that measures the degree to which crimes occur near each other in space. 
+
+Begin with the definition: Spatial autocorrelation is a measure of the degree to which one object is similar to other objects in its surrounding area.
+
+Use an example to illustrate this concept. For instance, if one neighborhood has a high rate of burglary, spatial autocorrelation would suggest that neighboring areas might also show high burglary rates.
+Explain Moran's I and Geary's C by using a visual representation of how these indices can plot and identify clusters of high crime rates.
+Stress the practical implications by explaining that police departments can use these metrics to predict and concentrate on areas that might require more attention or resources.
+
+
+\subsection C) Spatial Interpolation 
+
+Content:
+
+Definition of Spatial Interpolation
+Methods: IDW, Kriging, Spline
+Using Interpolation in Crime Mapping
+Speaking Notes:
+
+Define spatial interpolation as the process of estimating unknown values at certain locations based on known values from surrounding locations.
+Compare methods like Inverse Distance Weighting (IDW), Kriging, and Spline, and their use cases.
+Describe how interpolation can be used to create crime maps that predict crime in unsampled areas.
+
+Clarify that spatial interpolation allows us to predict unknown values for any geographic point based on the values of surrounding points.
+Differentiate between interpolation methods. For example, IDW assumes that each data point has a local influence that diminishes with distance, while Kriging takes into account the statistical properties of the sampled points.
+Emphasize the value of interpolation in crime mapping by giving a real-world application, like estimating the crime rate in new urban developments based on surrounding neighborhoods.
+Address the limitations, such as the fact that interpolation assumes spatial homogeneity and may not account for unique local factors.
+
+
+\subsection D) Hot spot analysis
+
+Content:
+
+What is Hot Spot Analysis?
+Techniques: Getis-Ord Gi*, Kernel Density
+Identifying High-Crime Areas
+Speaking Notes:
+
+Define hot spot analysis as a statistical technique used to identify areas of high intensity.
+Explain Getis-Ord Gi* and Kernel Density Estimation as two common techniques.
+Emphasize the importance of hot spot analysis in allocating resources and planning interventions.
+
+Define a hot spot as an area that experiences a statistically significant higher concentration of an event, like crime, compared to other areas.
+Explain the Getis-Ord Gi* statistic, which identifies hot spots by looking at each feature within the context of neighboring features. A high Gi* value indicates a hot spot.
+Describe how Kernel Density Estimation works by creating a smooth surface of crime intensity over a map, which can highlight areas of concern that aren't apparent from raw data alone.
+Discuss how this analysis helps in strategic planning, such as placing more streetlights in areas with high nighttime crime rates.
+
+
+\subsection Data Sources for GIS and Crime Data
+
+Introduce the different types of data sources available for crime analysis and GIS work. Public databases provide broad data while police incident reports give detailed local data.
+Discuss how the integrity and reliability of these data sources can significantly affect the outcomes of spatial analysis. Data must be accurate, timely, and consistently formatted.
+Highlight the role of emerging data sources, such as social media and crowdsourced platforms, in providing real-time data for dynamic GIS applications.
+Encourage ethical considerations when using personal data, emphasizing the balance between public safety and privacy.
+
+
+
+
+\subsection (Challenges for mapping crime data)
+
+- Using open police data can be criticised 
+- Firstly, police recorded crime provides point information through the use of GIS. However, the accuracy of spatial data is obscured by geo-masking techniques that served to protect the location privacy of victims - they never provide the location of where an exaact crime was reported 
+- how far is the jittering, quantity 
+- So what we think might have happened outside a school, might not of actually happened there 
+- Secondly, police recorded crime are a known contribution to the grey figure, in that they underestimate the actual number of crimes recorded and not just reported which reduces the accuracy of statistical models due to missing data. This isn't something that can be overcommed in mapping techniques but it something that defientyly has to be considered 
+- Thirdly, there are some conceptual issues surrounding the definition of our chosen crime type. The police recorded crime combines violent offences with sexual offences, this should be viewed with caution in the below analysis as it applies an overtly holistic definition by conceptualising these indifferent crimes into one category
+
+- Seasonality - Temporal analysis does beome limited to monthly or yearly trends /// 
+- Covid (large events that break everry day routine) - e.g. over the pandenmic research has identified a reduction in some criminal activity as a result of increased government restriction and lockdown rules, one example being that reduction in burglary as more people have been forced to work from home there is reduced opportunity to commit these crimes, so it is not entirely accurate to hold year-to-year comparisons over the pandemic as what  
+
+
+Any other thoughts; 
+
+- 	 it encodes systemic discrimination.  This is a great point and links back to the grey figure figure of crime, why is there such a huge gap between reported and recorded statistics? 
+    with crime rate data, are still affected by reporting statistics among certain demographics of the population. Graber and Stern (2018) highlighted that to call the police is a privilege of being white, additionally police legitimacy can also affect the willingness to call the police (Taylor et al., 2015).
+- Therefore, not all populations are likely to call the police so reports of missing incidents raise questions about reliability from our sample size.  
+- On that note, we do not have demogrpahic variables present from police recorded statistics 
+- Additionnaly, some people might quesiton the use of quantitative meethods as frankly insenstive where as crime surveys tend ro provide more individualistic experiences of crime, however, large quantitative studies have proved to be effectiv in the prediction of crime and the introduction/amendment of new policy 
+
+
+
+\subsection (MM - challenges of mapping crime data)
+
+can you think of anymore
+
+
+
+
+\subsetion (slide 25)
+
+Any questions 
+
+
+
+\subsection (slide 28- 29)
+
+conclusions, references, tomorrows material and survey
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### THE CODE DEMO 
+
+intro and that
+
+We are also joined with Emma Green, whi will be faciliting this workshop.  any technical questions please leave this in the chat.
+
+Any content related quesitons then please use the q+a function and ill try my best to answer quesions throughout. 
+
+Before we start, we have a quick poll
+
+ 
+  - eokay so now im going to explain the materials needed for this workshop
+
+
+Working directory -  The working directory is just a file path on your computer that sets the default location of any files you read into R, or save out of R. In other words, a working directory is like a little flag somewhere on your computer which is tied to a specific analysis project. If you ask R to import a dataset from a text file, or save a dataframe as a text file, it will assume that the file is inside of your working directory.
+
+You can only have one working directory active at any given time. The active working directory is called your current working directory.
+
+getwd()
+
+setwd(dir = "........")
+
+If you’re using RStudio, you have the option of creating a new R project. A project is simply a working directory designated with a .RProj file. When you open a project (using File/Open Project in RStudio or by double–clicking on the .Rproj file outside of R), the working directory will automatically be set to the directory that the .RProj file is located in.
+
+
+
+
+TOPIC 1:
+
+## Intro 
+
+In this first section I will show you how to read in the data, run some basic exploratory analysis and produce some point maps. 
+
+We currently have a dataframe that is not spatial
+
+LSOAs have an average population of 1000, they are used to improve the reporting of small area statistics in England and Wales. 
+LSOAs aren't that recognisable to non-statistical minds, or non-geopraphers 
+
+
+
+## what abpout with ggplot?
+
+- ggplot(data = interviews_plotting, aes(x = respondent_wall_type)) +
+    geom_bar()
+
+- ggplot(data = crime, aes(x = crime_type, fill = last_outcome_category)) +
+    geom_bar() + ylab("proportion") +
+    stat_count(geom = "text", 
+             aes(label = stat(count)),
+             position=position_fill(vjust=0.5), colour="white")
+
+
+
+'## Quick Maps - gmplot and ggmaps
+
+-ggmap likes to build its plots in a function called qmplot which is the ggplot equivalent of qplot
+-Arguable qmaps is non as the quicker, but less accurate function for plotting spatial data, its pretty much just useful to build maps that are similar to the ones we see via our apps 
+-First, lets get an overview of the crimes on the map, Using qmplot, we put in longitude and latitude for the x, and y parameters, and specify the data as the crime dataset.
+-Gecode = simple identifies the long/lat of area. Geocoding is the process of determining geographic coordinates for place names, street addresses, and codes (e.g., zip codes).
+The geocode function uses Googles Geocoding API to turn addresses from text to latitude and longitude pairs very simply.
+-So, how accurate are automated geocoding methods for GIS
+- 81% of addresses were geocided correctyly
+- More Accurate in Rural Areas
+This ggmaps is overlaying a google image onto our point data from the 'crime dataset' but specifiallly from our area of Crawley 002b
+
+
+## Simple Features 
+
+
+sf is also compatible with ggplot, there is also another packages named 'sp' but within the last few years researchers and geographers are moving from SP and SF. 
+
+The only main difference you need to be aware of is that the SP package worked well but wasn't entirely compatiible with all of R dataframes. The sf package makes it easier to join other dataframes
+
+
+To recap, when working with sptatial data you need to identify the CRS, in order to move from that 3D image of earth as a sphere to that 2D image of a map on screen
+
+sf objects are just data-frames that are collections of spatial objects. Each row is a spatial object (e.g. a polgyon), that may have data associated with it (e.g. its area) and a special geo variable that contains the coordinates
+
+
+ESPG -(European Petroleum Survey Group) Each code is a four-five digit number which represents a particular CRS definition
+
+
+When to use CRS?
+
+- First it’s worth considering when to transform. In some cases transformation to a projected CRS is essential, such as when using geometric functions such as st_buffer(), as Figure 6.1 showed. Conversely, publishing data online with the leaflet package may require a geographic CRS. Another case is when two objects with different CRSs must be compared or combined, as shown when we try to find the distance between two objects with different CRSs:
+
+
+- If your data contains longitude /lattitude you would use the world geodetic system. Remember this is part of the Geographic Reference System (
+- Howver, if your data contains Northings/Easting then you are most likely to use the BNG (given that the data is from the U.K). The BNG, or the Ordnance Survey National Grid reference system is a system of geographic grid references used in Great Britain, different from using Latitude and Longitude. In this case, points will be defined by “Easting” and “Northing” rather than “Longitude” and “Latitude.” 
+
+
+
+
+
+## Mapping point data 
+
+geom_sf ==  a unique aesthetic, it expects to fnd a sfc column containing simple features data
+
+You'll notice that to plot the points contained in our sf object we don't even need to specify any aesthetics. The axis have been automatically defined by `geom_sf()` based on the range of latitude and longitude coordinates of each observation, which are retained within the `geometry` column of the object. Even with this basic visualisation, one can identify some interesting patterns. with many burglaries clustering in specific areas of the city.
+
+
+We can also extend these plots by 
+
+ggplot() + 
+  geom_sf(data = sf, aes(col = crime_type), pch = 21, size = 1.5) +
+  scale_fill_viridis_d() + 
+  theme_bw()
+
+
+configure: error: gdal-config not found or not executable.
+ERROR: configuration failed for package ‘rgdal’
+* removing ‘/Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgdal’
+Warning in install.packages :
+  installation of package ‘rgdal’ had non-zero exit status
+
+
+
+- library(cowplot)
+- plot_grid(x, y, labels = c("asb", "drugs"), label_size = 14)
+
+
+
+
+## Solution to activty 1
+
+subset(sf, crime_type == "Anti-social behaviour") 
+
+drugs <- subset(sf, crime_type == "Drugs") %>%  
+  select(-c(1, 9, 10))      #this line is not necessary but helps to neaten your data as we are removing the columns that are not of interest
+
+ggplot() +
+  annotation_map_tile() +
+  geom_sf(data = drugs) 
+
+
+
+
+
+TOPIC 2 
+
+  What are shapefiles?  (under the sf package)
+
+Common format in the GIS industry - it stores our vector data (points, lines and polygons), It stores a single feature class, which means it'll store a single type (it will not mix the the differring feature types, i.e., it will only store a point shapefule, or a line shapefile or a polygon shapefile) 
+
+They contain multiple files, so they are useable across mutliple applications within GIS.
+
+- .shp: the file that contains the geometry for all features.
+- read.dbf untill foreign
+- .prj: the file that contains information on projection format including the coordinate system and projection information. It is a plain text file describing the projection using well-known text (WKT) format.
+
+
+within R, we will exploring the file extension .shp 
+
+To obtain boundary data we will use the https://borders.ukdataservice.ac.uk/bds.html
+Steps to download:
+•	Select; England, Statistical Building Block, 2011 and later
+•	Click ‘Find’
+•	Select ‘English Lower Layer Super Output Areas’
+•	Click ‘List Areas’
+•	Select ‘Surrey Health’
+•	Click ‘Extract Boundary Data’
+Read in the Shapefile for ‘Surrey Heath’
+
+
+(low-high), scale_*_gradient2 creates a diverging colour gradient (low-mid-high)
+
+
+## classification methods
+
+Now, when mapping quantitiatve data such as crime counts, typicaly the variables needed to be put into to 'bins'. As seen in the previous example, the default binning applied to highlight the LSOAs grouped started from 1-10, 11-20, 21-20, 31-40, 41-50 and 51-60 crimes 
+
+These bins were decided on automatically, however we can define more accurate classes that best refelct the distributional character of the data set
+
+
+The Jenks natural breaks algorithm, just like K-means, assigns data to one of K groups such that the within group distances are minimized. Also just like K-means, one must select K prior to running the algorithm.
+
+However, Jenks and K-means are different in how they minimize within group distances. Jenks takes advantage of the fact that 1-dimensional data is sortable which makes it a faster algorithm for 1-dimensional data. K-means is more general in that it can handle data in any dimension; including dimensions greater than 1 where the data is not sortable.
+
+
+More on tmap: 
+
+- Thematic maps are geographical maps in which spatial data distributions are visualized.
+- As mentioned above, the syntax of tmap is similar to that of ggplot2. This includes a strict separation between data and aesthetics. At the beginning, tm_shape() is passed a dataset, followed by one or more levels that define the type of display. Examples are tm_fill() and tm_dots() to plot data as polygons or points.
+tm_fill() fills the individual polygons, resulting in a filled outline of Surrey 
+- Another difference to ggplot2 is that the variable names must be passed as characters and the $ operator cannot be used.
+
+
+Plotting using the tmap package: 
+
+A disadvantage of static maps is that they always depict the same thing. This means that only one area is shown and the entire information is displayed directly. Interactive maps improve normal maps in that they allow the viewer to influence the look of the maps and provide additional information. The most common type of interactivity is panning and zooming the displayed map and displaying supplementary information when clicking on individual geometric objects. In tmap, interactivity can be added to each map using the function map_mode("view"). With tmap_mode("plot") this interactivity is removed again
+
+
+
+
+
+the exercise::
+
+hclust = The “hclust” style uses hclust to generate the breaks using hierarchical clustering
+bclust” = style uses bclust to generate the breaks using bagged clustering
+
+
+There are many different ways to classify your data, and you must think carefully about the choice you make, as it may affect your readers’ conclusions from your map.
+
+
+Small multiplies = both tmap_arrange and our tm_facets are what is known as small multiples
+
+For comparing the effects of using different methods we can use small multiples. Small multiples is simply a way of reproducing side by sides similar maps for comparative purposes.
+
+
+## activity 
+
+1)
+
+h <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "bclust") + 
+  tm_borders(alpha = 0.3)
+
+
+b <- tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "hclust") + 
+  tm_borders(alpha = 0.3)
+
+
+#2) 
+
+
+tmap_arrange(h, b)
+
+
+
+#3) 
+
+tmap_mode("view")
+
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("count", style = "bclust") + 
+  tm_borders(alpha = 0.3)
+
+
+
+
+
+TOPIC 3 - Crime count vs crime rate 
+
+Crime rate: 
+
+What is crime rates? CR is best understood in totality as “Crimes per 1,000 resident people as per the latest official Census over a selected time period” - Using rate reduces statistical bias and reduces the effect of the modifiable areal unit problem 
+
+It is none that crime rates vary. In some populations and in some periods, the prevalence of crime is much greater than in other populations and at other time periods. Accounting for these findings is an enormously important task because if we can understand the causal processes that underlie variation then we may be in a position to enact policy changes that can bring about changes in the volume of crime in society at any given point in time.
+
+
+For this workshop, we have downloaded residential and workday population statistics from the CKAn porta
+
+What is residential vs workday population? 
+
+The residential population reflect the usual activity of an area, whereas the workday population reflect the people who work, those who are resident in the area and those that either work from home or who do not work (Reis et al., 2018). Workday and residential population are however limited as they do not include activities other than employment. Therefore, when conducting your own analyss it might be more accurate to use the total LSOA population, as the workday and residentil reflect a partial population, as these tend to represent a more regular spatial grid 
+
+
+Left_join 
+
+left_join() return all rows from x , and all columns from x and y . Rows in x with no match in y will have NA values in the new columns. If there are multiple matches between x and y , all combinations of the matches are returned.
+
+
+
+- Cartograms 
+
+A cartogram is a map in which the geometry of regions is distorted in order to convey the information of an alternate variable. The region area will be inflated or deflated according to its numeric value. In R, the cartogram package is the best way to build it, as illustrated in the examples below.
+
+- A cartogram is a type of map where different geographic areas are modified based on a variable associated to each of those areas. While cartograms can be visually appealing, they require a previous knowledge of the geography represented, since sizes and limits of the geographies are altered.
+
+- In order to create a cartogram we will need to join the statistical and the geographical data.
+
+- We can now proceed to create a contiguous cartogram with ggplot2, cartogram and sf, using the modified sf object and passing the values of interest (n_pop column) as the weight of the cartogram_cont function:
+
+- Default colors; If you also pass values of interest to the fill argument of aes you can fill the regions by color based on that variable.
+
+
+tmap_mode("view",  "plot")
+
+
+#solution to topic 3 
+
+# 1) First calculate the crime rate 
+
+surrey_lsoa <- surrey_lsoa %>% 
+  mutate(crime_rate2 = (count/work_count)*1000)
+
+
+#2) Plot using ggplot 
+
+ggplot() + 
+  annotation_map_tile() + 
+  geom_sf(data = surrey_lsoa, aes(fill = crime_rate2), alpha = 0.5) + 
+  scale_fill_gradient2(name ="Crime Rate")
+
+
+#3) Plot using tmap 
+
+tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile") + 
+  tm_borders(alpha = 0.3)
+
+
+#4) Compare the workday vs residential population 
+
+e <- tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate", style = "quantile", title = "Workday Pop") + 
+  tm_borders(alpha = 0.3)
+
+f <- tm_shape(surrey_lsoa) + 
+  tm_fill("crime_rate2", style = "quantile", title = "Residential pop") + 
+  tm_borders(alpha = 0.3)
+
+
+tmap_arrange(e, f)
+
+
+#5) Cartogram
+
+ggplot(cart) + 
+  geom_sf(aes(fill = pop_count_res), 
+          color = "gray50", 
+          linetype = 1, 
+          lwd = 0.35) + 
+  scale_fill_gradientn(colours = heat.colors(n =10, 
+                                            alpha = 0.5, 
+                                            rev = TRUE)) + 
+  theme_gray() + 
+  labs(title = "Surrey Heath: Population by LSOA", 
+       subtitle = "August 2020")
+
+
+
+
+
+
+
+
+
+TOPIC 4: Additional Topics
+
+Why should I add noise to my data??
+
+
+
+'## Quick Maps - gmplot and ggmaps
+
+-ggmap likes to build its plots in a function called qmplot which is the ggplot equivalent of qplot
+-Arguable qmaps is non as the quicker, but less accurate function for plotting spatial data, its pretty much just useful to build maps that are similar to the ones we see via our apps 
+-First, lets get an overview of the crimes on the map, Using qmplot, we put in longitude and latitude for the x, and y parameters, and specify the data as the crime dataset.
+-Gecode = simple identifies the long/lat of area. Geocoding is the process of determining geographic coordinates for place names, street addresses, and codes (e.g., zip codes).
+The geocode function uses Googles Geocoding API to turn addresses from text to latitude and longitude pairs very simply.
+-So, how accurate are automated geocoding methods for GIS
+- 81% of addresses were geocided correctyly
+- More Accurate in Rural Areas
+This ggmaps is overlaying a google image onto our point data from the 'crime dataset' but specifiallly from our area of Crawley 002b
+
+
+
+
+
+
+
+
+\end{document}
