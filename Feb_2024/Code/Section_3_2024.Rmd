@@ -3,8 +3,6 @@ title: "Mapping Crime Data in R - Crime Rate vs Crime Count"
 author: "Nadia Kennar, Research Associate with the UKDS"
 date: "16th of February 2024"
 output:
-  html_document:
-    df_print: paged
   html_notebook: default
 toc: yes 
 ---

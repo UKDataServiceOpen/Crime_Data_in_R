@@ -1,0 +1,437 @@
+---
+title: "Mapping Crime Data in R - Spatial Analysis"
+author: "Nadia Kennar, Research Associate with the UKDS"
+date: "16th of February 2024"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+toc: yes 
+---
+
+```{r set up, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+
+## Intro 
+
+In this final section I will demonstrate how to run spatial interpolation (which is the process pf using points with known values to estimate values at other unknown points). We will then move on to creating heat maps in both GGPLOT2 and Leaflet. 
+
+## Load packages
+
+As always the first step is to load the necessary R packages via the library function. If you do not have these packages installed then please follow the instructions in the *Preliminary Task.Rmd* file. 
+
+## Load Packages
+
+```{r setup}
+
+# for data reading/manipulation 
+library(dplyr)
+library(tidyr)
+library(readr)
+library(tibble)
+library(janitor)
+library(readxl)
+# for spatial data and gis
+library(sf)
+library(ggmap)
+library(ggplot2)
+library(ggspatial)
+library(ggspatial)
+library(spdep)
+library(leaflet) 
+library(RColorBrewer)
+library(tmap)
+
+```
+
+
+
+
+
+
+## Spatial Interpolation 
+
+Spatial interpolation is a statistical technique used to predict or estimate values at unsampled locations within an area covered by existing observations. It's based on the principle that spatially or temporally close points tend to have similar values—a concept known as spatial autocorrelation. In the context of crime data, spatial interpolation can be particularly useful for several reasons:
+
+*1. Fill Gaps: Estimate crime rates in areas where data are missing or not collected, providing a more complete spatial representation of crime.
+*2. Smooth Crime Rates: Generate continuous surfaces of crime rates or risk across a geographic area, helping to identify hotspots and patterns that might not be evident from discrete data points alone.
+*3. Resource Allocation: Inform law enforcement and public safety officials about potential areas of increased crime activity, aiding in strategic planning and resource allocation.
+*4. Public Information: Provide communities with detailed maps of crime risk, enhancing awareness and preventive measures.
+
+Lets explore our data. First reread in the crime dataset
+
+```{r}
+crime <- read_csv("~/Documents/Crime_R_Workshop/Feb_2024/Data/crime_data/2022-02/2022-02-surrey-street.csv") %>% janitor::clean_names()
+
+summary(crime)
+```
+
+
+We know that there are 6881 observations overall, but what about just for Surrey Heath which is a boundary area within the county of Surrey. 
+
+We can use filter only those crimes that have taken place in Surrey Heath by using the dplyr and stringr packages
+
+```{r}
+library(stringr)
+surrey_heath_crimes <- crime %>%
+  filter(str_detect(lsoa_name, "^Surrey Heath"))
+
+# Explore the filtered dataset
+head(surrey_heath_crimes)
+summary(surrey_heath_crimes)
+```
+
+This code filters the original crime dataset to keep only the records associated with LSOAs in the Surrey Heath area, based on the naming convention in the lsoa_name column, and stores this subset of data in a new variable for further analysis or operations.
+
+We can now see that there are 468 observations, that is individual crime counts, across the boundry area of Surrey Heath. 
+
+We know need to group these individual crime counts by lsoas in order to obtain the aggregated statistics. This has been repeated in multiple sections so I won't expand too much here. We will create this into a new object named 'cleaned_crimes_grouped_by_lsoas' 
+
+
+```{r}
+cleaned_crimes_grouped_by_lsoa <- surrey_heath_crimes %>%
+  group_by(lsoa_code) %>%
+  summarise(count = n())
+
+# View the count of crimes by type
+cleaned_crimes_grouped_by_lsoa
+```
+
+
+So what can we see? Well there are now 54 observations, in this case representing the number of LSOAs in Surrey Heath. However, if we compare this to our Shapefile of Surrey Heath, there are 55 observations which tells us there is one missing LSOA. 
+
+We can run a spatial interpolation to account for this by estimating the missing crime counts based on the average of neighboring LSOAs. 
+
+Lets first identify the missing LSOA in the crime data set. We can use the setdiff() function from base R to do so...
+
+```{r}
+missing_lsoas <- setdiff(shp_file$lsoa21cd, cleaned_crimes_grouped_by_lsoa$lsoa_code)
+#E01030808
+```
+
+There we go! We have identified the missing LSOA is E01030808. 
+In order to now run the spatial interpolation on the average of neighboring LSOAs, spatial visualization is required in order to understand if these LSOA does in fact have any neighboring LSOAs to establish a mean. This is because if the LSOA E01030808 does not have any neighboring areas, we will not be able to establish a mean and therefore estimate a crime count value.
+
+We can first establish a list of neighbors where each element corresponds to a LSOA within the shapefile (shp_file) and contains the indices of neighboring LSOAS.
+
+```{r}
+neighbors <- st_touches(shp_file, shp_file)
+```
+
+This allows to now identify the LSOAs with no neighbors. This line uses sapply() to apply a function to each element of the neighbors list. The function checks if the length of each element (list of neighbor indices) is 0, which would indicate that an LSOA has no neighbors.
+
+```{r}
+# Identify LSOAs with no neighbors
+no_neighbors <- sapply(neighbors, function(x) length(x) == 0)
+```
+
+
+We then want to extract the indices (or IDs) of LSOAs with no neighbors and then extract the corresponding LSOAS. 
+
+```{r}
+# Extract the indices or IDs of LSOAs with no neighbors
+lsoas_no_neighbors <- which(no_neighbors)
+
+# Extract the corresponding LSOA codes or IDs
+lsoas_with_no_neighbors <- shp_file$lsoa_code[lsoas_no_neighbors]
+```
+
+
+If lsoas_with_no_neighbors is empty, all LSOAs have at least one neighbor. If lsoas_with_no_neighbors contains LSOA codes or IDs, these are the LSOAs with no neighboring LSOAs within your dataset.
+
+This would mean that we know that the LSOA E01030808 does in fact have neighboring areas and therefore we can run some calculations on our neighboring areas to interpolate that missing value. For each missing LSOA, we need to find neighboring LSOAs and calculate the average crime count. 
+
+This function iterates over a list of LSOAs (missing_lsoas) that lack crime data. For each missing LSOA, it:
+
+*Identifies neighboring LSOAs that share a boundary with it.
+*Gathers crime counts from these neighboring LSOAs.
+*Calculates the average crime count from these neighbors.
+*Rounds this average to the nearest whole number.
+*Prints out this average for verification.
+*If the average crime count is not calculated properly (e.g., it's NA or 0), it sets a default value of 1.
+*Finally, it adds this calculated average crime count back into the dataset for the missing LSOA, effectively estimating the crime count for areas where it was originally missing
+
+This process helps fill in gaps in the dataset, ensuring each LSOA has a crime count value, which is crucial for comprehensive spatial analysis.
+
+```{r}
+
+for(missing_lsoa in missing_lsoas) {
+    neighbors_indices <- st_touches(shp_file[shp_file$lsoa21cd == missing_lsoa, , drop = FALSE], shp_file)[[1]]
+    neighbor_lsoas <- shp_file$lsoa21cd[neighbors_indices]
+
+    # Extracting crime counts for neighboring LSOAs
+    neighbor_crime_counts <- cleaned_crimes_grouped_by_lsoa %>% 
+                             filter(lsoa_code %in% neighbor_lsoas) %>%
+                             pull(count) # Use pull to extract the 'count' column as a vector
+
+    # Calculating the average crime count
+    avg_crime_count <- mean(neighbor_crime_counts, na.rm = TRUE)
+    
+    # Round the average to the nearest whole number
+    avg_crime_count_rounded <- round(avg_crime_count)
+
+    # Debug: print the average crime count to verify
+    print(paste("Average crime count for missing LSOA", missing_lsoa, ":", avg_crime_count))
+
+    # Check if avg_crime_count is not calculated properly
+    if(is.na(avg_crime_count) || avg_crime_count == 0) {
+      # Apply a different strategy or set a default value other than 0 if that makes sense in your context
+      avg_crime_count <- 1 # Example: setting a default value if mean calculation fails
+    }
+
+    # Update the dataset with the calculated average for the missing LSOA
+    cleaned_crimes_grouped_by_lsoa <- rbind(cleaned_crimes_grouped_by_lsoa, data.frame(lsoa_code = missing_lsoa, count = avg_crime_count_rounded))
+}
+
+
+class(cleaned_crimes_grouped_by_lsoa)
+```
+
+
+Did you notice how the object 'cleaned_crimes_grouped_by_lsoas' has now changed from 54 observations to 55 observations. Lets see whats happened with that missing LSOA
+
+```{r}
+cleaned_crimes_grouped_by_lsoa[55, ]
+```
+
+
+Lets compare the previous surrey_lsoa (with the misssing lsoa data) and the surrey_lsoa_new (no missing lsoa data). Lets look at how these might be different both statistically and visually: 
+
+```{r}
+# Ensure both datasets are spatially joined to the original shapefile
+surrey_lsoa <- left_join(shp_file, crimes_grouped_by_lsoa, by = c("lsoa21cd" = "lsoa_code"))
+surrey_lsoa_new <- left_join(shp_file, cleaned_crimes_grouped_by_lsoa, by = c("lsoa21cd" = "lsoa_code"))
+```
+
+
+
+```{r}
+# Statistically Compare 
+mean_original <- mean(surrey_lsoa$count, na.rm = TRUE)
+mean_imputed <- mean(surrey_lsoa_new$count)
+
+median_original <- median(surrey_lsoa$count, na.rm = TRUE)
+median_imputed <- median(surrey_lsoa_new$count)
+
+# Print the results
+cat("Mean Crime Count - Original Data (with missing):", mean_original, "\n")
+cat("Mean Crime Count - Imputed Data (no missing):", mean_imputed, "\n\n")
+
+cat("Median Crime Count - Original Data (with missing):", median_original, "\n")
+cat("Median Crime Count - Imputed Data (no missing):", median_imputed, "\n")
+```
+
+
+```{r}
+# Visually Compare
+# Plotting the original dataset with missing value
+ggplot() +
+  geom_sf(data = surrey_lsoa, aes(fill = count), color = NA) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey", guide = guide_legend(title = "Crime Count")) +
+  ggtitle("Original Data with Missing LSOA Crime Count") +
+  theme_minimal()
+
+# Plotting the dataset with imputed value
+ggplot() +
+  geom_sf(data = surrey_lsoa_new, aes(fill = count), color = NA) +
+  scale_fill_viridis_c(option = "plasma", guide = guide_legend(title = "Crime Count")) +
+  ggtitle("Imputed Data with No Missing LSOA Crime Count") +
+  theme_minimal()
+
+
+```
+
+
+
+
+## Heat Maps 
+
+As I'm specifically interested in creating heatmaps of ASB across surrey heath, there is a little bit of data preparation needed. The steps are just repeated from above but they can be summarised as such:
+
+*1) filter for asb within the crime dataframe (and within surrey heath, although this is not necessary as the shapefile is from surrey heath, but i want to impute some missing values before hand) 
+*2) group by lsoa and summarise the counts
+*3) find the missing lsoas
+*4) impute the missing values for the lsoas
+*5) left_join to the shapefile
+
+
+```{r}
+# Filter for ASB within Surry Heath
+asb_data <- crime %>%
+  filter(crime_type == "Anti-social behaviour") %>% 
+  filter(str_detect(lsoa_name, "^Surrey Heath"))
+
+# Group by LSOA and summarise the counts
+asb_grouped_by_lsoa <- asb_data %>%
+  group_by(lsoa_code) %>%
+  summarise(count=n())
+
+# Find the missing LSOAs
+missing_lsoas <- setdiff(shp_file$lsoa21cd, asb_grouped_by_lsoa$lsoa_code)
+
+# Impute the missing values 
+for(missing_lsoa in missing_lsoas) {
+    neighbors_indices <- st_touches(shp_file[shp_file$lsoa21cd == missing_lsoa, , drop = FALSE], shp_file)[[1]]
+    neighbor_lsoas <- shp_file$lsoa21cd[neighbors_indices]
+
+    # Extracting crime counts for neighboring LSOAs
+    neighbor_crime_counts <- asb_grouped_by_lsoa %>% 
+                             filter(lsoa_code %in% neighbor_lsoas) %>%
+                             pull(count) # Use pull to extract the 'count' column as a vector
+
+    # Calculating the average crime count
+    avg_crime_count <- mean(neighbor_crime_counts, na.rm = TRUE)
+    
+    # Round the average to the nearest whole number
+    avg_crime_count_rounded <- round(avg_crime_count)
+
+    # Debug: print the average crime count to verify
+    print(paste("Average crime count for missing LSOA", missing_lsoa, ":", avg_crime_count))
+
+    # Check if avg_crime_count is not calculated properly
+    if(is.na(avg_crime_count) || avg_crime_count == 0) {
+      # Apply a different strategy or set a default value other than 0 if that makes sense in your context
+      avg_crime_count <- 1 # Example: setting a default value if mean calculation fails
+    }
+
+    # Update the dataset with the calculated average for the missing LSOA
+    asb_grouped_by_lsoa <- rbind(asb_grouped_by_lsoa, data.frame(lsoa_code = missing_lsoa, count = avg_crime_count_rounded))
+}
+
+# Left_join the now cleaned data back into the shapefile
+asb_lsoa <- left_join(shp_file, asb_grouped_by_lsoa, by = c("lsoa21cd" = "lsoa_code"))
+```
+
+
+
+### Using GGPPLOT2
+
+This ggplot code snippet creates a heat map visualizing the distribution of ASB incidents across LSOAs. The use of the magma color palette from viridis ensures that the visualization is both attractive and perceptually accurate, enabling viewers to easily see where ASB incidents are more or less concentrated. 
+
+```{r}
+
+ggplot(data = asb_lsoa) +
+  geom_sf(aes(fill = count), color = NA) + # geom_sf plots the spatial data, fill controls the color based on ASB count
+  scale_fill_viridis_c(option = "magma", direction = -1, na.value = "white", 
+                       guide = guide_colorbar(title = "ASB Count")) + # Adjusts the color scale
+  labs(title = "ASB Incidents by LSOA", 
+       subtitle = "Visualised using ggplot2") + 
+  theme_minimal()
+
+```
+
+
+### Using leaflet
+
+
+This code snippet creates an interactive map using the leaflet package in R to visualize Anti-Social Behaviour (ASB) incidents across Lower Super Output Areas (LSOAs) based on the asb_lsoa dataset. The dataset is expected to be an sf object containing geometries for each LSOA and a count variable representing the number of ASB incidents in each area
+
+```{r}
+# Define a color palette function based on the 'count' column
+colorPalette <- colorNumeric(palette = "viridis", domain = asb_lsoa$count, na.color = "transparent")
+
+# Create the Leaflet map
+leaflet(asb_lsoa) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>% # Adds a light-themed base map
+  addPolygons(
+    fillColor = ~colorPalette(count), # Apply the color based on the 'count' column
+    weight = 1, # Border weight
+    opacity = 1, # Border opacity
+    color = "white", # Border color
+    fillOpacity = 0.7, # Fill opacity
+    popup = ~paste0("LSOA: ", lsoa21cd, "<br>Count: ", count) # Popup content
+  ) %>%
+  addLegend("bottomright", pal = colorPalette, values = ~count,
+            title = "ASB Counts",
+            opacity = 1)
+
+asb_lsoa <- st_transform(asb_lsoa, 4326)
+
+```
+
+
+
+
+
+
+
+
+
+
+## Activity 
+
+Compare the heat maps now using the ASB data WITH the missing values. Follow the steps below by first preparing your dataset and then making the plots. 
+
+*1) Filter for just ASB within Surrey Heath 
+
+```{r}
+asb_data2 <- crime %>%
+  filter(.... == "Anti-social behaviour") %>% 
+  filter(str_detect(...., "^Surrey Heath"))
+```
+
+*2) Group by LSOA and summarise the crime count
+
+```{r}
+asb_grouped_by_lsoa2 <- asb_data %>%
+  group_by(.....) %>%
+  summarise(.....=n())
+```
+
+*3) Left_join the new grouped ASB dataset to the shapefile
+
+Remember we are skipping the imputation method here as we want to see the affect of including missing values into our maps. So go ahead and simply join the grouped data to the shapefile
+
+```{r}
+asb_lsoa_missing <- left_join(...., ...., by = c("lsoa21cd" = "lsoa_code"))
+```
+
+*4) Now plot with ggplot 
+
+```{r}
+ggplot(data = ...) +
+  geom_sf(aes(fill = ...elt()), color = NA) + 
+  scale_fill_viridis_c(option = "magma", direction = -1, na.value = "white", 
+                       guide = guide_colorbar(title = "ASB Count")) + # Adjusts the color scale
+  labs(title = "ASB Incidents by LSOA", 
+       subtitle = "Visualised using ggplot2") + 
+  theme_minimal()
+
+
+```
+
+*5) Now plot with leaflet 
+
+```{r}
+# Define a color palette function based on the 'count' column
+colorPalette <- colorNumeric(palette = "viridis", domain = asb_lsoa_missing$count, na.color = "transparent")
+
+# remember to first transform the object into the correct CRS
+asb_lsoa_missing <- .....(asb_lsoa_missing, ....)
+
+# Create the Leaflet map
+leaflet(....) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>% # Adds a light-themed base map
+  addPolygons(
+    fillColor = ~colorPalette(count), 
+    weight = 1, # Border weight
+    opacity = 1, # Border opacity
+    color = "white", # Border color
+    fillOpacity = 0.7, # Fill opacity
+    popup = ~paste0("LSOA: ", lsoa21cd, "<br>Count: ", count) 
+  ) %>%
+  addLegend("bottomright", pal = colorPalette, values = ~count,
+            title = "ASB Counts",
+            opacity = 1)
+
+```
+
+
+
+
+
+
+
+
+

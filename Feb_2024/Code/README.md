@@ -16,30 +16,6 @@ Please bare in mind that Binder can take sometime to launch!
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/UKDataServiceOpen/Crime_Data_in_R.git/HEAD)
 
 
-# Colab 
-
-### Preliminary Tasks 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Preliminary%20Tasks.ipynb)
-
-### Section 1 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Section_1.ipynb)
-
-
-### Section 2 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Section_2.ipynb)
-
-### Section 3 
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Section_3.ipynb)
-
-### Code and Solutions to 1-3
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Code%20and%20Solutions%20from%20Topics%201-%204%20.ipynb)
-
-### Additional Toptics 
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/UKDataServiceOpen/Crime_Data_in_R/blob/main/March_2023/Code/Additional%20Topics.ipynb)
-
 
 
 
