@@ -1,1 +1,1 @@
-install.packages(c(("readr", "tibble", "janitor", "sf", "ggmap", "ggplot2", "ggspatial", "spdep", "leaflet", "RColorBrewer", "tmap"))
+install.packages(c(("dplyr", "tidyr", "readr", "tibble", "janitor", "readxl", "stringr", "sf", "ggmap", "ggplot2", "ggspatial", "spdep", "leaflet", "RColorBrewer", "tmap"))
