@@ -23,3 +23,15 @@ The training materials for the latest workshop can be found here:
 * To keep up to date with upcoming and past training events: <a href="https://ukdataservice.ac.uk/training-events/" target=_blank>[Events]</a>
 * To get in contact with feedback, ideas or to seek assistance: <a href="https://ukdataservice.ac.uk/help.aspx" target=_blank>[Help]</a>
 
+Data Citations: 
+
+Crime Data
+UK Police API. (2026). Street-level crime data. data.police.uk. Retrieved February 27, 2026, from https://data.police.uk
+LSOA Boundaries
+UK Data Service Census Support. (2021). England LSOA boundaries 2021. Retrieved from https://borders.ukdataservice.ac.uk
+Resident Population
+Office for National Statistics. (2022). Census 2021 Table TS001: Number of usual residents. Nomis/UK Data Service. Retrieved from https://statistics.ukdataservice.ac.uk
+Economic Activity
+Office for National Statistics. (2022). Census 2021 Table TS066: Economic activity. Nomis/UK Data Service. Retrieved from https://statistics.ukdataservice.ac.uk
+Rural Urban Classification
+Office for National Statistics. (2021). Rural Urban Classification (2021) of LSOAs in England and Wales. Open Geography Portal. Retrieved from https://geoportal.statistics.gov.uk
