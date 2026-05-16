@@ -35,3 +35,7 @@ Economic Activity
 Office for National Statistics. (2022). Census 2021 Table TS066: Economic activity. Nomis/UK Data Service. Retrieved from https://statistics.ukdataservice.ac.uk
 Rural Urban Classification
 Office for National Statistics. (2021). Rural Urban Classification (2021) of LSOAs in England and Wales. Open Geography Portal. Retrieved from https://geoportal.statistics.gov.uk
+
+All five datasets are released under the Open Government Licence v3.0, which permits free reuse, redistribution, and adaptation for both commercial and non-commercial purposes, provided that the source is acknowledged. No special registration or application is required to access any of these datasets in the forms used in this workshop.
+
+OGL v3.0 Attribution Notice: Contains public sector information licensed under the Open Government Licence v3.0. See https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
